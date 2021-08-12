@@ -1,0 +1,44 @@
+{
+  "name": "web-chess",
+  "version": "0.1.0",
+  "description": "chess game ui for web",
+  "main": "src/index.js",
+  "author": "yoav niran",
+  "license": "MIT",
+  "scripts": {
+    "start": "webpack serve --hot-only",
+    "jest": "NODE_ENV=test jest --maxWorkers=25%",
+    "test": "yarn jest;"
+  },
+  "dependencies": {
+    "@chess-fu/fen-parser": "^1.1.3",
+    "beautiful-react-hooks": "^0.35.0",
+    "lodash": "^4.17.21",
+    "react": "^17.0.2",
+    "react-chess-pieces": "^1.0.5",
+    "react-dom": "^17.0.2",
+    "recoil": "^0.4.0",
+    "styled-components": "^5.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@babel/plugin-proposal-export-default-from": "^7.14.5",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.14.5",
+    "@babel/plugin-proposal-optional-chaining": "^7.14.5",
+    "@babel/plugin-transform-runtime": "^7.15.0",
+    "@babel/preset-env": "^7.15.0",
+    "@babel/preset-react": "^7.14.5",
+    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
+    "babel-jest": "^27.0.6",
+    "babel-loader": "^8.2.2",
+    "babel-plugin-lodash": "^3.3.4",
+    "babel-plugin-module-resolver": "^4.1.0",
+    "babel-plugin-styled-components": "^1.13.2",
+    "html-webpack-plugin": "^5.3.2",
+    "jest": "^27.0.6",
+    "react-refresh": "^0.10.0",
+    "webpack": "^5.49.0",
+    "webpack-cli": "^4.7.2",
+    "webpack-dev-server": "^3.11.2"
+  }
+}
