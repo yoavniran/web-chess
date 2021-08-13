@@ -10,9 +10,7 @@ const Game = (props) => {
 
 	return (
 		<ThemeProvider theme={defaultTheme}>
-			<GameProvider {...props}>
-				<GameBoard />
-			</GameProvider>
+			<GameProvider {...props} />
 		</ThemeProvider>
 	);
 };

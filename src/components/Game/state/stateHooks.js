@@ -1,46 +1,54 @@
-import { selector, useRecoilState } from "recoil";
+import { selector, useRecoilState, isRecoilValue } from "recoil";
 import isString from "lodash/isString";
-import { translateFenToState } from "logic";
+import { translateFenToState, translateStateToFen } from "logic";
 import {
-	GameBoardSettings,
 	GameMoves,
 	GameCurrentPosition,
-	GameStartingPosition,
+	GameStartingPosition, GameStartingPositionFen,
 } from "./atoms";
 
-const getSetter = (atom, setter) => ({ set }, value) => {
-	setter ? setter({ set }, value) : set(atom, value);
-};
+// const getSetter = (atom, setter) => ({ set }, value) => {
+// 	setter ? setter({ set }, value) : set(atom, value);
+// };
 
-const createSimpleStateHook = (key, atom, customSetter = undefined) => {
-	const setter = getSetter(atom, customSetter);
-
-	const simpleStateSelector = selector({
+const createStateHookSetter = (key, setter) => {
+	// const isAtom = isRecoilValue(customSetterOrAtom);
+	// const setter = getSetter(atom, customSetter);
+	const stateSelector = selector({
 		key,
-		get: ({ get }) => get(atom),
+		get: ({ get }) => null,
 		set: ({ set }, value) => {
-			console.log(`>>>>>>>> SIMPLE STATE HOOK ${key} - setter called `, { value });
-			setter({ set }, value);
+			console.log(`>>>>>>>> STATE HOOK ${key} - setter called `, { value });
+			setter(set, value);
 		},
 	});
 
-	return () => useRecoilState(simpleStateSelector);
+	return () => useRecoilState(stateSelector)[1];
 };
 
-const useGameCurrentPosition =
-	createSimpleStateHook("selectGameCurrentPosition", GameCurrentPosition);
+const useGameStartingPositionSetter = createStateHookSetter(
+	"GameStartingPositionState",
+	(set, value) => {
+			const isFen = isString(value),
+				position = isFen ? translateFenToState(value) : value,
+				fen = isFen ? value : translateStateToFen(value);
 
-const useGameStartingPosition =
-	createSimpleStateHook("selectGameStartingPosition", GameStartingPosition,
-		({ set }, value) => {
-			const newPosition = isString(value) ?
-				translateFenToState(value) :
-				value;
+			set(GameStartingPosition, position);
+			set(GameStartingPositionFen, fen);
+			set(GameMoves, []);
+	});
+// const useGameCurrentPosition =
+// 	createSimpleStateHook(GameCurrentPosition);
+// //"selectGameCurrentPosition",
 
-			set(GameStartingPosition, newPosition);
-		});
+// const useSetGameStartingPosition =
+// 	createSimpleSetterHook( GameStartingPosition,
+// 		(current, value) => {
+// 			return isString(value) ?
+// 				translateFenToState(value) :
+// 				value;
+// 		});
 
 export {
-	useGameCurrentPosition,
-	useGameStartingPosition,
-};
+	useGameStartingPositionSetter,
+}

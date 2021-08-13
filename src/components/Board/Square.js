@@ -1,7 +1,7 @@
-import React from "react";
+import React, { memo } from "react";
 import styled, { css } from "styled-components";
-import chessPieces from "react-chess-pieces";
 import { SQUARE_TONES } from "consts";
+import Piece from "./Piece";
 
 const darkSquareCss = css`
   ${({ theme }) => `
@@ -26,15 +26,28 @@ const SquareContainer = styled.div`
   min-height: 32px;
   width: calc(100% / 8);
   height: calc(100% / 8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   ${({ $tone }) => $tone === SQUARE_TONES.LIGHT ? lightSquareCss : darkSquareCss}
 `;
 
-const Square = ({ piece = null, tone, name }) => {
-	console.log("RENDERING SQUARE ", { name, piece });
-	return (<SquareContainer $tone={tone}>
-		{piece?.symbol && chessPieces({ piece: piece.symbol })}
+const Square = memo(({
+	                     piece = null,
+	                     tone,
+	                     name,
+	                     isPieceSelected,
+	                     onPieceSelected,
+                     }) => {
+	// console.log("RENDERING SQUARE !!!!!!!!!!", { piece, tone, name, isPieceSelected });
+	return (<SquareContainer $tone={tone} data-name={name}>
+		{piece?.symbol && <Piece
+			{...piece}
+			isSelected={isPieceSelected}
+			onPieceSelected={onPieceSelected}
+		/>}
 	</SquareContainer>);
-};
+});
 
 export default Square;

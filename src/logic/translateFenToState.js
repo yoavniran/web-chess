@@ -1,5 +1,5 @@
-import { EMPTY } from "consts";
 import FenParser from "@chess-fu/fen-parser";
+import { EMPTY,TURN_PIECE } from "consts";
 import getSquareName from "./getSquareName";
 
 const getRowCol = (row, col, isFlipped) => {
@@ -22,7 +22,11 @@ const getPiecesSquares = (parser, isFlipped) => {
 					isEmpty: c === EMPTY,
 				};
 			});
-	})).flat();
+	})).flat()
+		.reduce((res, piece) => {
+			res[piece.square] = piece;
+			return res;
+		}, {});
 };
 
 const translateFenToState = (fen, isFlipped = false) => {
@@ -35,9 +39,9 @@ const translateFenToState = (fen, isFlipped = false) => {
 	return {
 		piecesSquares: getPiecesSquares(parser, isFlipped),
 		castles: parser.castles,
-		ply: parser.halfmoveClock,
+		halfmoveClock: parser.halfmoveClock,
 		move: parser.moveNumber - 1,
-		turn: parser.turn,
+		turn: TURN_PIECE[parser.turn],
 		enpass: parser.enpass !== EMPTY ? parser.enpass : false,
 	};
 };

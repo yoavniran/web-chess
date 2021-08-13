@@ -1,4 +1,7 @@
-const createGameApi = (state) =>  {
+const createGameApi = ({
+	                       toggleIsFlipped,
+	                       setStartingPosition,
+                       }) => {
 
 	console.log("1!!!!!!! CREATING GAME API !!!!!!!");
 
@@ -23,15 +26,19 @@ const createGameApi = (state) =>  {
 	};
 
 	const flipBoard = () => {
-
+		toggleIsFlipped();
 	};
 
 	const resign = (color) => {
 
 	};
 
+	/**
+	 * restart Game from provided FEN position
+	 * @param {string} fen
+	 */
 	const loadFen = (fen) => {
-
+		setStartingPosition(fen);
 	};
 
 	const loadPgn = (pgn) => {
@@ -41,7 +48,8 @@ const createGameApi = (state) =>  {
 	// const offerDraw = (color)
 
 	return {
-
+		flipBoard,
+		loadFen,
 	};
 };
 

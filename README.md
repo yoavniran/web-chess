@@ -11,7 +11,7 @@ An implementation of a playable chess board using web technologies:
 - React
 - Recoil JS
 - Styled Components
-
+- Framer Motion
 
 
 ## Features
@@ -20,9 +20,10 @@ An implementation of a playable chess board using web technologies:
 
 | Feature | Area | Status
 |-------- | -----| -----------
-| Flip Board | board | 
+| Flip Board | board |   ✅
 | Board Coordinates (inside, outside) | board |
 | All legal moves (castle, castling limitations, en passant) | moves | 
+| Can move indication | moves, pieces | 🚧
 | Promotion | moves | 
 | Stalemate detection | moves |
 | check & checkmate detection | moves |

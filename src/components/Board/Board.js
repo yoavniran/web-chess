@@ -8,12 +8,12 @@ const BoardContainer = styled.div`
   flex-wrap: wrap;
 
   box-shadow: 0 0 4px 1px #000;
-	
+
   ${({ $size }) => `
 		width: ${$size};
 		height: ${$size};
 	`}
-	
+
 `;
 
 export const BOARD_COORDINATES_POSITION = {
@@ -23,10 +23,13 @@ export const BOARD_COORDINATES_POSITION = {
 };
 
 const Board = ({
+	               className,
 	               size = "100%", //100%, px
 	               isFlipped = false,
 	               pieces = [],
 	               coordinates = BOARD_COORDINATES_POSITION.OUTSIDE,
+	               selectedPieceSquare = "",
+	               onPieceSelected,
                }) => {
 
 	/**
@@ -35,14 +38,16 @@ const Board = ({
 	const grid = useMemo(() =>
 		createBoardSquares(isFlipped), [isFlipped]);
 
-	console.log("!!!! RENDERING BOARD !!!!!", { grid, isFlipped, pieces});
+	console.log("%%%%%%%%% RENDERING BOARD %%%%%%%%%", { grid, isFlipped, pieces, selectedPieceSquare });
 
-	return (<BoardContainer $size={size}>
-		{grid.map((square, index) =>
+	return (<BoardContainer $size={size} className={className}>
+		{grid.map((square) =>
 			<Square
 				key={square.name}
 				{...square}
-				piece={pieces[index]}
+				piece={pieces[square.name]}
+				isPieceSelected={selectedPieceSquare === square.name}
+				onPieceSelected={onPieceSelected}
 			/>)}
 	</BoardContainer>);
 };

@@ -3,6 +3,7 @@ import {
 	GameCurrentPosition,
 	GameStartingPosition,
 	GameBoardSettings,
+	SelectedPiece,
 } from "./atoms";
 
 const createSelectorHook = (key, getter) => {
@@ -11,13 +12,21 @@ const createSelectorHook = (key, getter) => {
 		get: ({ get }) => getter(get),
 	});
 
-	return () => useRecoilValue(hookSelector);
-}
+	const hook = () => useRecoilValue(hookSelector);
+	hook.selector = hookSelector;
+
+	return hook;
+};
+
+const selectGameCurrentPosition = selector({
+	key: "selectGameCurrentPosition",
+	get: ({ get }) => get(GameCurrentPosition) || get(GameStartingPosition),
+});
 
 const useBoardPiecesSelector = createSelectorHook(
 	"BoardPiecesSelector",
 	(get) => {
-		const currentPosition = get(GameCurrentPosition) || get(GameStartingPosition);
+		const currentPosition = get(selectGameCurrentPosition); // get(GameCurrentPosition) || get(GameStartingPosition);
 		return currentPosition?.piecesSquares;
 	},
 );
@@ -29,7 +38,31 @@ const useIsFlippedSelector = createSelectorHook(
 	},
 );
 
+const useMoveCounterSelector = createSelectorHook(
+	"MoveCounterSelector",
+	(get) => {
+		const currentPosition = get(selectGameCurrentPosition);
+		return currentPosition?.move;
+	},
+);
+
+const useTurnSelector = createSelectorHook(
+	"TurnSelector",
+	(get) => {
+		const currentPosition = get(selectGameCurrentPosition);
+		return currentPosition?.turn;
+	},
+);
+
+const useSelectedPieceSquareSelector = createSelectorHook(
+	"SelectedPieceSquareSelector",
+	(get) => get(SelectedPiece),
+);
+
 export {
 	useBoardPiecesSelector,
 	useIsFlippedSelector,
+	useMoveCounterSelector,
+	useTurnSelector,
+	useSelectedPieceSquareSelector,
 };

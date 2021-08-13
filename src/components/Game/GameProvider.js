@@ -4,13 +4,15 @@ import { usePreviousValue } from "beautiful-react-hooks";
 import { INITIAL_FEN } from "consts";
 import createGameApi from "./gameApi";
 import {
-	useGameStartingPosition
+	useGameStartingPositionSetter,
+	useToggleGameBoardIsFlipped,
 } from "./state";
 
 const GameContext = createContext(null);
 
 const useGameApi = ({ position }) => {
-	const setStartingPosition = useGameStartingPosition()[1];
+	const setStartingPosition = useGameStartingPositionSetter();
+	const toggleIsFlipped = useToggleGameBoardIsFlipped();
 
 	useEffect(() => {
 		console.log("useGameApi HOOK rendered with position = ", position);
@@ -18,7 +20,10 @@ const useGameApi = ({ position }) => {
 	}, [position]);
 
 	const gameApi = useMemo(() => createGameApi({
-		position
+		// position,
+
+		toggleIsFlipped,
+		setStartingPosition,
 	}), [position]);
 
 	window.__wcGameApi = gameApi;

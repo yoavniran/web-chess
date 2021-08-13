@@ -54,12 +54,18 @@ const GameBoardSettings = atom({
 	}
 });
 
+const SelectedPiece = atom({
+	key: "SelectedPiece",
+	default: "",
+});
+
 export {
 	GameStartingPosition,
 	GameCurrentPosition,
 	GameMoves,
 	GameBoardSettings,
-	GameStartingPositionFen
+	GameStartingPositionFen,
+	SelectedPiece,
 };
 
 // const GameState = atom({

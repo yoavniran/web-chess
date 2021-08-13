@@ -1,3 +1,6 @@
-export { default as Board } from "./components/Board";
-export { default as Game } from "./components/Game";
+export {
+	default as Game,
+	GameBoard,
+	GameMoveCounter,
+} from "./components/Game";
 

@@ -13,6 +13,11 @@ export const PIECE_COLORS = {
 	BLACK: "BLACK",
 };
 
+export const TURN_PIECE = {
+	"w": PIECE_COLORS.WHITE,
+	"b": PIECE_COLORS.BLACK
+}
+
 export const WHITE_ROOK = "R",
 	WHITE_KNIGHT = "N",
 	WHITE_BISHOP = "B",

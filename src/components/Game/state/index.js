@@ -1,9 +1,3 @@
-export {
-	useGameStartingPosition,
-	useGameCurrentPosition,
-} from "./stateHooks";
-
-export {
-	useBoardPiecesSelector,
-	useIsFlippedSelector,
-} from "./selectorHooks";
+export * from "./setterHooks";
+export * from "./stateHooks";
+export * from "./selectorHooks";
