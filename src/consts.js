@@ -32,10 +32,19 @@ export const BLACK_ROOK = "r",
 	BLACK_KING = "k",
 	BLACK_PAWN = "p";
 
-// const MOVE_TYPES = {
-// 	MOVE: "MOVE",
-// 	TAKE: ""
-// }
+export const MOVE_TYPES = {
+	MOVE: "MOVE",
+	TAKE: "TAKE",
+	EN_PASSANT: "EN_PASSANT",
+}
+
+export const MOVE_DIRECTIONS = {
+	"FORWARD" : 1,
+	"BACKWARD": 2,
+	"SIDE": 4,
+	"DIAGONAL": 8,
+}
+
 export const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 export const EMPTY = "-";

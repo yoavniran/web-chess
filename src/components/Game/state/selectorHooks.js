@@ -3,8 +3,9 @@ import {
 	GameCurrentPosition,
 	GameStartingPosition,
 	GameBoardSettings,
-	SelectedPiece,
+	SelectedPieceData,
 } from "./atoms";
+import { selectGameCurrentPosition } from "./selectors";
 
 const createSelectorHook = (key, getter) => {
 	const hookSelector = selector({
@@ -18,15 +19,10 @@ const createSelectorHook = (key, getter) => {
 	return hook;
 };
 
-const selectGameCurrentPosition = selector({
-	key: "selectGameCurrentPosition",
-	get: ({ get }) => get(GameCurrentPosition) || get(GameStartingPosition),
-});
-
 const useBoardPiecesSelector = createSelectorHook(
 	"BoardPiecesSelector",
 	(get) => {
-		const currentPosition = get(selectGameCurrentPosition); // get(GameCurrentPosition) || get(GameStartingPosition);
+		const currentPosition = get(selectGameCurrentPosition);
 		return currentPosition?.piecesSquares;
 	},
 );
@@ -56,7 +52,7 @@ const useTurnSelector = createSelectorHook(
 
 const useSelectedPieceSquareSelector = createSelectorHook(
 	"SelectedPieceSquareSelector",
-	(get) => get(SelectedPiece),
+	(get) => get(SelectedPieceData)?.square,
 );
 
 export {

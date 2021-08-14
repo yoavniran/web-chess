@@ -1,5 +1,5 @@
 import FenParser from "@chess-fu/fen-parser";
-import { EMPTY,TURN_PIECE } from "consts";
+import { EMPTY, TURN_PIECE } from "consts";
 import getSquareName from "./getSquareName";
 
 const getRowCol = (row, col, isFlipped) => {

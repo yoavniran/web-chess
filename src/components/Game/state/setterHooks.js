@@ -1,7 +1,6 @@
 import { useSetRecoilState } from "recoil";
 import {
 	GameBoardSettings,
-	SelectedPiece,
 } from "./atoms";
 import { useCallback } from "react";
 
@@ -25,10 +24,6 @@ const useToggleGameBoardIsFlipped =
 			};
 		});
 
-const useSetSelectedPiece =
-	createSimpleSetterHook(SelectedPiece);
-
 export {
 	useToggleGameBoardIsFlipped,
-	useSetSelectedPiece,
 };

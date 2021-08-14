@@ -1,11 +1,15 @@
 import { selector, useRecoilState, isRecoilValue } from "recoil";
 import isString from "lodash/isString";
-import { translateFenToState, translateStateToFen } from "logic";
+import { calculatePieceMoves, translateFenToState, translateStateToFen } from "logic";
 import {
 	GameMoves,
 	GameCurrentPosition,
-	GameStartingPosition, GameStartingPositionFen,
+	GameStartingPosition,
+	GameStartingPositionFen,
+	SelectedPieceData,
+	SelectedPieceAvailableMoves,
 } from "./atoms";
+import {  selectGameCurrentPosition } from  "./selectors";
 
 // const getSetter = (atom, setter) => ({ set }, value) => {
 // 	setter ? setter({ set }, value) : set(atom, value);
@@ -17,9 +21,9 @@ const createStateHookSetter = (key, setter) => {
 	const stateSelector = selector({
 		key,
 		get: ({ get }) => null,
-		set: ({ set }, value) => {
+		set: ({ set, get }, value) => {
 			console.log(`>>>>>>>> STATE HOOK ${key} - setter called `, { value });
-			setter(set, value);
+			setter(set, value, get);
 		},
 	});
 
@@ -37,6 +41,20 @@ const useGameStartingPositionSetter = createStateHookSetter(
 			set(GameStartingPositionFen, fen);
 			set(GameMoves, []);
 	});
+
+const useSelectedPieceSetter = createStateHookSetter(
+"SelectedPieceState",
+	(set, { square, symbol }, get) => {
+
+		set(SelectedPieceData, square);
+		const currentPosition = get(selectGameCurrentPosition);
+
+		if (currentPosition) {
+			set(SelectedPieceAvailableMoves, calculatePieceMoves(square, symbol, currentPosition))
+		}
+	}
+);
+
 // const useGameCurrentPosition =
 // 	createSimpleStateHook(GameCurrentPosition);
 // //"selectGameCurrentPosition",
@@ -51,4 +69,5 @@ const useGameStartingPositionSetter = createStateHookSetter(
 
 export {
 	useGameStartingPositionSetter,
+	useSelectedPieceSetter,
 }

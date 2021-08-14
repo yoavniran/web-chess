@@ -22,9 +22,9 @@ An implementation of a playable chess board using web technologies:
 |-------- | -----| -----------
 | Flip Board | board |   ✅
 | Board Coordinates (inside, outside) | board |
-| All legal moves (castle, castling limitations, en passant) | moves | 
+| All legal moves (castle, castling limitations, en passant, promotion) | moves | 
 | Can move indication | moves, pieces | 🚧
-| Promotion | moves | 
+| Promotion Selector | ui, moves | 
 | Stalemate detection | moves |
 | check & checkmate detection | moves |
 | time travel (show moves backward, forward) | moves, game |

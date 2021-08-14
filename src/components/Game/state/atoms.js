@@ -54,9 +54,15 @@ const GameBoardSettings = atom({
 	}
 });
 
-const SelectedPiece = atom({
-	key: "SelectedPiece",
-	default: "",
+// { square, symbol}
+const SelectedPieceData = atom({
+	key: "SelectedPieceData",
+	default: null,
+});
+
+const SelectedPieceAvailableMoves = atom({
+	key: "SelectedPieceAvailableMoves",
+	default: [],
 });
 
 export {
@@ -65,7 +71,8 @@ export {
 	GameMoves,
 	GameBoardSettings,
 	GameStartingPositionFen,
-	SelectedPiece,
+	SelectedPieceData,
+	SelectedPieceAvailableMoves,
 };
 
 // const GameState = atom({

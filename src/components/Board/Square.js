@@ -22,6 +22,7 @@ const lightSquareCss = css`
 `;
 
 const SquareContainer = styled.div`
+  position: relative;
   min-width: 32px;
   min-height: 32px;
   width: calc(100% / 8);
@@ -31,6 +32,15 @@ const SquareContainer = styled.div`
   align-items: center;
 
   ${({ $tone }) => $tone === SQUARE_TONES.LIGHT ? lightSquareCss : darkSquareCss}
+`;
+
+const SquareName = styled.span`
+  position: absolute;
+  left: 2px;
+  bottom: 2px;
+	font-size: 14px;
+	
+  color: ${({ $tone }) => $tone === SQUARE_TONES.LIGHT ? "#000" : "#FFF"}
 `;
 
 const Square = memo(({
@@ -47,6 +57,7 @@ const Square = memo(({
 			isSelected={isPieceSelected}
 			onPieceSelected={onPieceSelected}
 		/>}
+		<SquareName $tone={tone}>{name}</SquareName>
 	</SquareContainer>);
 });
 

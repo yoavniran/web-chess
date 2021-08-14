@@ -31,7 +31,7 @@ const PieceWrapper = styled.div`
 const Piece = ({ symbol, square, isSelected = false, onPieceSelected }) => {
 	const onPieceClick = () => {
 		console.log("PIECE CLICKED ", { symbol, square });
-		onPieceSelected(square);
+		onPieceSelected({ symbol, square });
 	};
 
 	return (

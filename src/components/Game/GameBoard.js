@@ -3,7 +3,7 @@ import Board from "../Board";
 import {
 	useBoardPiecesSelector,
 	useIsFlippedSelector,
-	useSetSelectedPiece,
+	useSelectedPieceSetter,
 	useSelectedPieceSquareSelector,
 } from "./state";
 
@@ -14,7 +14,7 @@ const GameBoard = ({ className }) => {
 	const piecesSquares = useBoardPiecesSelector(),
 		isFlipped = useIsFlippedSelector(),
 		selectedPieceSquare = useSelectedPieceSquareSelector(),
-		setSelectedPiece = useSetSelectedPiece();
+		setSelectedPiece = useSelectedPieceSetter();
 
 	return (<Board
 		className={className}
