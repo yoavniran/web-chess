@@ -23,30 +23,153 @@ describe("calculateSquaresForMove tests", () => {
 		const squares = calculateSquaresForMove(
 			"A1",
 			PIECE_COLORS.WHITE,
-			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD,
-			Infinity
+			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS,
+			Infinity,
 		);
 
-
-		expect(squares).toHaveLength(7);
-		expect(squares[0]).toBe("A2");
-		expect(squares[6]).toBe("A8");
+		expect(squares).toHaveLength(14);
+		expect(findSquare("A2", squares)).toBe(true);
+		expect(findSquare("A8", squares)).toBe(true);
+		expect(findSquare("B1", squares)).toBe(true);
+		expect(findSquare("H1", squares)).toBe(true);
+		expect(findSquare("A1", squares)).toBe(false);
+		expect(findSquare("B2", squares)).toBe(false);
 	});
 
 	it("should calculate squares for White Rook D4", () => {
 		const squares = calculateSquaresForMove(
 			"D4",
 			PIECE_COLORS.WHITE,
-			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD,
-			Infinity
+			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS,
+			Infinity,
 		);
 
-		console.log("!!!!1 ", squares);
-
-		expect(squares).toHaveLength(7);
+		expect(squares).toHaveLength(14);
 		expect(findSquare("D1", squares)).toBe(true);
 		expect(findSquare("D8", squares)).toBe(true);
+		expect(findSquare("C4", squares)).toBe(true);
+		expect(findSquare("H4", squares)).toBe(true);
+		expect(findSquare("A4", squares)).toBe(true);
 		expect(findSquare("D4", squares)).toBe(false);
+		expect(findSquare("E5", squares)).toBe(false);
 	});
+
+	it("should calculate squares for BLACK Rook H8", () => {
+		const squares = calculateSquaresForMove(
+			"H8",
+			PIECE_COLORS.BLACK,
+			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS,
+			Infinity,
+		);
+
+		expect(squares).toHaveLength(14);
+		expect(findSquare("D8", squares)).toBe(true);
+		expect(findSquare("H1", squares)).toBe(true);
+		expect(findSquare("H5", squares)).toBe(true);
+		expect(findSquare("A8", squares)).toBe(true);
+		expect(findSquare("H8", squares)).toBe(false);
+		expect(findSquare("G7", squares)).toBe(false);
+	});
+
+	it("should calculate squares for White King E1", () => {
+		const squares = calculateSquaresForMove(
+			"E1",
+			PIECE_COLORS.WHITE,
+			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS | MOVE_DIRECTIONS.DIAGONAL,
+			1,
+		);
+
+		expect(squares).toHaveLength(5);
+		expect(findSquare("E2", squares)).toBe(true);
+		expect(findSquare("D1", squares)).toBe(true);
+		expect(findSquare("F1", squares)).toBe(true);
+		expect(findSquare("F2", squares)).toBe(true);
+		expect(findSquare("D2", squares)).toBe(true);
+		expect(findSquare("E1", squares)).toBe(false);
+	});
+
+	it("should calculate squares for Black King D5", () => {
+		const squares = calculateSquaresForMove(
+			"D5",
+			PIECE_COLORS.BLACK,
+			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS | MOVE_DIRECTIONS.DIAGONAL,
+			1,
+		);
+
+		expect(squares).toHaveLength(8);
+		expect(findSquare("D4", squares)).toBe(true);
+		expect(findSquare("D6", squares)).toBe(true);
+		expect(findSquare("C4", squares)).toBe(true);
+		expect(findSquare("E6", squares)).toBe(true);
+		expect(findSquare("D5", squares)).toBe(false);
+	});
+
+	it("should calculate squares for Black Queen E5", () => {
+		const squares = calculateSquaresForMove(
+			"E5",
+			PIECE_COLORS.BLACK,
+			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS | MOVE_DIRECTIONS.DIAGONAL,
+			Infinity,
+		);
+
+		expect(squares).toHaveLength(27);
+		expect(findSquare("D6", squares)).toBe(true);
+		expect(findSquare("F6", squares)).toBe(true);
+		expect(findSquare("A1", squares)).toBe(true);
+		expect(findSquare("H8", squares)).toBe(true);
+		expect(findSquare("H2", squares)).toBe(true);
+		expect(findSquare("E5", squares)).toBe(false);
+	});
+
+	it("should calculate squares for White Queen D4", () => {
+		const squares = calculateSquaresForMove(
+			"D5",
+			PIECE_COLORS.WHITE,
+			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS | MOVE_DIRECTIONS.DIAGONAL,
+			Infinity,
+		);
+
+		expect(squares).toHaveLength(27);
+		expect(findSquare("G8", squares)).toBe(true);
+		expect(findSquare("A8", squares)).toBe(true);
+		expect(findSquare("A2", squares)).toBe(true);
+		expect(findSquare("H1", squares)).toBe(true);
+		expect(findSquare("E6", squares)).toBe(true);
+		expect(findSquare("D5", squares)).toBe(false);
+	});
+
+	it("should calculate squares for White Knight E5", () => {
+		const squares = calculateSquaresForMove(
+			"E5",
+			PIECE_COLORS.WHITE,
+			MOVE_DIRECTIONS.KNIGHT
+		);
+
+		expect(squares).toHaveLength(8);
+		expect(findSquare("F7", squares)).toBe(true);
+		expect(findSquare("D7", squares)).toBe(true);
+		expect(findSquare("G6", squares)).toBe(true);
+		expect(findSquare("G4", squares)).toBe(true);
+		expect(findSquare("F3", squares)).toBe(true);
+		expect(findSquare("D3", squares)).toBe(true);
+		expect(findSquare("C6", squares)).toBe(true);
+		expect(findSquare("C4", squares)).toBe(true);
+		expect(findSquare("E5", squares)).toBe(false);
+	});
+
+	it("should calculate squares for Black Knight B8", () => {
+		const squares = calculateSquaresForMove(
+			"B8",
+			PIECE_COLORS.BLACK,
+			MOVE_DIRECTIONS.KNIGHT
+		);
+
+		expect(squares).toHaveLength(3);
+		expect(findSquare("D7", squares)).toBe(true);
+		expect(findSquare("C6", squares)).toBe(true);
+		expect(findSquare("A6", squares)).toBe(true);
+		expect(findSquare("B8", squares)).toBe(false);
+	});
+
 
 });

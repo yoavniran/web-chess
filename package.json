@@ -6,7 +6,7 @@
   "author": "yoav niran",
   "license": "MIT",
   "scripts": {
-    "start": "webpack serve --hot-only",
+    "start": "webpack serve --hot-only --port 10001",
     "jest": "NODE_ENV=test jest --maxWorkers=25%",
     "test": "yarn jest;"
   },

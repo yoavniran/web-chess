@@ -41,8 +41,9 @@ export const MOVE_TYPES = {
 export const MOVE_DIRECTIONS = {
 	"FORWARD" : 1,
 	"BACKWARD": 2,
-	"SIDE": 4,
+	"SIDEWAYS": 4,
 	"DIAGONAL": 8,
+	"KNIGHT": 16,
 }
 
 export const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";

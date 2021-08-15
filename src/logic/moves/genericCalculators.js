@@ -11,11 +11,16 @@ const regularMoveCalculator = (square, symbol, state, pieceColor, definition) =>
 	//all squares the piece could potentially move to (no limitations calculated)
 	const moveSquares = calculateSquaresForMove(square, pieceColor, directions, count);
 
+	//TODO FILTER out own pieces squares
+
 	console.log("!!!!!!! regularMoveCalculator ",{
 		moveSquares,
 	} );
 
 	return [];
+
+
+
 	//return allowed square(s)
 };
 
@@ -32,6 +37,12 @@ const calculateMoves = (definitions, square, symbol, state, pieceColor) => {
 		allowedMoves = definitions.map(([defType, ...definition]) => {
 			return MOVE_CALCULATORS[defType](square, symbol, state, pieceColor, definition);
 		}).flat();
+
+
+
+
+
+
 	}
 
 	console.log(`FOUND ${allowedMoves.length} AVAILABLE MOVES !!!!! `, {
