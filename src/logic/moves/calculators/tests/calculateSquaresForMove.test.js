@@ -1,4 +1,4 @@
-import { MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
+import { DIAGONAL_VECTORS, MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
 import calculateSquaresForMove from "../calculateSquaresForMove";
 
 const findSquare = (name, squares) => !!squares.find((s) => s === name);
@@ -142,7 +142,7 @@ describe("calculateSquaresForMove tests", () => {
 		const squares = calculateSquaresForMove(
 			"E5",
 			PIECE_COLORS.WHITE,
-			MOVE_DIRECTIONS.KNIGHT
+			MOVE_DIRECTIONS.KNIGHT,
 		);
 
 		expect(squares).toHaveLength(8);
@@ -161,7 +161,7 @@ describe("calculateSquaresForMove tests", () => {
 		const squares = calculateSquaresForMove(
 			"B8",
 			PIECE_COLORS.BLACK,
-			MOVE_DIRECTIONS.KNIGHT
+			MOVE_DIRECTIONS.KNIGHT,
 		);
 
 		expect(squares).toHaveLength(3);
@@ -171,5 +171,25 @@ describe("calculateSquaresForMove tests", () => {
 		expect(findSquare("B8", squares)).toBe(false);
 	});
 
+	it("should calculate squares for White Queen H3", () => {
+		const possibleMovesForDirection = calculateSquaresForMove(
+			"H3",
+			PIECE_COLORS.WHITE,
+			MOVE_DIRECTIONS.DIAGONAL,
+			1);
 
+		expect(possibleMovesForDirection).toHaveLength(2);
+	});
+
+	it("should calculate squares for diagonal with specific vector", () => {
+
+		const possibleMovesForDirection = calculateSquaresForMove(
+			"H3",
+			PIECE_COLORS.WHITE,
+			MOVE_DIRECTIONS.DIAGONAL,
+			1,
+			{ diagonalVector: DIAGONAL_VECTORS.SW });
+
+		expect(possibleMovesForDirection).toHaveLength(1);
+	});
 });

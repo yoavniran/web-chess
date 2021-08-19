@@ -49,3 +49,10 @@ export const MOVE_DIRECTIONS = {
 export const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 export const EMPTY = "-";
+
+export const DIAGONAL_VECTORS = {
+	NE: 1,
+	NW: 2,
+	SE: 4,
+	SW: 8,
+}

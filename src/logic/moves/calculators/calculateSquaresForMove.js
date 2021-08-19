@@ -1,5 +1,7 @@
-import { MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
+import { MOVE_DIRECTIONS, PIECE_COLORS, DIAGONAL_VECTORS } from "consts";
 import getSquareName from "../getSquareName";
+import getSquareCoordinates from "../getSquareCoordinates";
+import sortSquaresByClosest from "../sortSquaresByClosest";
 
 const KNIGHT_MODIFIERS = [[+2, -1], [+2, +1], [+1, +2], [-1, +2], [-2, +1], [-2, -1], [+1, -2], [-1, -2]];
 
@@ -26,11 +28,14 @@ const createSidewaysParams = (modifier) => ({
 	calculator: (val, startCoordinates) => getSquareName(startCoordinates[1], val),
 });
 
-const createDiagonalParams = (rowMod, colMod) => ({
+const createDiagonalParams = (rowMod, colMod, vector, options) => ({
+	_vector: vector,
 	starter: (squareCoordinate) => [squareCoordinate[0] + colMod, squareCoordinate[1] + rowMod],
 	advancer: ([col, row]) => [col + colMod, row + rowMod],
 	calculator: ([col, row]) => getSquareName(row, col),
 	checker: getIsValidCoordinates,
+	//allow calling code to request moves for only specified vectors
+	countOverride: options?.diagonalVector && !(options.diagonalVector & vector) ? 0 : undefined
 });
 
 const DIRECTION_PARAMS = {
@@ -47,15 +52,11 @@ const DIRECTION_PARAMS = {
 		createSidewaysParams(-1),
 	],
 
-	[MOVE_DIRECTIONS.DIAGONAL]: () => [
-		//NE
-		createDiagonalParams(1, 1),
-		//NW
-		createDiagonalParams(1, -1),
-		//SE
-		createDiagonalParams(-1, 1),
-		//SW
-		createDiagonalParams(-1, -1),
+	[MOVE_DIRECTIONS.DIAGONAL]: (color, options) => [
+		createDiagonalParams(1, 1, DIAGONAL_VECTORS.NE, options),
+		createDiagonalParams(1, -1, DIAGONAL_VECTORS.NW,options),
+		createDiagonalParams(-1, 1, DIAGONAL_VECTORS.SE, options),
+		createDiagonalParams(-1, -1, DIAGONAL_VECTORS.SW,options),
 	],
 
 	[MOVE_DIRECTIONS.KNIGHT]: () => [{
@@ -71,7 +72,7 @@ const DIRECTION_PARAMS = {
 	}],
 };
 
-const getDirectionParams = (direction, color) => DIRECTION_PARAMS[direction](color);
+const getDirectionParams = (direction, color, options) => DIRECTION_PARAMS[direction](color, options);
 
 const getSquaresFromParams = (params, startCoordinates, count) => {
 	const defaultChecker = (val) => val >= 0 && val < 8;
@@ -80,7 +81,7 @@ const getSquaresFromParams = (params, startCoordinates, count) => {
 	let i = starter(startCoordinates);
 	let j = 0;
 
-	while (checker(i) && j < (countOverride || count)) {
+	while (checker(i) && j < (countOverride ?? count)) {
 		const result = calculator(i, startCoordinates);
 
 		if (result) {
@@ -94,26 +95,20 @@ const getSquaresFromParams = (params, startCoordinates, count) => {
 	return squares;
 };
 
-const calculateSquaresForMove = (startSquare, color, directions, count) => {
-	const startCoordinates = [startSquare[0].toLowerCase().charCodeAt() - 97, parseInt(startSquare[1]) - 1];
+const calculateSquaresForMove = (startSquare, color, directions, count, options = {}) => {
+	const startCoordinates = getSquareCoordinates(startSquare);
 	const allowedDirections = getAllowedDirections(directions);
 
 	const squares = allowedDirections.map(({ direction }) => {
-		const paramsSets = getDirectionParams(direction, color);
+		const paramsSets = getDirectionParams(direction, color, options);
 
 		return paramsSets
 			.map((params) => getSquaresFromParams(params, startCoordinates, count))
 			.flat();
 	}).flat();
 
-	console.log("calculateSquaresForMove !!!!! ", {
-		startSquare, color, directions, count,
-		startCoordinates,
-		allowedDirections,
-		squares,
-	});
-
-	return squares;
+	//return squares sorted by closest to starting square
+	return sortSquaresByClosest(startSquare, squares);
 };
 
 export default calculateSquaresForMove;

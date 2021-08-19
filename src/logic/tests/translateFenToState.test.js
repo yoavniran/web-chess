@@ -14,7 +14,7 @@ import {
 } from "consts";
 import translateFenToState from "../translateFenToState";
 
-const getSquareSymbol = (name, squares) => squares[name].symbol; //.find((s) => s.square === name).symbol;
+const getSquareSymbol = (name, squares) => squares[name].symbol;
 
 describe("translateFenToState tests", () => {
 

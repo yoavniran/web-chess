@@ -1,6 +1,7 @@
 import FenParser from "@chess-fu/fen-parser";
 import { EMPTY, TURN_PIECE } from "consts";
 import getSquareName from "./getSquareName";
+import getColorFromSymbol from "./getColorFromSymbol";
 
 const getRowCol = (row, col, isFlipped) => {
 	return [
@@ -16,9 +17,12 @@ const getPiecesSquares = (parser, isFlipped) => {
 		const chars = isFlipped ? rowChars.split("").reverse() : rowChars.split("");
 		return chars
 			.map((c, col) => {
+				const symbol = c !== EMPTY ? c : false;
+
 				return {
 					square: getSquareName(...getRowCol(row, col, isFlipped)),
-					symbol: c !== EMPTY ? c : false,
+					symbol,
+					pieceColor: symbol && getColorFromSymbol(symbol),
 					isEmpty: c === EMPTY,
 				};
 			});
