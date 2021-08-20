@@ -1,6 +1,6 @@
 import { MOVE_DIRECTIONS } from "consts";
 import getMoveDirection from "../getMoveDirection";
-import getSquareCoordinates from "../../getSquareCoordinates";
+import getSquareCoordinates from "../../utils/getSquareCoordinates";
 
 describe("getMoveDirection tests", () => {
 	it("should return DIAGONAL", () => {

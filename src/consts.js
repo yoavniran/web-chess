@@ -34,7 +34,7 @@ export const BLACK_ROOK = "r",
 
 export const MOVE_TYPES = {
 	MOVE: "MOVE",
-	TAKE: "TAKE",
+	CASTLE: "CASTLE",
 	EN_PASSANT: "EN_PASSANT",
 }
 
@@ -56,3 +56,8 @@ export const DIAGONAL_VECTORS = {
 	SE: 4,
 	SW: 8,
 }
+
+export const SIDEWAYS_VECTORS = {
+	LEFT: 1,
+	RIGHT: 2,
+};

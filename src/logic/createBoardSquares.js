@@ -1,5 +1,5 @@
-import getSquareTone from "./getSquareTone";
-import getSquareName from "./getSquareName";
+import getSquareTone from "./utils/getSquareTone";
+import getSquareName from "./utils/getSquareName";
 
 /**
  * @typedef BoardSquare
@@ -9,7 +9,6 @@ import getSquareName from "./getSquareName";
  * @property {number} row
  * @property {number} col
  */
-
 
 /**
  * returns board squares White by default

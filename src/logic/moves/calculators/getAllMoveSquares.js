@@ -1,7 +1,7 @@
-import { MOVE_DIRECTIONS, PIECE_COLORS, DIAGONAL_VECTORS } from "consts";
-import getSquareName from "../getSquareName";
-import getSquareCoordinates from "../getSquareCoordinates";
-import sortSquaresByClosest from "../sortSquaresByClosest";
+import { MOVE_DIRECTIONS, PIECE_COLORS, DIAGONAL_VECTORS, SIDEWAYS_VECTORS } from "consts";
+import getSquareName from "../../utils/getSquareName";
+import getSquareCoordinates from "../../utils/getSquareCoordinates";
+import sortSquaresByClosest from "../../sortSquaresByClosest";
 
 const KNIGHT_MODIFIERS = [[+2, -1], [+2, +1], [+1, +2], [-1, +2], [-2, +1], [-2, -1], [+1, -2], [-1, -2]];
 
@@ -22,10 +22,12 @@ const createSimpleDirectionsParams = (modifier) => ({
 	calculator: (val, startCoordinates) => getSquareName(val, startCoordinates[0]),
 });
 
-const createSidewaysParams = (modifier) => ({
+const createSidewaysParams = (modifier, vector, options) => ({
 	...createSimpleDirectionsParams(modifier),
 	starter: (startCoordinates) => startCoordinates[0] + modifier,
 	calculator: (val, startCoordinates) => getSquareName(startCoordinates[1], val),
+	//allow calling code to request moves for only specified vectors
+	countOverride: options?.sidewaysVector && !(options.sidewaysVector & vector) ? 0 : undefined,
 });
 
 const createDiagonalParams = (rowMod, colMod, vector, options) => ({
@@ -35,7 +37,7 @@ const createDiagonalParams = (rowMod, colMod, vector, options) => ({
 	calculator: ([col, row]) => getSquareName(row, col),
 	checker: getIsValidCoordinates,
 	//allow calling code to request moves for only specified vectors
-	countOverride: options?.diagonalVector && !(options.diagonalVector & vector) ? 0 : undefined
+	countOverride: options?.diagonalVector && !(options.diagonalVector & vector) ? 0 : undefined,
 });
 
 const DIRECTION_PARAMS = {
@@ -45,18 +47,18 @@ const DIRECTION_PARAMS = {
 	[MOVE_DIRECTIONS.BACKWARD]: (color) =>
 		[createSimpleDirectionsParams(color === PIECE_COLORS.WHITE ? -1 : 1)],
 
-	[MOVE_DIRECTIONS.SIDEWAYS]: () => [
+	[MOVE_DIRECTIONS.SIDEWAYS]: (color, options) => [
 		//move toward col H
-		createSidewaysParams(1),
+		createSidewaysParams(1, SIDEWAYS_VECTORS.RIGHT, options),
 		//move toward col A
-		createSidewaysParams(-1),
+		createSidewaysParams(-1, SIDEWAYS_VECTORS.LEFT, options),
 	],
 
 	[MOVE_DIRECTIONS.DIAGONAL]: (color, options) => [
 		createDiagonalParams(1, 1, DIAGONAL_VECTORS.NE, options),
-		createDiagonalParams(1, -1, DIAGONAL_VECTORS.NW,options),
+		createDiagonalParams(1, -1, DIAGONAL_VECTORS.NW, options),
 		createDiagonalParams(-1, 1, DIAGONAL_VECTORS.SE, options),
-		createDiagonalParams(-1, -1, DIAGONAL_VECTORS.SW,options),
+		createDiagonalParams(-1, -1, DIAGONAL_VECTORS.SW, options),
 	],
 
 	[MOVE_DIRECTIONS.KNIGHT]: () => [{
@@ -95,7 +97,7 @@ const getSquaresFromParams = (params, startCoordinates, count) => {
 	return squares;
 };
 
-const calculateSquaresForMove = (startSquare, color, directions, count, options = {}) => {
+const getAllMoveSquares = (startSquare, color, directions, count, options = {}) => {
 	const startCoordinates = getSquareCoordinates(startSquare);
 	const allowedDirections = getAllowedDirections(directions);
 
@@ -111,4 +113,4 @@ const calculateSquaresForMove = (startSquare, color, directions, count, options 
 	return sortSquaresByClosest(startSquare, squares);
 };
 
-export default calculateSquaresForMove;
+export default getAllMoveSquares;

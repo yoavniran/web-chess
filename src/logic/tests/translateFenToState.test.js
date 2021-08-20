@@ -21,10 +21,6 @@ describe("translateFenToState tests", () => {
 	it("should translate initial position for White", () => {
 		const state = translateFenToState(INITIAL_FEN);
 
-		// expect(state.piecesSquares[0].square).toBe("A8");
-		// expect(state.piecesSquares[7].square).toBe("H8");
-		// expect(state.piecesSquares[63].square).toBe("H1");
-
 		expect(getSquareSymbol("A1", state.piecesSquares)).toBe(WHITE_ROOK);
 		expect(getSquareSymbol("H1", state.piecesSquares)).toBe(WHITE_ROOK);
 		expect(getSquareSymbol("E1", state.piecesSquares)).toBe(WHITE_KING);
@@ -46,10 +42,6 @@ describe("translateFenToState tests", () => {
 
 	it("should translate initial position for Black", () => {
 		const state = translateFenToState(INITIAL_FEN, true);
-
-		// expect(state.piecesSquares[0].square).toBe("H1");
-		// expect(state.piecesSquares[7].square).toBe("A1");
-		// expect(state.piecesSquares[63].square).toBe("A8");
 
 		expect(getSquareSymbol("A1", state.piecesSquares)).toBe(WHITE_ROOK);
 		expect(getSquareSymbol("H1", state.piecesSquares)).toBe(WHITE_ROOK);

@@ -1,26 +1,26 @@
-import { DIAGONAL_VECTORS, MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
-import calculateSquaresForMove from "../calculateSquaresForMove";
+import { DIAGONAL_VECTORS, MOVE_DIRECTIONS, PIECE_COLORS, SIDEWAYS_VECTORS } from "consts";
+import getAllMoveSquares from "../getAllMoveSquares";
 
 const findSquare = (name, squares) => !!squares.find((s) => s === name);
 
-describe("calculateSquaresForMove tests", () => {
+describe("getAllMoveSquares tests", () => {
 
 	it("should calculate one square forward for White G2", () => {
-		const squares = calculateSquaresForMove("G2", PIECE_COLORS.WHITE, MOVE_DIRECTIONS.FORWARD, 1);
+		const squares = getAllMoveSquares("G2", PIECE_COLORS.WHITE, MOVE_DIRECTIONS.FORWARD, 1);
 
 		expect(squares).toHaveLength(1);
 		expect(squares[0]).toBe("G3");
 	});
 
 	it("should calculate one square forward for Black G7", () => {
-		const squares = calculateSquaresForMove("G7", PIECE_COLORS.BLACK, MOVE_DIRECTIONS.FORWARD, 1);
+		const squares = getAllMoveSquares("G7", PIECE_COLORS.BLACK, MOVE_DIRECTIONS.FORWARD, 1);
 
 		expect(squares).toHaveLength(1);
 		expect(squares[0]).toBe("G6");
 	});
 
 	it("should calculate squares for White Rook A1", () => {
-		const squares = calculateSquaresForMove(
+		const squares = getAllMoveSquares(
 			"A1",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS,
@@ -37,7 +37,7 @@ describe("calculateSquaresForMove tests", () => {
 	});
 
 	it("should calculate squares for White Rook D4", () => {
-		const squares = calculateSquaresForMove(
+		const squares = getAllMoveSquares(
 			"D4",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS,
@@ -55,7 +55,7 @@ describe("calculateSquaresForMove tests", () => {
 	});
 
 	it("should calculate squares for BLACK Rook H8", () => {
-		const squares = calculateSquaresForMove(
+		const squares = getAllMoveSquares(
 			"H8",
 			PIECE_COLORS.BLACK,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS,
@@ -72,7 +72,7 @@ describe("calculateSquaresForMove tests", () => {
 	});
 
 	it("should calculate squares for White King E1", () => {
-		const squares = calculateSquaresForMove(
+		const squares = getAllMoveSquares(
 			"E1",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS | MOVE_DIRECTIONS.DIAGONAL,
@@ -89,7 +89,7 @@ describe("calculateSquaresForMove tests", () => {
 	});
 
 	it("should calculate squares for Black King D5", () => {
-		const squares = calculateSquaresForMove(
+		const squares = getAllMoveSquares(
 			"D5",
 			PIECE_COLORS.BLACK,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS | MOVE_DIRECTIONS.DIAGONAL,
@@ -105,7 +105,7 @@ describe("calculateSquaresForMove tests", () => {
 	});
 
 	it("should calculate squares for Black Queen E5", () => {
-		const squares = calculateSquaresForMove(
+		const squares = getAllMoveSquares(
 			"E5",
 			PIECE_COLORS.BLACK,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS | MOVE_DIRECTIONS.DIAGONAL,
@@ -122,7 +122,7 @@ describe("calculateSquaresForMove tests", () => {
 	});
 
 	it("should calculate squares for White Queen D4", () => {
-		const squares = calculateSquaresForMove(
+		const squares = getAllMoveSquares(
 			"D5",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS | MOVE_DIRECTIONS.DIAGONAL,
@@ -139,7 +139,7 @@ describe("calculateSquaresForMove tests", () => {
 	});
 
 	it("should calculate squares for White Knight E5", () => {
-		const squares = calculateSquaresForMove(
+		const squares = getAllMoveSquares(
 			"E5",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.KNIGHT,
@@ -158,7 +158,7 @@ describe("calculateSquaresForMove tests", () => {
 	});
 
 	it("should calculate squares for Black Knight B8", () => {
-		const squares = calculateSquaresForMove(
+		const squares = getAllMoveSquares(
 			"B8",
 			PIECE_COLORS.BLACK,
 			MOVE_DIRECTIONS.KNIGHT,
@@ -172,7 +172,7 @@ describe("calculateSquaresForMove tests", () => {
 	});
 
 	it("should calculate squares for White Queen H3", () => {
-		const possibleMovesForDirection = calculateSquaresForMove(
+		const possibleMovesForDirection = getAllMoveSquares(
 			"H3",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.DIAGONAL,
@@ -183,7 +183,7 @@ describe("calculateSquaresForMove tests", () => {
 
 	it("should calculate squares for diagonal with specific vector", () => {
 
-		const possibleMovesForDirection = calculateSquaresForMove(
+		const possibleMovesForDirection = getAllMoveSquares(
 			"H3",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.DIAGONAL,
@@ -191,5 +191,18 @@ describe("calculateSquaresForMove tests", () => {
 			{ diagonalVector: DIAGONAL_VECTORS.SW });
 
 		expect(possibleMovesForDirection).toHaveLength(1);
+	});
+
+	it("should calculate squares for sideways with specific vector", () => {
+		const possibleMovesForDirection = getAllMoveSquares(
+			"F6",
+			PIECE_COLORS.WHITE,
+			MOVE_DIRECTIONS.SIDEWAYS,
+			Infinity,
+			{ sidewaysVector: SIDEWAYS_VECTORS.RIGHT },
+		);
+
+		expect(possibleMovesForDirection).toHaveLength(2);
+
 	});
 });
