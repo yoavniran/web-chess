@@ -1,4 +1,4 @@
-import { MOVE_DIRECTIONS, MOVE_TYPES } from "consts";
+import { MOVE_DIRECTIONS, MOVE_TYPES, MOVE_SQUARE_STATE } from "consts";
 
 const QUEEN_MOVE_DEFINITIONS = [
 	[
@@ -11,8 +11,8 @@ const QUEEN_MOVE_DEFINITIONS = [
 		MOVE_DIRECTIONS.FORWARD |
 		MOVE_DIRECTIONS.BACKWARD |
 		MOVE_DIRECTIONS.DIAGONAL,
-		// isEmpty
-		false,
+		// squareState
+		MOVE_SQUARE_STATE.EITHER,
 		//canBeTaken
 		true
 	]

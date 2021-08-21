@@ -16,6 +16,7 @@ import {
 import getColorFromSymbol from "../../utils/getColorFromSymbol";
 import pawnMovesDefinitions from "./definitions/pawnMovesDefinitions";
 import queenMovesDefinitions from "./definitions/queenMovesDefinitions";
+import knightMovesDefinitions from "./definitions/knightMovesDefinitions";
 import moveCalculator from "./moveCalculator";
 
 const PIECE_DEFINITIONS = {
@@ -25,8 +26,8 @@ const PIECE_DEFINITIONS = {
 	[BLACK_QUEEN]: queenMovesDefinitions,
 	[WHITE_QUEEN]: queenMovesDefinitions,
 
-	// [BLACK_KNIGHT]: knightCalculator,
-	// [WHITE_KNIGHT]: knightCalculator,
+	[BLACK_KNIGHT]: knightMovesDefinitions,
+	[WHITE_KNIGHT]: knightMovesDefinitions,
 
 	// [WHITE_BISHOP]: bishopCalculator,
 	// [BLACK_BISHOP]: bishopCalculator,
@@ -48,7 +49,7 @@ const MOVE_CALCULATORS = {
 	[MOVE_TYPES.CASTLE]: () => [],
 };
 
-const calculateMoves = (definitions, square, symbol, state, pieceColor) => {
+const calculateForDefinitions = (definitions, square, symbol, state, pieceColor) => {
 	let allowedMoves = [];
 
 	if (isRightTurn(state, pieceColor)) {
@@ -72,7 +73,7 @@ const calculateMovesFromSquare = (square, symbol, state) => {
 	const pieceColor = getColorFromSymbol(symbol);
 	const definitions = PIECE_DEFINITIONS[symbol];
 
-	return calculateMoves(
+	return calculateForDefinitions(
 		definitions,
 		square,
 		symbol,

@@ -29,7 +29,9 @@ const Board = ({
 	               pieces = [],
 	               coordinates = BOARD_COORDINATES_POSITION.OUTSIDE,
 	               selectedPieceSquare = "",
+	               allowedMoveSquares = [],
 	               onPieceSelected,
+	               onPieceUnselected,
                }) => {
 
 	/**
@@ -38,7 +40,7 @@ const Board = ({
 	const grid = useMemo(() =>
 		createBoardSquares(isFlipped), [isFlipped]);
 
-	console.log("%%%%%%%%% RENDERING BOARD %%%%%%%%%", { grid, isFlipped, pieces, selectedPieceSquare });
+	console.log("%%%%%%%%% RENDERING BOARD %%%%%%%%%", { grid, isFlipped, pieces, selectedPieceSquare, allowedMoveSquares });
 
 	return (<BoardContainer $size={size} className={className}>
 		{grid.map((square) =>
@@ -48,6 +50,8 @@ const Board = ({
 				piece={pieces[square.name]}
 				isPieceSelected={selectedPieceSquare === square.name}
 				onPieceSelected={onPieceSelected}
+				onPieceUnselected={onPieceUnselected}
+				isAllowedMove={!!~allowedMoveSquares.indexOf(square.name)}
 			/>)}
 	</BoardContainer>);
 };

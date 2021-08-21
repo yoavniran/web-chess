@@ -23,6 +23,13 @@ const filterUnreachableSquares = (startSquare, moveSquares) => {
 		const square = remainingSquares.shift();
 		const moveCoordinates = getSquareCoordinates(square);
 		const direction = getMoveDirection(startCoordinates, moveCoordinates);
+
+		if (direction === MOVE_DIRECTIONS.KNIGHT) {
+			//Knight doesnt have "unreachable" squares
+			addArrayToSet(moveSquares, allowedSquares);
+			break;
+		}
+
 		const diagonalVector = direction === MOVE_DIRECTIONS.DIAGONAL ?
 			getMoveDiagonalVector(startCoordinates, moveCoordinates) : undefined;
 

@@ -1,10 +1,12 @@
 import React from "react";
 import Board from "../Board";
 import {
+	useAllowedMovesSquaresSelector,
 	useBoardPiecesSelector,
 	useIsFlippedSelector,
 	useSelectedPieceSetter,
 	useSelectedPieceSquareSelector,
+	useUnselectPieceSetter,
 } from "./state";
 
 /**
@@ -14,7 +16,9 @@ const GameBoard = ({ className }) => {
 	const piecesSquares = useBoardPiecesSelector(),
 		isFlipped = useIsFlippedSelector(),
 		selectedPieceSquare = useSelectedPieceSquareSelector(),
-		setSelectedPiece = useSelectedPieceSetter();
+		setSelectedPiece = useSelectedPieceSetter(),
+		unselectPiece = useUnselectPieceSetter(),
+		allowedMovesSquares = useAllowedMovesSquaresSelector();
 
 	return (<Board
 		className={className}
@@ -22,6 +26,8 @@ const GameBoard = ({ className }) => {
 		pieces={piecesSquares}
 		selectedPieceSquare={selectedPieceSquare}
 		onPieceSelected={setSelectedPiece}
+		onPieceUnselected={unselectPiece}
+		allowedMoveSquares={allowedMovesSquares}
 	/>);
 };
 

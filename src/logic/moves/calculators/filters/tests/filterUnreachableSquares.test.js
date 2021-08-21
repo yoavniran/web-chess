@@ -102,4 +102,10 @@ describe("filterUnreachableSquares tests", () => {
 		expect(findSquare("E7", filtered)).toBe(false);
 	});
 
+	it("should not filter paths for Knight on G1", () => {
+			const moveSquares = ["F3", "H3"];
+
+			const filtered = filterUnreachableSquares("G1", moveSquares);
+			expect(filtered).toHaveLength(2);
+	});
 });

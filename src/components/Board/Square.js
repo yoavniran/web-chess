@@ -30,7 +30,8 @@ const SquareContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-
+  cursor: ${({ $isMoveTarget }) => $isMoveTarget ? "pointer" : "default"};
+	
   ${({ $tone }) => $tone === SQUARE_TONES.LIGHT ? lightSquareCss : darkSquareCss}
 `;
 
@@ -38,9 +39,21 @@ const SquareName = styled.span`
   position: absolute;
   left: 2px;
   bottom: 2px;
-	font-size: 14px;
-	
-  color: ${({ $tone }) => $tone === SQUARE_TONES.LIGHT ? "#000" : "#FFF"}
+  font-size: 14px;
+
+  color: ${({ $tone, theme }) =>
+          $tone === SQUARE_TONES.LIGHT ? theme.lightOverlayText : theme.darkOverlayText}
+`;
+
+const AllowedMoveIndicator = styled.div`
+  position: absolute;
+  width: 30%;
+  height: 30%;
+  border-radius: 100%;
+  box-shadow: inset 0 0 10px 1px ${({ theme }) => theme.indicators.allowed};
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 `;
 
 const Square = memo(({
@@ -49,15 +62,26 @@ const Square = memo(({
 	                     name,
 	                     isPieceSelected,
 	                     onPieceSelected,
+	                     onPieceUnselected,
+	                     showSquareName = false,
+	                     showAllowedMoveIndication = true,
+	                     isAllowedMove = false,
                      }) => {
 	// console.log("RENDERING SQUARE !!!!!!!!!!", { piece, tone, name, isPieceSelected });
-	return (<SquareContainer $tone={tone} data-name={name}>
+	return (<SquareContainer
+		$tone={tone}
+		data-name={name}
+		data-allowed-move={isAllowedMove}
+		$isMoveTarget={isAllowedMove}
+	>
 		{piece?.symbol && <Piece
 			{...piece}
 			isSelected={isPieceSelected}
 			onPieceSelected={onPieceSelected}
+			onPieceUnselected={onPieceUnselected}
 		/>}
-		<SquareName $tone={tone}>{name}</SquareName>
+		{showSquareName && <SquareName $tone={tone}>{name}</SquareName>}
+		{showAllowedMoveIndication && isAllowedMove && <AllowedMoveIndicator/>}
 	</SquareContainer>);
 });
 

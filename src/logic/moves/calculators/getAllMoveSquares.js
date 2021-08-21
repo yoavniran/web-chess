@@ -67,7 +67,7 @@ const DIRECTION_PARAMS = {
 		calculator: (i, startCoordinates) => {
 			const modifiers = KNIGHT_MODIFIERS[i],
 				col = startCoordinates[0] + modifiers[0],
-				row = startCoordinates  [1] + modifiers[1];
+				row = startCoordinates[1] + modifiers[1];
 			return getIsValidCoordinates([col, row]) ? getSquareName(row, col) : undefined;
 		},
 		countOverride: 8,

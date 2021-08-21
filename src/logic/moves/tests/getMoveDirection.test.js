@@ -3,51 +3,68 @@ import getMoveDirection from "../getMoveDirection";
 import getSquareCoordinates from "../../utils/getSquareCoordinates";
 
 describe("getMoveDirection tests", () => {
-	it("should return DIAGONAL", () => {
+
+	it.each([
+		["B2", "D4"],
+		["H8", "A1"],
+		["D4", "E5"],
+		["D3", "E4"],
+		["E4", "D3"],
+		["F5", "H7"],
+	])("should return DIAGONAL (%s, %s)", (start, end) => {
 		expect(getMoveDirection(
-			getSquareCoordinates("B2"),
-			getSquareCoordinates("D4")
+			getSquareCoordinates(start),
+			getSquareCoordinates(end),
 		)).toBe(MOVE_DIRECTIONS.DIAGONAL);
-
-		expect(getMoveDirection(
-			getSquareCoordinates("H8"),
-			getSquareCoordinates("A1")
-		)).toBe(MOVE_DIRECTIONS.DIAGONAL);
 	});
 
-	it("should return SIDEWAYS", () => {
+	it.each([
+		["A4", "H4"],
+		["G8", "E8"],
+		["B4", "A4"],
+		["C5", "G5"],
+	])("should return SIDEWAYS (%s, %s)", (start, end) => {
 		expect(getMoveDirection(
-			getSquareCoordinates("A4"),
-			getSquareCoordinates("H4")
-		)).toBe(MOVE_DIRECTIONS.SIDEWAYS);
-
-		expect(getMoveDirection(
-			getSquareCoordinates("G8"),
-			getSquareCoordinates("E8")
+			getSquareCoordinates(start),
+			getSquareCoordinates(end),
 		)).toBe(MOVE_DIRECTIONS.SIDEWAYS);
 	});
 
-	it("should return FORWARD", () => {
+	it.each([
+		["E1", "E4"],
+		["B7", "B8"],
+		["F1", "F2"],
+	])("should return FORWARD (%s, %s)", (start, end) => {
 		expect(getMoveDirection(
-			getSquareCoordinates("E1"),
-			getSquareCoordinates("E4")
-		)).toBe(MOVE_DIRECTIONS.FORWARD);
-
-		expect(getMoveDirection(
-			getSquareCoordinates("B7"),
-			getSquareCoordinates("B8")
+			getSquareCoordinates(start),
+			getSquareCoordinates(end),
 		)).toBe(MOVE_DIRECTIONS.FORWARD);
 	});
 
-	it("should return BACKWARD", () => {
+	it.each([
+		["G7", "G6"],
+		["C4", "C2"],
+		["H8", "H6"],
+	])("should return BACKWARD (%s, %s)", (start, end) => {
 		expect(getMoveDirection(
-			getSquareCoordinates("G7"),
-			getSquareCoordinates("G6")
+			getSquareCoordinates(start),
+			getSquareCoordinates(end),
 		)).toBe(MOVE_DIRECTIONS.BACKWARD);
+	});
 
+	it.each([
+		["G1", "H3"],
+		["H3", "G1"],
+		["H3", "G5"],
+		["G5", "H3"],
+		["F3", "H4"],
+		["C6", "D4"],
+		["D5", "B6"],
+		["E8", "F6"],
+	])("should return KNIGHT (%s, %s)", (start, end) => {
 		expect(getMoveDirection(
-			getSquareCoordinates("C4"),
-			getSquareCoordinates("C2")
-		)).toBe(MOVE_DIRECTIONS.BACKWARD);
+			getSquareCoordinates(start),
+			getSquareCoordinates(end),
+		)).toBe(MOVE_DIRECTIONS.KNIGHT);
 	});
 });

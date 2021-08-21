@@ -1,9 +1,10 @@
 import { selector, useRecoilValue } from "recoil";
 import {
-	GameCurrentPosition,
-	GameStartingPosition,
+	// GameCurrentPosition,
+	// GameStartingPosition,
 	GameBoardSettings,
 	SelectedPieceData,
+	SelectedPieceAvailableMoves,
 } from "./atoms";
 import { selectGameCurrentPosition } from "./selectors";
 
@@ -52,7 +53,12 @@ const useTurnSelector = createSelectorHook(
 
 const useSelectedPieceSquareSelector = createSelectorHook(
 	"SelectedPieceSquareSelector",
-	(get) => get(SelectedPieceData)?.square,
+	(get) => get(SelectedPieceData),
+);
+
+const useAllowedMovesSquaresSelector = createSelectorHook(
+	"AllowedMovesSquaresSelector",
+	(get) => get(SelectedPieceAvailableMoves),
 );
 
 export {
@@ -61,4 +67,5 @@ export {
 	useMoveCounterSelector,
 	useTurnSelector,
 	useSelectedPieceSquareSelector,
+	useAllowedMovesSquaresSelector,
 };
