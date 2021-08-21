@@ -6,7 +6,7 @@ const GameMoveCounter = (props ) => {
 	const move = useMoveCounterSelector(),
 		turn = useTurnSelector();
 
-	return (<MoveCounter {...props} move={move + 1} turn={turn}/>)
+	return (<MoveCounter {...props} move={move + 1} turn={turn}/>);
 };
 
 export default GameMoveCounter;

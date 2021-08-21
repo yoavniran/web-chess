@@ -17,14 +17,14 @@ const useGameApi = ({ position }) => {
 	useEffect(() => {
 		console.log("useGameApi HOOK rendered with position = ", position);
 		setStartingPosition(position);
-	}, [position]);
+	}, [setStartingPosition, position]);
 
 	const gameApi = useMemo(() => createGameApi({
 		// position,
 
 		toggleIsFlipped,
 		setStartingPosition,
-	}), [position]);
+	}), [toggleIsFlipped, setStartingPosition]);
 
 	window.__wcGameApi = gameApi;
 

@@ -14,10 +14,10 @@ const createSelectorHook = (key, getter) => {
 		get: ({ get }) => getter(get),
 	});
 
-	const hook = () => useRecoilValue(hookSelector);
-	hook.selector = hookSelector;
+	const useHook = () => useRecoilValue(hookSelector);
+	useHook.selector = hookSelector;
 
-	return hook;
+	return useHook;
 };
 
 const useBoardPiecesSelector = createSelectorHook(

@@ -25,7 +25,7 @@ const runThroughFilters = (moveSquares, square, state, pieceColor, squareState, 
 
 	//Filter out all unreachable squares left from previous filters
 	return filterUnreachableSquares(square, moveSquares);
-}
+};
 
 const moveCalculator = (square, symbol, state, pieceColor, definition, allowedMoves) => {
 	const [count, directions, squareState, canBeTaken, ...testers] = definition;

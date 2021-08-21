@@ -27,7 +27,7 @@ const Board = ({
 	               size = "100%", //100%, px
 	               isFlipped = false,
 	               pieces = [],
-	               coordinates = BOARD_COORDINATES_POSITION.OUTSIDE,
+	               coordinatesPosition = BOARD_COORDINATES_POSITION.OUTSIDE,
 	               selectedPieceSquare = "",
 	               allowedMoveSquares = [],
 	               onPieceSelected,

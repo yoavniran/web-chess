@@ -1,5 +1,6 @@
 import React, { memo } from "react";
 import styled, { css } from "styled-components";
+import { motion, AnimatePresence } from "framer-motion";
 import { SQUARE_TONES } from "consts";
 import Piece from "./Piece";
 
@@ -31,7 +32,7 @@ const SquareContainer = styled.div`
   justify-content: center;
   align-items: center;
   cursor: ${({ $isMoveTarget }) => $isMoveTarget ? "pointer" : "default"};
-	
+
   ${({ $tone }) => $tone === SQUARE_TONES.LIGHT ? lightSquareCss : darkSquareCss}
 `;
 
@@ -45,7 +46,7 @@ const SquareName = styled.span`
           $tone === SQUARE_TONES.LIGHT ? theme.lightOverlayText : theme.darkOverlayText}
 `;
 
-const AllowedMoveIndicator = styled.div`
+const AllowedMoveIndicator = styled(motion.div)`
   position: absolute;
   width: 30%;
   height: 30%;
@@ -55,6 +56,12 @@ const AllowedMoveIndicator = styled.div`
   top: 50%;
   transform: translate(-50%, -50%);
 `;
+
+const moveIndicatorAnimationVariants = {
+	visible: { height: "30%", width: "30%" },
+	hidden: { height: 0, width: 0 },
+	exit: {  height: 0, width: 0 },
+};
 
 const Square = memo(({
 	                     piece = null,
@@ -74,6 +81,7 @@ const Square = memo(({
 		data-allowed-move={isAllowedMove}
 		$isMoveTarget={isAllowedMove}
 	>
+		<AnimatePresence>
 		{piece?.symbol && <Piece
 			{...piece}
 			isSelected={isPieceSelected}
@@ -81,7 +89,15 @@ const Square = memo(({
 			onPieceUnselected={onPieceUnselected}
 		/>}
 		{showSquareName && <SquareName $tone={tone}>{name}</SquareName>}
-		{showAllowedMoveIndication && isAllowedMove && <AllowedMoveIndicator/>}
+		{showAllowedMoveIndication && isAllowedMove &&
+			<AllowedMoveIndicator
+				key={`${name}-${piece}-moveIndicator`}
+				initial="hidden"
+				animate="visible"
+				exit="exit"
+				variants={moveIndicatorAnimationVariants}
+			/>}
+		</AnimatePresence>
 	</SquareContainer>);
 });
 

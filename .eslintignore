@@ -1,0 +1,8 @@
+node_modules/
+jest.config.js
+*.story.js
+*.stories.js
+*.mock.js
+packages/**/lib/**/*.js
+scripts/
+cypress/

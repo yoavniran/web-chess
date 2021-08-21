@@ -1,6 +1,7 @@
 import React, { useCallback } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import ChessPiece from "react-chess-pieces";
+import { motion } from "framer-motion";
 
 const SelectedIndicator = styled.div`
   position: absolute;
@@ -13,7 +14,7 @@ const SelectedIndicator = styled.div`
   transform: translate(-50%, -50%);
 `;
 
-const PieceWrapper = styled.div`
+const PieceWrapper = styled(motion.div)`
   position: relative;
   height: 100%;
   width: 100%;
@@ -28,9 +29,13 @@ const PieceWrapper = styled.div`
   }
 `;
 
+const hoverAnimate = {
+	scale: 1.1,
+	transition: { duration: 0.5 },
+};
+
 const Piece = ({ symbol, square, isSelected = false, onPieceSelected, onPieceUnselected }) => {
 	const onPieceClick = useCallback(() => {
-		console.log("PIECE CLICKED ", { symbol, square });
 		if (isSelected) {
 			onPieceUnselected({ symbol, square });
 		} else {
@@ -43,6 +48,7 @@ const Piece = ({ symbol, square, isSelected = false, onPieceSelected, onPieceUns
 			onClick={onPieceClick}
 			data-selected={isSelected}
 			$selected={isSelected}
+			whileHover={hoverAnimate}
 		>
 			<ChessPiece piece={symbol}/>
 			{isSelected && <SelectedIndicator/>}
