@@ -60,7 +60,7 @@ const GameBoardSettings = atom({
 	}
 });
 
-// { square, symbol}
+// {string} square
 const SelectedPieceData = atom({
 	key: "SelectedPieceData",
 	default: null,

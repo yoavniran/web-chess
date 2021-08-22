@@ -44,9 +44,6 @@ const getRowCol = (row, col, isFlipped) => {
 const getSquaresData = (parser, isFlipped) => {
 	const ranks = isFlipped ? parser.ranks.reverse() : parser.ranks;
 
-	const blackPositions = {},
-		whitePositions = {};
-
 	return [].concat(ranks.map((rowChars, row) => {
 		const chars = isFlipped ? rowChars.split("").reverse() : rowChars.split("");
 		return chars
@@ -97,7 +94,7 @@ const translateFenToState = (fen, isFlipped = false) => {
 	const { squares, whitePositions, blackPositions } = getSquaresData(parser, isFlipped);
 
 	return {
-		squares, //: getPiecesSquares(parser, isFlipped),
+		squares,
 		whitePositions,
 		blackPositions,
 		castles: parser.castles,

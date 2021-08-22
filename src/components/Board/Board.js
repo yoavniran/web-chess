@@ -32,8 +32,9 @@ const Board = ({
 	               moveAnimation = MOVE_ANIMATIONS.TELEPORT,
 	               selectedPieceSquare = "",
 	               allowedMoveSquares = [],
-	               onPieceSelected,
-	               onPieceUnselected,
+	               selectPiece,
+	               unselectPiece,
+	               movePiece,
                }) => {
 
 	/**
@@ -57,9 +58,10 @@ const Board = ({
 				{...square}
 				{...squares[square.name]}
 				isPieceSelected={selectedPieceSquare === square.name}
-				onPieceSelected={onPieceSelected}
-				onPieceUnselected={onPieceUnselected}
+				selectPiece={selectPiece}
+				unselectPiece={unselectPiece}
 				isAllowedMove={!!~allowedMoveSquares.indexOf(square.name)}
+				movePiece={movePiece}
 			/>)}
 	</BoardContainer>);
 };

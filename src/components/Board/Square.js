@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import styled, { css } from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { SQUARE_TONES } from "consts";
@@ -74,12 +74,19 @@ const Square = memo(({
 	                     name,
 	                     symbol,
 	                     isPieceSelected,
-	                     onPieceSelected,
-	                     onPieceUnselected,
+	                     selectPiece,
+	                     unselectPiece,
 	                     showSquareName = false,
 	                     showAllowedMoveIndication = true,
 	                     isAllowedMove = false,
+	                     movePiece,
                      }) => {
+	const onSquareClick = useCallback(() => {
+		if (isAllowedMove) {
+			console.log("ALLOWED MOVED SQUARE CLICKED ", name);
+			movePiece({ square: name });
+		}
+	}, [isAllowedMove, name]);
 
 	return (
 		<SquareContainer
@@ -87,15 +94,17 @@ const Square = memo(({
 			data-name={name}
 			data-allowed-move={isAllowedMove}
 			$isMoveTarget={isAllowedMove}
+			onClick={onSquareClick}
 		>
 			<AnimatePresence>
 				{symbol &&
 				<Piece
+					key={`piece-${name}-${symbol}`}
 					symbol={symbol}
 					square={name}
 					isSelected={isPieceSelected}
-					onPieceSelected={onPieceSelected}
-					onPieceUnselected={onPieceUnselected}
+					selectPiece={selectPiece}
+					unselectPiece={unselectPiece}
 				/>}
 
 				{showSquareName &&

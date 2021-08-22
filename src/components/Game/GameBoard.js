@@ -3,7 +3,7 @@ import Board from "../Board";
 import {
 	useAllowedMovesSquaresSelector,
 	useBoardSquaresSelector,
-	useIsFlippedSelector,
+	useIsFlippedSelector, usePieceDestinationSetter,
 	useSelectedPieceSetter,
 	useSelectedPieceSquareSelector,
 	useUnselectPieceSetter,
@@ -18,16 +18,18 @@ const GameBoard = ({ className }) => {
 		selectedPieceSquare = useSelectedPieceSquareSelector(),
 		setSelectedPiece = useSelectedPieceSetter(),
 		unselectPiece = useUnselectPieceSetter(),
-		allowedMovesSquares = useAllowedMovesSquaresSelector();
+		allowedMovesSquares = useAllowedMovesSquaresSelector(),
+		setPieceDestinationSquare = usePieceDestinationSetter();
 
 	return (<Board
 		className={className}
 		isFlipped={isFlipped}
 		squares={squares}
 		selectedPieceSquare={selectedPieceSquare}
-		onPieceSelected={setSelectedPiece}
-		onPieceUnselected={unselectPiece}
+		selectPiece={setSelectedPiece}
+		unselectPiece={unselectPiece}
 		allowedMoveSquares={allowedMovesSquares}
+		movePiece={setPieceDestinationSquare}
 	/>);
 };
 

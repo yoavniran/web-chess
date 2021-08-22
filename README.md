@@ -23,14 +23,14 @@ An implementation of a playable chess board using web technologies:
 | Flip Board | board |   ✅
 | Board Coordinates (inside, outside) | board |
 | All legal moves (castle, castling limitations, en passant, promotion) | moves | 
-| Can move indication | moves, pieces | 🚧
+| Can move indication | moves, pieces |   ✅
 | Promotion Selector | ui, moves | 
 | Stalemate detection | moves |
 | check & checkmate detection | moves |
 | time travel (show moves backward, forward) | moves, game |
 | history board | game |
 | taken pieces bar | game | 
-| Start from any FEN | state |
+| Start from any FEN | state |  ✅
 | Load PGN (lichess, chess.com) | state |
 | Output to FEN | state |
 | Output to PGN | state |
@@ -41,7 +41,7 @@ An implementation of a playable chess board using web technologies:
 
 | Feature | Area | Status
 |-------- | -----| -----------
-| Check Highlight | board |
+| Check/mate Highlight | board |
 | Legal moves highlight (+toggle) | board |
 | board themes | board | 
 | sounds (move, check, invalid) | feedback |
