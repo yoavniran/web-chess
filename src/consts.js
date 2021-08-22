@@ -46,7 +46,6 @@ export const MOVE_DIRECTIONS = {
 	"KNIGHT": 16,
 };
 
-
 export const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 export const EMPTY = "-";
@@ -68,3 +67,9 @@ export const MOVE_SQUARE_STATE = {
 	ONLY_OCCUPIED: "ONLY_OCCUPIED",
 	EITHER: "EITHER"
 };
+
+export const MOVE_ANIMATIONS = {
+	NONE: "NONE",
+	TELEPORT: "TELEPORT",
+	SLIDE: "SLIDE",
+}

@@ -51,7 +51,9 @@ const Piece = ({ symbol, square, isSelected = false, onPieceSelected, onPieceUns
 			whileHover={hoverAnimate}
 		>
 			<ChessPiece piece={symbol}/>
-			{isSelected && <SelectedIndicator/>}
+
+			{isSelected &&
+			<SelectedIndicator/>}
 		</PieceWrapper>
 	);
 };

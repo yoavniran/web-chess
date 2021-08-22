@@ -3,13 +3,16 @@
  * @param {PIECE_COLOR} pieceColor
  * @param {string[]} moveSquares
  * @param {State} state
+ * @param {string[]} expectedTake
  * @returns {string[]}
  */
-const filterOwnPiecesSquares = (pieceColor, moveSquares, state) => {
+const filterOwnPiecesSquares = (pieceColor, moveSquares, state, expectedTake = []) => {
 	return moveSquares
 		.filter((squareName) => {
-			const squareState = state.piecesSquares[squareName];
-			return !squareState.symbol || squareState.pieceColor !== pieceColor;
+			const squareState = state.squares[squareName];
+			return !squareState.symbol ||
+				squareState.pieceColor !== pieceColor ||
+				!!~expectedTake.indexOf(squareName);
 		});
 };
 

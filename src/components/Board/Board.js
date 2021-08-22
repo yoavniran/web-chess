@@ -1,5 +1,6 @@
 import React, { useMemo } from "react";
 import styled from "styled-components";
+import { MOVE_ANIMATIONS } from "consts";
 import { createBoardSquares } from "logic";
 import Square from "./Square";
 
@@ -26,8 +27,9 @@ const Board = ({
 	               className,
 	               size = "100%", //100%, px
 	               isFlipped = false,
-	               pieces = [],
+	               squares = [],
 	               coordinatesPosition = BOARD_COORDINATES_POSITION.OUTSIDE,
+	               moveAnimation = MOVE_ANIMATIONS.TELEPORT,
 	               selectedPieceSquare = "",
 	               allowedMoveSquares = [],
 	               onPieceSelected,
@@ -40,14 +42,20 @@ const Board = ({
 	const grid = useMemo(() =>
 		createBoardSquares(isFlipped), [isFlipped]);
 
-	console.log("%%%%%%%%% RENDERING BOARD %%%%%%%%%", { grid, isFlipped, pieces, selectedPieceSquare, allowedMoveSquares });
+	console.log("%%%%%%%%% RENDERING BOARD %%%%%%%%%", {
+		grid,
+		isFlipped,
+		squares,
+		selectedPieceSquare,
+		allowedMoveSquares,
+	});
 
 	return (<BoardContainer $size={size} className={className}>
 		{grid.map((square) =>
 			<Square
 				key={square.name}
 				{...square}
-				piece={pieces[square.name]}
+				{...squares[square.name]}
 				isPieceSelected={selectedPieceSquare === square.name}
 				onPieceSelected={onPieceSelected}
 				onPieceUnselected={onPieceUnselected}

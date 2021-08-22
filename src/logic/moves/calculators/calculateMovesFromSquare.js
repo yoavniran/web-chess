@@ -13,15 +13,19 @@ import {
 	WHITE_QUEEN,
 	WHITE_ROOK,
 } from "consts";
+import { addArrayToSet } from "../../../utils";
 import getColorFromSymbol from "../../utils/getColorFromSymbol";
-import pawnMovesDefinitions from "./definitions/pawnMovesDefinitions";
+import kingMovesDefinitions from "./definitions/kingMovesDefinitions";
 import queenMovesDefinitions from "./definitions/queenMovesDefinitions";
+import rookMovesDefinitions from "./definitions/rookMovesDefinitions";
+import bishopMovesDefinitions from "./definitions/bishopMovesDefinitions";
 import knightMovesDefinitions from "./definitions/knightMovesDefinitions";
+import pawnMovesDefinitions from "./definitions/pawnMovesDefinitions";
 import moveCalculator from "./moveCalculator";
 
 const PIECE_DEFINITIONS = {
-	// [BLACK_KING]: kingCalculator,
-	// [WHITE_KING]: kingCalculator,
+	[BLACK_KING]: kingMovesDefinitions,
+	[WHITE_KING]: kingMovesDefinitions,
 
 	[BLACK_QUEEN]: queenMovesDefinitions,
 	[WHITE_QUEEN]: queenMovesDefinitions,
@@ -29,11 +33,11 @@ const PIECE_DEFINITIONS = {
 	[BLACK_KNIGHT]: knightMovesDefinitions,
 	[WHITE_KNIGHT]: knightMovesDefinitions,
 
-	// [WHITE_BISHOP]: bishopCalculator,
-	// [BLACK_BISHOP]: bishopCalculator,
+	[WHITE_BISHOP]: bishopMovesDefinitions,
+	[BLACK_BISHOP]: bishopMovesDefinitions,
 
-	// [WHITE_ROOK]: rookCalculator,
-	// [BLACK_ROOK]: rookCalculator,
+	[WHITE_ROOK]: rookMovesDefinitions,
+	[BLACK_ROOK]: rookMovesDefinitions,
 
 	[WHITE_PAWN]: pawnMovesDefinitions,
 	[BLACK_PAWN]: pawnMovesDefinitions,
@@ -49,37 +53,35 @@ const MOVE_CALCULATORS = {
 	[MOVE_TYPES.CASTLE]: () => [],
 };
 
-const calculateForDefinitions = (definitions, square, symbol, state, pieceColor) => {
-	let allowedMoves = [];
+const calculateForDefinitions = (definitions, square, symbol, state, pieceColor, options) => {
+	const movesSet = definitions
+		.reduce((res, [defType, ...definition]) => {
+			addArrayToSet(
+				MOVE_CALCULATORS[defType](square, symbol, state, pieceColor, definition, options),
+				res
+			);
 
-	if (isRightTurn(state, pieceColor)) {
-		definitions.forEach(([defType, ...definition]) => {
-			allowedMoves = MOVE_CALCULATORS[defType](square, symbol, state, pieceColor, definition, allowedMoves);
-		});
-	}
+			return res;
+		}, new Set());
 
-	console.log(`FOUND ${allowedMoves.length} AVAILABLE MOVES !!!!! `, {
-		definitions,
-		square,
-		symbol,
-		state,
-		pieceColor,
-	});
-
-	return allowedMoves;
+	return [...movesSet.values()];
 };
 
-const calculateMovesFromSquare = (square, symbol, state) => {
+const canCalculate = (state, pieceColor, options) =>
+	options.ignoreTurn || isRightTurn(state, pieceColor);
+
+const calculateMovesFromSquare = (square, symbol, state, options = {}) => {
 	const pieceColor = getColorFromSymbol(symbol);
 	const definitions = PIECE_DEFINITIONS[symbol];
 
-	return calculateForDefinitions(
+	return canCalculate(state, pieceColor, options) ? calculateForDefinitions(
 		definitions,
 		square,
 		symbol,
 		state,
 		pieceColor,
-	);
+		options,
+	) : [];
 };
 
 export default calculateMovesFromSquare;

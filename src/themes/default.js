@@ -9,8 +9,8 @@ const defaultTheme = {
 	lightOverlayText: "#1d1d1d",
 
 	indicators: {
-		selected: "rgba(234, 207, 143, 0.75)",
-		allowed: "rgba(77, 173, 11, 0.75)",
+		selected: "rgba(234,198,112,0.75)",
+		allowed: "rgba(51,168,233,0.75)",
 	}
 };
 

@@ -9,7 +9,7 @@ describe("filterOwnPiecesSquares tests", () => {
 
 		const filtered = filterOwnPiecesSquares(PIECE_COLORS.WHITE,
 			["A2", "A3", "B1"], {
-				piecesSquares: {
+				squares: {
 					"A2": {
 						symbol: "P",
 						pieceColor: PIECE_COLORS.WHITE,

@@ -15,7 +15,7 @@ describe("filterBeyondTakeSquares tests", () => {
 		);
 
 		const state = {
-			piecesSquares: {
+			squares: {
 				F5: { pieceColor: PIECE_COLORS.BLACK },
 				E2: { pieceColor: PIECE_COLORS.WHITE },
 				G3: { pieceColor: PIECE_COLORS.BLACK },
@@ -52,7 +52,7 @@ describe("filterBeyondTakeSquares tests", () => {
 		);
 
 		const state = {
-			piecesSquares: {
+			squares: {
 				F7: { pieceColor: PIECE_COLORS.WHITE }, //cause remove: F8
 				G6: { pieceColor: PIECE_COLORS.BLACK },
 				F3: { pieceColor: PIECE_COLORS.WHITE }, //cause remove: F2
@@ -77,5 +77,29 @@ describe("filterBeyondTakeSquares tests", () => {
 
 		expect(findSquare("C6", filtered)).toBe(false);
 		expect(findSquare("C6", moveSquares)).toBe(true);
+	});
+
+	it("should find takes for Black Queen on F2 with expected take", () => {
+
+		const moveSquares = getAllMoveSquares(
+			"F2",
+			PIECE_COLORS.BLACK,
+			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS | MOVE_DIRECTIONS.DIAGONAL,
+			Infinity,
+		);
+
+		const state = {
+			squares: {
+				B2: { pieceColor: PIECE_COLORS.BLACK }, //cause remove: A2
+				F6: { pieceColor: PIECE_COLORS.WHITE }, //cause remove: F7
+			},
+		};
+
+		const filtered = filterBeyondTakeSquares("F2", PIECE_COLORS.BLACK, moveSquares, state, ["B2"]);
+
+		expect(findSquare("A2", filtered)).toBe(false);
+		expect(findSquare("F7", filtered)).toBe(false);
+
+		expect(filtered).toHaveLength(21);
 	});
 });

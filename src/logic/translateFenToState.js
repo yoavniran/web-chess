@@ -1,5 +1,5 @@
 import FenParser from "@chess-fu/fen-parser";
-import { EMPTY, TURN_PIECE } from "consts";
+import { EMPTY, PIECE_COLORS, TURN_PIECE } from "consts";
 import getSquareName from "./utils/getSquareName";
 import getColorFromSymbol from "./utils/getColorFromSymbol";
 
@@ -13,7 +13,9 @@ const getRowCol = (row, col, isFlipped) => {
 /**
  * @typedef State
  * @type {object}
- * @property {Object.<string, PieceSquare>} piecesSquares
+ * @property {Object.<string, PieceSquare>} squares
+ * @property {Object.<string, string>} whitePositions
+ * @property {Object.<string, string>} blackPositions
  * @property {string} castles
  * @property {number} halfMoveClock
  * @property {number} move
@@ -31,32 +33,52 @@ const getRowCol = (row, col, isFlipped) => {
  */
 
 /**
- * Returns current game's squares with their info
+ * Returns:
+ *  - current game's squares with their info
+ *  - current white pieces positions
+ *  - current black pieces positions
  * @param parser
  * @param {boolean} isFlipped
- * @returns {Object.<string, PieceSquare>}
+ * @returns {squares: Object.<string, PieceSquare>, whitePositions: Object.<string, string>, blackPositions: Object.<string, string>}
  */
-const getPiecesSquares = (parser, isFlipped) => {
+const getSquaresData = (parser, isFlipped) => {
 	const ranks = isFlipped ? parser.ranks.reverse() : parser.ranks;
+
+	const blackPositions = {},
+		whitePositions = {};
 
 	return [].concat(ranks.map((rowChars, row) => {
 		const chars = isFlipped ? rowChars.split("").reverse() : rowChars.split("");
 		return chars
 			.map((c, col) => {
 				const symbol = c !== EMPTY ? c : false;
+				const pieceColor = symbol ? getColorFromSymbol(symbol) : null;
 
 				return {
-					square: getSquareName(...getRowCol(row, col, isFlipped)),
+					name: getSquareName(...getRowCol(row, col, isFlipped)),
 					symbol,
-					pieceColor: symbol && getColorFromSymbol(symbol),
+					pieceColor,
 					isEmpty: c === EMPTY,
 				};
 			});
 	})).flat()
-		.reduce((res, piece) => {
-			res[piece.square] = piece;
+		.reduce((res, square) => {
+			res.squares[square.name] = square;
+
+			if (!square.isEmpty) {
+				if (square.pieceColor === PIECE_COLORS.WHITE) {
+					res.whitePositions[square.name] = square.symbol;
+				} else {
+					res.blackPositions[square.name] = square.symbol;
+				}
+			}
+
 			return res;
-		}, {});
+		}, {
+			squares: {},
+			whitePositions: {},
+			blackPositions: {}
+		});
 };
 
 /**
@@ -72,8 +94,12 @@ const translateFenToState = (fen, isFlipped = false) => {
 
 	const parser = new FenParser(fen);
 
+	const { squares, whitePositions, blackPositions } = getSquaresData(parser, isFlipped);
+
 	return {
-		piecesSquares: getPiecesSquares(parser, isFlipped),
+		squares, //: getPiecesSquares(parser, isFlipped),
+		whitePositions,
+		blackPositions,
 		castles: parser.castles,
 		halfmoveClock: parser.halfmoveClock,
 		move: parser.moveNumber - 1,

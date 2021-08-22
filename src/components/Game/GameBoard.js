@@ -2,7 +2,7 @@ import React from "react";
 import Board from "../Board";
 import {
 	useAllowedMovesSquaresSelector,
-	useBoardPiecesSelector,
+	useBoardSquaresSelector,
 	useIsFlippedSelector,
 	useSelectedPieceSetter,
 	useSelectedPieceSquareSelector,
@@ -13,7 +13,7 @@ import {
  * Board connected to Game Context
  */
 const GameBoard = ({ className }) => {
-	const piecesSquares = useBoardPiecesSelector(),
+	const squares = useBoardSquaresSelector(),
 		isFlipped = useIsFlippedSelector(),
 		selectedPieceSquare = useSelectedPieceSquareSelector(),
 		setSelectedPiece = useSelectedPieceSetter(),
@@ -23,7 +23,7 @@ const GameBoard = ({ className }) => {
 	return (<Board
 		className={className}
 		isFlipped={isFlipped}
-		pieces={piecesSquares}
+		squares={squares}
 		selectedPieceSquare={selectedPieceSquare}
 		onPieceSelected={setSelectedPiece}
 		onPieceUnselected={unselectPiece}

@@ -22,15 +22,21 @@ const GameStartingPosition = atom({
 	default: [],
 });
 
+/**
+ * {
+ *   squares: Object.<string, PieceSquare>,
+ *   whitePositions: Object.<string, string>,
+ *   blackPositions: Object.<string, string>,
+ *   castles: string,
+ *   halfmoveClock: number,
+ *   move: number,
+ *   turn: PIECE_COLOR,
+ *   enpass: boolean | string
+ * }
+ */
 const GameCurrentPosition = atom({
 	key: "GameCurrentPosition",
 	default: null,
-	// piecesSquares: getPiecesSquares(parser, isFlipped),
-	// castles: parser.castles,
-	// ply: parser.halfmoveClock,
-	// move: parser.moveNumber - 1,
-	// turn: parser.turn,
-	// enpass: parser.enpass !== EMPTY ? parser.enpass : false,
 });
 
 /**

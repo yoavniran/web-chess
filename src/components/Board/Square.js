@@ -58,15 +58,21 @@ const AllowedMoveIndicator = styled(motion.div)`
 `;
 
 const moveIndicatorAnimationVariants = {
-	visible: { height: "30%", width: "30%" },
-	hidden: { height: 0, width: 0 },
-	exit: {  height: 0, width: 0 },
+	visible: { height: "30%", width: "30%", opacity: "100%" },
+	hidden: { height: 0, width: 0, opacity: 0 },
+	exit: { height: 0, width: 0, opacity: 0 },
+};
+
+const moveIndicatorHoverAnimate = {
+	width: "20%",
+	height: "20%",
+	transition: { duration: 0.5 },
 };
 
 const Square = memo(({
-	                     piece = null,
 	                     tone,
 	                     name,
+	                     symbol,
 	                     isPieceSelected,
 	                     onPieceSelected,
 	                     onPieceUnselected,
@@ -74,31 +80,39 @@ const Square = memo(({
 	                     showAllowedMoveIndication = true,
 	                     isAllowedMove = false,
                      }) => {
-	// console.log("RENDERING SQUARE !!!!!!!!!!", { piece, tone, name, isPieceSelected });
-	return (<SquareContainer
-		$tone={tone}
-		data-name={name}
-		data-allowed-move={isAllowedMove}
-		$isMoveTarget={isAllowedMove}
-	>
-		<AnimatePresence>
-		{piece?.symbol && <Piece
-			{...piece}
-			isSelected={isPieceSelected}
-			onPieceSelected={onPieceSelected}
-			onPieceUnselected={onPieceUnselected}
-		/>}
-		{showSquareName && <SquareName $tone={tone}>{name}</SquareName>}
-		{showAllowedMoveIndication && isAllowedMove &&
-			<AllowedMoveIndicator
-				key={`${name}-${piece}-moveIndicator`}
-				initial="hidden"
-				animate="visible"
-				exit="exit"
-				variants={moveIndicatorAnimationVariants}
-			/>}
-		</AnimatePresence>
-	</SquareContainer>);
+
+	return (
+		<SquareContainer
+			$tone={tone}
+			data-name={name}
+			data-allowed-move={isAllowedMove}
+			$isMoveTarget={isAllowedMove}
+		>
+			<AnimatePresence>
+				{symbol &&
+				<Piece
+					symbol={symbol}
+					square={name}
+					isSelected={isPieceSelected}
+					onPieceSelected={onPieceSelected}
+					onPieceUnselected={onPieceUnselected}
+				/>}
+
+				{showSquareName &&
+				<SquareName $tone={tone}>{name}</SquareName>}
+
+				{showAllowedMoveIndication && isAllowedMove &&
+				<AllowedMoveIndicator
+					key={`${name}-${symbol}-moveIndicator`}
+					initial="hidden"
+					animate="visible"
+					exit="exit"
+					variants={moveIndicatorAnimationVariants}
+					whileHover={moveIndicatorHoverAnimate}
+				/>}
+			</AnimatePresence>
+		</SquareContainer>
+	);
 });
 
 export default Square;

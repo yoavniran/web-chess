@@ -2,3 +2,5 @@
 dist/
 node_modules/
 .jest-cache/
+.eslintcache
+*.log

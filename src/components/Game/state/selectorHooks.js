@@ -20,11 +20,11 @@ const createSelectorHook = (key, getter) => {
 	return useHook;
 };
 
-const useBoardPiecesSelector = createSelectorHook(
-	"BoardPiecesSelector",
+const useBoardSquaresSelector = createSelectorHook(
+	"BoardSquaresSelector",
 	(get) => {
 		const currentPosition = get(selectGameCurrentPosition);
-		return currentPosition?.piecesSquares;
+		return currentPosition?.squares;
 	},
 );
 
@@ -62,7 +62,7 @@ const useAllowedMovesSquaresSelector = createSelectorHook(
 );
 
 export {
-	useBoardPiecesSelector,
+	useBoardSquaresSelector,
 	useIsFlippedSelector,
 	useMoveCounterSelector,
 	useTurnSelector,

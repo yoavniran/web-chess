@@ -5,33 +5,36 @@ import filterUnreachableSquares from "./filters/filterUnreachableSquares";
 import filterBeyondTakeSquares from "./filters/filterBeyondTakeSquares";
 import filterNonEmptySquares from "./filters/filterNonEmptySquares";
 import filterNonOccupiedSquares from "./filters/filterNonOccupiedSquares";
+import filterCanBeTakenSquares from "./filters/filterCanBeTakenSquares";
 
-const runThroughFilters = (moveSquares, square, state, pieceColor, squareState, canBeTaken) =>  {
-	//Filter out own pieces squares
-	moveSquares = filterOwnPiecesSquares(pieceColor, moveSquares, state);
+const runThroughFilters = (moveSquares, square, state, pieceColor, squareState, canBeTaken, options) => {
+	//Filter out own pieces squares.
+	moveSquares = filterOwnPiecesSquares(pieceColor, moveSquares, state, options.expectedTake);
+
 	//Filter out squares that are beyond possible takes
-	moveSquares = filterBeyondTakeSquares(square, pieceColor, moveSquares, state);
+	moveSquares = filterBeyondTakeSquares(square, pieceColor, moveSquares, state, options.expectedTake);
 
 	if (!canBeTaken) {
-		//TODO: filter out squares can be taken on if canBeTaken === false
+		//filter out squares can be taken on if canBeTaken === false
+		moveSquares = filterCanBeTakenSquares(sqiare, pieceColor, moveSquares, state);
 	}
 
 	if (squareState === MOVE_SQUARE_STATE.ONLY_EMPTY) {
 		//filter out squares that must be empty for move
-		moveSquares = filterNonEmptySquares(moveSquares, state);
+		moveSquares = filterNonEmptySquares(moveSquares, state, options.expectedTake);
 	} else if (squareState === MOVE_SQUARE_STATE.ONLY_OCCUPIED) {
-		moveSquares =  filterNonOccupiedSquares(moveSquares, state);
+		moveSquares = filterNonOccupiedSquares(moveSquares, state, options.expectedTake);
 	}
 
 	//Filter out all unreachable squares left from previous filters
 	return filterUnreachableSquares(square, moveSquares);
 };
 
-const moveCalculator = (square, symbol, state, pieceColor, definition, allowedMoves) => {
+const moveCalculator = (square, symbol, state, pieceColor, definition, options = {}) => {
 	const [count, directions, squareState, canBeTaken, ...testers] = definition;
 
 	const canCalculate = testers.every((tester) =>
-		tester(square, symbol, state, pieceColor, definition, allowedMoves));
+		tester(square, symbol, state, pieceColor, definition));
 
 	let moveSquares = [];
 
@@ -43,16 +46,13 @@ const moveCalculator = (square, symbol, state, pieceColor, definition, allowedMo
 			state,
 			pieceColor,
 			squareState,
-			canBeTaken);
+			canBeTaken,
+			options,
+		);
 	}
 
-	console.log("!!!!!!! moveCalculator ", {
-		moveSquares,
-		allowedMoves
-	});
-
 	//add new allowed moves to those calculated by (possibly) previous calculators
-	return allowedMoves.concat(moveSquares);
+	return moveSquares;
 };
 
 export default moveCalculator;
