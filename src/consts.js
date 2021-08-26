@@ -73,3 +73,8 @@ export const MOVE_ANIMATIONS = {
 	TELEPORT: "TELEPORT",
 	SLIDE: "SLIDE",
 }
+
+export const CASTLE_SIDES = {
+	QUEEN: "q",
+	KING: "k",
+};

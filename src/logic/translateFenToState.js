@@ -1,7 +1,7 @@
 import FenParser from "@chess-fu/fen-parser";
 import { EMPTY, PIECE_COLORS, TURN_PIECE } from "consts";
-import getSquareName from "./utils/getSquareName";
-import getColorFromSymbol from "./utils/getColorFromSymbol";
+import getSquareName from "./helpers/getSquareName";
+import getColorFromSymbol from "./helpers/getColorFromSymbol";
 
 const getRowCol = (row, col, isFlipped) => {
 	return [
@@ -16,6 +16,7 @@ const getRowCol = (row, col, isFlipped) => {
  * @property {Object.<string, PieceSquare>} squares
  * @property {Object.<string, string>} whitePositions
  * @property {Object.<string, string>} blackPositions
+ * @property {Take[]} takes
  * @property {string} castles
  * @property {number} halfMoveClock
  * @property {number} move
@@ -97,11 +98,12 @@ const translateFenToState = (fen, isFlipped = false) => {
 		squares,
 		whitePositions,
 		blackPositions,
+		takes: [],
 		castles: parser.castles,
 		halfmoveClock: parser.halfmoveClock,
 		move: parser.moveNumber - 1,
 		turn: TURN_PIECE[parser.turn],
-		enpass: parser.enpass !== EMPTY ? parser.enpass : false,
+		enpass: parser.enpass !== EMPTY ? `${parser.enpass[0].toUpperCase()}${parser.enpass[1]}` : false,
 	};
 };
 

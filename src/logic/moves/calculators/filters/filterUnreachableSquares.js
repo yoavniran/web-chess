@@ -1,7 +1,7 @@
 import { MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
 import { addArrayToSet } from "utils";
-import getSquareCoordinates from "../../../utils/getSquareCoordinates";
-import getDistance from "../../../utils/getDistance";
+import getSquareCoordinates from "../../../helpers/getSquareCoordinates";
+import getDistance from "../../../helpers/getDistance";
 import getAllMoveSquares from "../getAllMoveSquares";
 import getMoveDirection from "../../getMoveDirection";
 import getMoveDiagonalVector from "../../getMoveDiagonalVector";

@@ -1,6 +1,6 @@
 import { MOVE_DIRECTIONS } from "consts";
 import getMoveDirection from "../getMoveDirection";
-import getSquareCoordinates from "../../utils/getSquareCoordinates";
+import getSquareCoordinates from "../../helpers/getSquareCoordinates";
 
 describe("getMoveDirection tests", () => {
 

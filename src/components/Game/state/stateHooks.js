@@ -51,12 +51,14 @@ const useSelectedPieceSetter = createStateHookSetter(
 	},
 );
 
+const unselectPiece = (set) => {
+	set(SelectedPieceData, null);
+	set(SelectedPieceAvailableMoves, []);
+};
+
 const useUnselectPieceSetter = createStateHookSetter(
 	"UnselectPieceState",
-	(set) => {
-		set(SelectedPieceData, null);
-		set(SelectedPieceAvailableMoves, []);
-	},
+	unselectPiece,
 );
 
 const usePieceDestinationSetter = createStateHookSetter(
@@ -69,7 +71,9 @@ const usePieceDestinationSetter = createStateHookSetter(
 		//TODO: update current position
 		console.log("MOVING PIECE !!!!!!!!!!");
 		set(GameCurrentPosition, (state) =>
-			applyMoveToState(state, pieceSquare,square))
+			applyMoveToState(state, pieceSquare,square));
+
+		unselectPiece(set);
 		// set(GameMoves, moves.concat({
 		//
 		// }));

@@ -1,6 +1,6 @@
 import { MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
 import getMoveDirection from "../../getMoveDirection";
-import getSquareCoordinates from "../../../utils/getSquareCoordinates";
+import getSquareCoordinates from "../../../helpers/getSquareCoordinates";
 import getAllMoveSquares from "../getAllMoveSquares";
 import getMoveDiagonalVector from "../../getMoveDiagonalVector";
 import getMoveSidewaysVector from "../../getMoveSidewaysVector";

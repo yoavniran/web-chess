@@ -45,6 +45,14 @@ const createGameApi = ({
 
 	};
 
+	const exportToFen = () => {
+
+	};
+
+	const exportToPgn = () => {
+
+	};
+
 	// const offerDraw = (color)
 
 	return {

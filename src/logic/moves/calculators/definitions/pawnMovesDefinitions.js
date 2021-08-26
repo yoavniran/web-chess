@@ -1,10 +1,8 @@
-import { MOVE_TYPES, MOVE_DIRECTIONS, PIECE_COLORS, MOVE_SQUARE_STATE } from "consts";
-import getSquareCoordinates from "../../../utils/getSquareCoordinates";
+import { MOVE_TYPES, MOVE_DIRECTIONS, MOVE_SQUARE_STATE } from "consts";
+import { isPawnStartPosition } from "logic/helpers/is";
 
-const isTwoSquareMoveAllowed = (square, symbol, state, pieceColor) => {
-	const coordinates = getSquareCoordinates(square);
-	return pieceColor === PIECE_COLORS.WHITE ? coordinates[1] === 1 : coordinates[1] === 6;
-};
+const isTwoSquareMoveAllowed = (square, symbol) =>
+	isPawnStartPosition(symbol, square);
 
 const PAWN_MOVE_DEFINITIONS = [
 	//type | count | direction | squareState | canBeTaken | testers

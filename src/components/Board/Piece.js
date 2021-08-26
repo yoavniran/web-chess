@@ -35,14 +35,13 @@ const hoverAnimate = {
 };
 
 const pieceAnimationVariants = {
-	visible: { height: "100%", opacity: 100, transition: { duration: 0.2 } },
+	visible: { height: "100%", opacity: 100, transition: { duration: 0.4 } },
 	hidden: { height: 0, opacity: 0 },
 	exit: { height: 0, opacity: 0, transition: { duration: 0.6 } },
 };
 
 const Piece = ({ symbol, square, isSelected = false, selectPiece, unselectPiece }) => {
 	const onPieceClick = useCallback(() => {
-		console.log("PIECE CLICKED !!!! ", { symbol, square });
 		if (isSelected) {
 			unselectPiece({ symbol, square });
 		} else {

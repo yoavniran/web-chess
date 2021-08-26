@@ -1,6 +1,6 @@
 import { SIDEWAYS_VECTORS } from "consts";
 import { switchReturn } from "utils";
-import getSquareName from "../utils/getSquareName";
+import getSquareName from "../helpers/getSquareName";
 
 const getMoveSidewaysVector = (a, b) =>
 	switchReturn([a, b],

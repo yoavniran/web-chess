@@ -14,7 +14,7 @@ import {
 	WHITE_ROOK,
 } from "consts";
 import { addArrayToSet } from "../../../utils";
-import getColorFromSymbol from "../../utils/getColorFromSymbol";
+import getColorFromSymbol from "../../helpers/getColorFromSymbol";
 import kingMovesDefinitions from "./definitions/kingMovesDefinitions";
 import queenMovesDefinitions from "./definitions/queenMovesDefinitions";
 import rookMovesDefinitions from "./definitions/rookMovesDefinitions";

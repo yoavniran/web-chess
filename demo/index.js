@@ -1,17 +1,19 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { render } from "react-dom";
 import styled from "styled-components";
+import { ResizableBox } from "react-resizable";
 import { Game, GameBoard, GameMoveCounter } from "../src/index";
 
+import "react-resizable/css/styles.css";
+
+const INIT_BOARD_SIZE = 900;
+
 const DemoContainer = styled.main`
-	display: flex;
-	flex-wrap: wrap;
-	
+  display: flex;
+  flex-wrap: wrap;
 `;
 
 const BoardContainer = styled.div`
-  width: 900px;
-  height: 900px;
   margin-right: 20px;
 `;
 
@@ -20,29 +22,37 @@ const StyledGameBoard = styled(GameBoard)`
 
 const StyledGameMoveCounter = styled(GameMoveCounter)`
   font-size: 20px;
-	font-weight: bold;
-	background-color: black;
-	color: white;
-	max-height:40px;
-	padding: 10px;
+  font-weight: bold;
+  background-color: black;
+  color: white;
+  max-height: 40px;
+  padding: 10px;
 `;
 
 const Demo = () => {
-
 	return (
 		<Game>
 			<DemoContainer>
 				<BoardContainer>
-					<StyledGameBoard/>
+					<ResizableBox
+						lockAspectRatio
+						height={INIT_BOARD_SIZE}
+						width={INIT_BOARD_SIZE}
+						minConstraints={[500, 500]}
+						maxConstraints={[1100, 1100]}
+						resizeHandles={["se"]}
+					>
+						<StyledGameBoard/>
+					</ResizableBox>
 				</BoardContainer>
-				<StyledGameMoveCounter />
+				<StyledGameMoveCounter/>
 			</DemoContainer>
 		</Game>
 	);
 };
 
-render(<Demo/>
-	, document.getElementById("app"));
+render(<Demo/>,
+	document.getElementById("app"));
 
 
 if (module["hot"]) {

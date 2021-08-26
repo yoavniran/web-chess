@@ -24,7 +24,12 @@ module.exports = {
 					plugins: isDevelopment ? [require.resolve("react-refresh/babel")] : [],
 				},
 			},
-		}],
+		},
+			{
+				test: /\.css$/i,
+				use: ["style-loader", "css-loader"],
+			},
+		],
 	},
 	devServer: {
 		hotOnly: true,
@@ -57,7 +62,6 @@ module.exports = {
 };
 
 // 	entry: ["regenerator-runtime/runtime", "./src/client/index.js"],
-
 // 		rules: [
 // 			{
 // 				test: /\.(js|jsx)$/,
@@ -78,14 +82,12 @@ module.exports = {
 // 			},
 // 		],
 // 	},
-
 // 		new MiniCssExtractPlugin(),
 // 		new webpack.DefinePlugin({
 // 			"process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV),
 // 		}),
 // 	],
 // };
-
 // 	resolve: {
 // 		modules: ["node_modules", path.resolve("./src/client")],
 // 		alias: {

@@ -1,5 +1,5 @@
-import getSquareTone from "./utils/getSquareTone";
-import getSquareName from "./utils/getSquareName";
+import getSquareTone from "./helpers/getSquareTone";
+import getSquareName from "./helpers/getSquareName";
 
 /**
  * @typedef BoardSquare
@@ -37,8 +37,6 @@ const createBoardSquares = (isFlipped = false) => {
 				row,
 				col,
 			};
-
-			// console.log(" CELL !!! ", { index, row: i, col: j, i2, j2, square: grid[index] });
 		}
 	}
 
