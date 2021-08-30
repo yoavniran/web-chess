@@ -1,17 +1,21 @@
 import { MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
 import getMoveDirection from "../../getMoveDirection";
-import getSquareCoordinates from "../../../helpers/getSquareCoordinates";
-import getAllMoveSquares from "../getAllMoveSquares";
+import getSquareCoordinates from "logic/helpers/getSquareCoordinates";
+import getOppositeColor from "logic/helpers/getOppositeColor";
+import calculatePieceAllMoveSquares from "../calculatePieceAllMoveSquares";
 import getMoveDiagonalVector from "../../getMoveDiagonalVector";
 import getMoveSidewaysVector from "../../getMoveSidewaysVector";
 
-const findTakes = (startSquare, pieceColor, moveSquares, state, expectedTake) => {
-	const takeColor = pieceColor === PIECE_COLORS.WHITE ? PIECE_COLORS.BLACK : PIECE_COLORS.WHITE;
+const findTakes = (startSquare, pieceColor, moveSquares, state, options) => {
+	const { expectedTake, considerEmpty } = options;
+	const takeColor = getOppositeColor(pieceColor);
 
 	return moveSquares.filter((ms) => {
 		const squareState = state.squares[ms];
-		return (squareState && !squareState.isEmpty && squareState.pieceColor === takeColor) ||
-			!!~expectedTake.indexOf(ms);
+
+		return !considerEmpty?.includes(ms) &&
+			((squareState && !squareState.isEmpty && squareState.pieceColor === takeColor) ||
+			expectedTake?.includes(ms));
 	});
 };
 
@@ -24,7 +28,7 @@ const getSquareBeyondTake = (startSquare, takeSquare) => {
 		diagonalVector = direction === MOVE_DIRECTIONS.DIAGONAL ?
 			getMoveDiagonalVector(startCoordinates, takeCoordinates) : undefined;
 
-	const moves = getAllMoveSquares(
+	const moves = calculatePieceAllMoveSquares(
 		takeSquare,
 		PIECE_COLORS.WHITE,
 		direction,
@@ -40,10 +44,10 @@ const getSquareBeyondTake = (startSquare, takeSquare) => {
  * @param pieceColor
  * @param moveSquares
  * @param {State} state
- * @param {string[]} expectedTake
+ * @param {{expectedTake: string[] | undefined, considerEmpty: string[] | undefined }} options
  */
-const filterBeyondTakeSquares = (startSquare, pieceColor, moveSquares, state, expectedTake = []) => {
-	const possibleTakes = findTakes(startSquare, pieceColor, moveSquares, state, expectedTake);
+const filterBeyondTakeSquares = (startSquare, pieceColor, moveSquares, state, options = {}) => { //expectedTake = []) => {
+	const possibleTakes = findTakes(startSquare, pieceColor, moveSquares, state, options);
 
 	const removeSquares = possibleTakes.map((pt) =>
 		getSquareBeyondTake(startSquare, pt),

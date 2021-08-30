@@ -59,7 +59,6 @@ const ProviderWithState = ({
 };
 
 const GameProvider = (props) => {
-
 	return (<RecoilRoot>
 		<ProviderWithState {...props} />
 	</RecoilRoot>);

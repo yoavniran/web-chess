@@ -97,7 +97,7 @@ const getSquaresFromParams = (params, startCoordinates, count) => {
 	return squares;
 };
 
-const getAllMoveSquares = (startSquare, color, directions, count, options = {}) => {
+const calculatePieceAllMoveSquares = (startSquare, color, directions, count, options = {}) => {
 	const startCoordinates = getSquareCoordinates(startSquare);
 	const allowedDirections = getAllowedDirections(directions);
 
@@ -113,4 +113,4 @@ const getAllMoveSquares = (startSquare, color, directions, count, options = {}) 
 	return sortSquaresByClosest(startSquare, squares);
 };
 
-export default getAllMoveSquares;
+export default calculatePieceAllMoveSquares;

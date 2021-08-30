@@ -2,7 +2,7 @@ import { MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
 import { addArrayToSet } from "utils";
 import getSquareCoordinates from "../../../helpers/getSquareCoordinates";
 import getDistance from "../../../helpers/getDistance";
-import getAllMoveSquares from "../getAllMoveSquares";
+import calculatePieceAllMoveSquares from "../calculatePieceAllMoveSquares";
 import getMoveDirection from "../../getMoveDirection";
 import getMoveDiagonalVector from "../../getMoveDiagonalVector";
 
@@ -33,7 +33,7 @@ const filterUnreachableSquares = (startSquare, moveSquares) => {
 		const diagonalVector = direction === MOVE_DIRECTIONS.DIAGONAL ?
 			getMoveDiagonalVector(startCoordinates, moveCoordinates) : undefined;
 
-		const possibleMovesForDirection = getAllMoveSquares(
+		const possibleMovesForDirection = calculatePieceAllMoveSquares(
 			startSquare,
 			PIECE_COLORS.WHITE,
 			direction,

@@ -1,5 +1,5 @@
 import { MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
-import getAllMoveSquares from "../../getAllMoveSquares";
+import calculatePieceAllMoveSquares from "../../calculatePieceAllMoveSquares";
 import filterUnreachableSquares from "../filterUnreachableSquares";
 
 const findSquare = (name, squares) => !!squares.find((s) => s === name);
@@ -9,7 +9,7 @@ const removeSquares = (squares, removeSquares) =>
 
 describe("filterUnreachableSquares tests", () => {
 	it("should filter all squares for Rook on A1", () => {
-		const moveSquares = removeSquares(getAllMoveSquares(
+		const moveSquares = removeSquares(calculatePieceAllMoveSquares(
 			"A1",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS,
@@ -22,7 +22,7 @@ describe("filterUnreachableSquares tests", () => {
 	});
 
 	it("should filter forward squares for Rook on A1", () => {
-		const moveSquares = getAllMoveSquares(
+		const moveSquares = calculatePieceAllMoveSquares(
 			"A1",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS,
@@ -35,7 +35,7 @@ describe("filterUnreachableSquares tests", () => {
 	});
 
 	it("should keep all squares for Rook on A1", () => {
-		const moveSquares = getAllMoveSquares(
+		const moveSquares = calculatePieceAllMoveSquares(
 			"A1",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS,
@@ -52,7 +52,7 @@ describe("filterUnreachableSquares tests", () => {
 	});
 
 	it("should filter unreachable paths for Queen on H3", () => {
-		const moveSquares = removeSquares(getAllMoveSquares(
+		const moveSquares = removeSquares(calculatePieceAllMoveSquares(
 			"H3",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS | MOVE_DIRECTIONS.DIAGONAL,
@@ -79,7 +79,7 @@ describe("filterUnreachableSquares tests", () => {
 	});
 
 	it("should filter unreachable paths for Bishop on G5", () => {
-		const moveSquares = removeSquares(getAllMoveSquares(
+		const moveSquares = removeSquares(calculatePieceAllMoveSquares(
 			"G5",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.DIAGONAL,

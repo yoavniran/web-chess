@@ -78,3 +78,29 @@ export const CASTLE_SIDES = {
 	QUEEN: "q",
 	KING: "k",
 };
+
+export const CHECK_TYPES = {
+	NONE: "NONE",
+	CHECK: "CHECk",
+	MATE: "MATE",
+};
+
+export const WHITE_INIT_PIECES = {
+	[WHITE_PAWN]: 8,
+	[WHITE_KNIGHT]: 2,
+	[WHITE_BISHOP]: 2,
+	[WHITE_ROOK]: 2,
+	[WHITE_QUEEN]: 1,
+	[WHITE_KING]: 1,
+};
+
+export const BLACK_INIT_PIECES = {
+	[BLACK_PAWN]: 8,
+	[BLACK_KNIGHT]: 2,
+	[BLACK_BISHOP]: 2,
+	[BLACK_ROOK]: 2,
+	[BLACK_QUEEN]: 1,
+	[BLACK_KING]: 1,
+};
+
+

@@ -1,12 +1,14 @@
-import { PIECE_COLORS } from "../consts";
+import { BLACK_KING, PIECE_COLORS, WHITE_KING } from "../consts";
 import {
 	getCastlesAfterMove,
 	getEnpassantAfterMove,
-	getColorPositionAfterMove,
+	getColorPiecePositions,
 	getFiftyMoveRuleCount,
 } from "./moves/calculators/afterMove";
+import { switchReturn } from "../utils";
+import getCheckType from "./helpers/getCheckType";
 
-const getSquaresAfterMove = (squares, startSquare, targetSquare, symbol, color) => {
+const getSquaresAfterNormalMove = (squares, startSquare, targetSquare, symbol, color) => {
 	return {
 		...squares,
 		[startSquare]: {
@@ -22,6 +24,26 @@ const getSquaresAfterMove = (squares, startSquare, targetSquare, symbol, color) 
 			pieceColor: color,
 		},
 	};
+};
+
+const getSquaresAfterCastle = () => {
+
+};
+
+const getSquaresAfterEnpassant = () => {
+
+};
+
+const getSquaresAfterMove = (squares, startSquare, targetSquare, symbol, color, takeInfo) => {
+	//TODO: get is enpassant! need to remove pawn from correct square (even though pwn didnt move to it)
+	//TODO: get is move is castle - calculate squares according to castle
+	//TODO: handle promotion ! dont finalize move until client (UI) returns the promoted symbol
+
+	return switchReturn([squares, startSquare, targetSquare, symbol, color, takeInfo],
+		getSquaresAfterCastle,
+		getSquaresAfterEnpassant,
+		getSquaresAfterNormalMove,
+	);
 };
 
 const getTakeInfo = (state, startSquare, targetSquare, move) => {
@@ -42,15 +64,17 @@ const applyMoveToState = (state, startSquare, targetSquare) => {
 		movingColor = squares[startSquare].pieceColor;
 
 	const takeInfo = getTakeInfo(state, startSquare, targetSquare, state.move);
+	const newSquares = getSquaresAfterMove(squares, startSquare, targetSquare, movingSymbol, movingColor, takeInfo);
+	const newWhitePositions = movingColor === PIECE_COLORS.WHITE ?
+			getColorPiecePositions(movingColor, newSquares) : whitePositions;
+	const newBlackPositions =movingColor === PIECE_COLORS.BLACK ?
+		getColorPiecePositions(movingColor, newSquares) : blackPositions;
 
 	return {
 		...state,
-		squares:
-			getSquaresAfterMove(squares, startSquare, targetSquare, movingSymbol, movingColor),
-		whitePositions: movingColor === PIECE_COLORS.WHITE ?
-			getColorPositionAfterMove(whitePositions, startSquare, targetSquare, movingSymbol) : whitePositions,
-		blackPositions: movingColor === PIECE_COLORS.BLACK ?
-			getColorPositionAfterMove(blackPositions, startSquare, targetSquare, movingSymbol) : blackPositions,
+		squares: newSquares,
+		whitePositions: newWhitePositions,
+		blackPositions: newBlackPositions,
 		//move is counted after WHITE & BLACK PLAYED (2 Ply)
 		move: movingColor === PIECE_COLORS.BLACK ? state.move + 1 : state.move,
 		turn: movingColor === PIECE_COLORS.WHITE ? PIECE_COLORS.BLACK : PIECE_COLORS.WHITE,
@@ -58,6 +82,8 @@ const applyMoveToState = (state, startSquare, targetSquare) => {
 		enpassant: getEnpassantAfterMove(state, movingSymbol, movingColor, startSquare, targetSquare),
 		halfmoveClock: getFiftyMoveRuleCount(state.halfMoveClock, movingSymbol, !!takeInfo),
 		takes: !!takeInfo ? state.takes.concat(takeInfo) : state.takes,
+		whiteCheck: getCheckType(WHITE_KING, { newSquares, whitePositions, blackPositions }),
+		blackCheck: getCheckType(BLACK_KING, { newSquares, whitePositions, blackPositions }),
 	};
 };
 

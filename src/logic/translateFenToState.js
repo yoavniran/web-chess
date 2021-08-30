@@ -1,7 +1,16 @@
 import FenParser from "@chess-fu/fen-parser";
-import { EMPTY, PIECE_COLORS, TURN_PIECE } from "consts";
+import {
+	BLACK_INIT_PIECES, BLACK_KING,
+	EMPTY,
+	PIECE_COLORS,
+	TURN_PIECE,
+	WHITE_INIT_PIECES,
+	WHITE_KING,
+} from "consts";
 import getSquareName from "./helpers/getSquareName";
 import getColorFromSymbol from "./helpers/getColorFromSymbol";
+import getCheckType from "./helpers/getCheckType";
+import findPieceTypeSquares from "./helpers/findPieceTypeSquares";
 
 const getRowCol = (row, col, isFlipped) => {
 	return [
@@ -10,28 +19,6 @@ const getRowCol = (row, col, isFlipped) => {
 	];
 };
 
-/**
- * @typedef State
- * @type {object}
- * @property {Object.<string, PieceSquare>} squares
- * @property {Object.<string, string>} whitePositions
- * @property {Object.<string, string>} blackPositions
- * @property {Take[]} takes
- * @property {string} castles
- * @property {number} halfMoveClock
- * @property {number} move
- * @property {TURN_PIECE} turn
- * @property {boolean | string} enpass
- */
-
-/**
- * @typedef PieceSquare
- * @type {object}
- * @property {string} square
- * @property {string} symbol
- * @property {PIECE_COLOR} pieceColor
- * @property {boolean} isEmpty
- */
 
 /**
  * Returns:
@@ -75,8 +62,24 @@ const getSquaresData = (parser, isFlipped) => {
 		}, {
 			squares: {},
 			whitePositions: {},
-			blackPositions: {}
+			blackPositions: {},
 		});
+};
+
+const getTakesForColor = (color, initPieces, state) => {
+	return Object.entries(initPieces)
+		.map(([symbol, count]) => {
+			const piecePositions = findPieceTypeSquares(state, symbol);
+
+			return piecePositions.length < count ?
+				new Array(count - piecePositions.length)
+					.fill({symbol, color}) : [];
+		}).flat()
+};
+
+const getTakes = (positions) => {
+	return getTakesForColor(PIECE_COLORS.WHITE, WHITE_INIT_PIECES,positions)
+		.concat(getTakesForColor(PIECE_COLORS.BLACK, BLACK_INIT_PIECES, positions));
 };
 
 /**
@@ -91,19 +94,20 @@ const translateFenToState = (fen, isFlipped = false) => {
 	}
 
 	const parser = new FenParser(fen);
-
 	const { squares, whitePositions, blackPositions } = getSquaresData(parser, isFlipped);
 
 	return {
 		squares,
 		whitePositions,
 		blackPositions,
-		takes: [],
+		takes: getTakes({ whitePositions, blackPositions }),
 		castles: parser.castles,
 		halfmoveClock: parser.halfmoveClock,
 		move: parser.moveNumber - 1,
 		turn: TURN_PIECE[parser.turn],
 		enpass: parser.enpass !== EMPTY ? `${parser.enpass[0].toUpperCase()}${parser.enpass[1]}` : false,
+		// whiteCheck: getCheckType(WHITE_KING, { squares, whitePositions, blackPositions }),
+		// blackCheck: getCheckType(BLACK_KING, { squares, whitePositions, blackPositions }),
 	};
 };
 

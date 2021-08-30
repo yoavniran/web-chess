@@ -1,6 +1,6 @@
 import { MOVE_DIRECTIONS, MOVE_TYPES, MOVE_SQUARE_STATE } from "consts";
 
-const QUEEN_MOVE_DEFINITIONS = [
+const KING_MOVE_DEFINITIONS = [
 	[
 		//type
 		MOVE_TYPES.MOVE,
@@ -19,4 +19,4 @@ const QUEEN_MOVE_DEFINITIONS = [
 	[MOVE_TYPES.CASTLE]
 ];
 
-export default QUEEN_MOVE_DEFINITIONS;
+export default KING_MOVE_DEFINITIONS;

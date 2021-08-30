@@ -1,21 +1,19 @@
 import { PIECE_COLORS } from "consts";
-import calculateMovesFromSquare from "../calculateMovesFromSquare";
+import getAttackingPiecesOnSquare from "logic/helpers/getAttackingPiecesOnSquare";
 
-const getCanBeTakenOnSquare = (targetSquare, opponentPieces, state) => {
-	return !!Object.entries(opponentPieces)
-		.find(([square, symbol]) => {
-			const moveSquares = calculateMovesFromSquare(
-				square, symbol, state, { ignoreTurn: true, expectedTake: [targetSquare], expectedOccupied: [targetSquare] });
+const getCanBeTakenOnSquare = (targetSquare, startSquare, opponentPieces, state) =>
+	!!getAttackingPiecesOnSquare(
+		startSquare,
+		targetSquare,
+		opponentPieces,
+		state)
+		.length;
 
-			return !!~moveSquares.indexOf(targetSquare);
-		});
-};
-
-const filterCanBeTakenSquares = (startSquare, pieceColor, moveSquares, state) => {
+const filterCanBeTakenSquares = (pieceColor, startSquare, moveSquares, state) => {
 	const opponentPieces = pieceColor === PIECE_COLORS.WHITE ? state.blackPositions : state.whitePositions;
 
 	return moveSquares.filter((targetSquare) =>
-		!getCanBeTakenOnSquare(targetSquare, opponentPieces, state));
+		!getCanBeTakenOnSquare(targetSquare, startSquare,opponentPieces, state));
 };
 
 export default filterCanBeTakenSquares;

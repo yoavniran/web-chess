@@ -1,5 +1,5 @@
 import { MOVE_SQUARE_STATE } from "consts";
-import getAllMoveSquares from "./getAllMoveSquares";
+import calculatePieceAllMoveSquares from "./calculatePieceAllMoveSquares";
 import filterOwnPiecesSquares from "./filters/filterOwnPiecesSquares";
 import filterUnreachableSquares from "./filters/filterUnreachableSquares";
 import filterBeyondTakeSquares from "./filters/filterBeyondTakeSquares";
@@ -12,11 +12,11 @@ const runThroughFilters = (moveSquares, square, state, pieceColor, squareState, 
 	moveSquares = filterOwnPiecesSquares(pieceColor, moveSquares, state, options.expectedTake);
 
 	//Filter out squares that are beyond possible takes
-	moveSquares = filterBeyondTakeSquares(square, pieceColor, moveSquares, state, options.expectedTake);
+	moveSquares = filterBeyondTakeSquares(square, pieceColor, moveSquares, state, options);
 
-	if (!canBeTaken) {
+	if (!canBeTaken && !options.noTakeCheck) {
 		//filter out squares can be taken on if canBeTaken === false
-		moveSquares = filterCanBeTakenSquares(sqiare, pieceColor, moveSquares, state);
+		moveSquares = filterCanBeTakenSquares(pieceColor, square, moveSquares, state);
 	}
 
 	if (squareState === MOVE_SQUARE_STATE.ONLY_EMPTY) {
@@ -33,15 +33,15 @@ const runThroughFilters = (moveSquares, square, state, pieceColor, squareState, 
 const moveCalculator = (square, symbol, state, pieceColor, definition, options = {}) => {
 	const [count, directions, squareState, canBeTaken, ...testers] = definition;
 
+	let moveSquares = [];
+
 	const canCalculate = testers.every((tester) =>
 		tester(square, symbol, state, pieceColor, definition));
-
-	let moveSquares = [];
 
 	if (canCalculate) {
 		moveSquares = runThroughFilters(
 			//first get all squares the piece could potentially move to (without limitations)
-			getAllMoveSquares(square, pieceColor, directions, count),
+			calculatePieceAllMoveSquares(square, pieceColor, directions, count),
 			square,
 			state,
 			pieceColor,

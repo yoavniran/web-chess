@@ -10,7 +10,7 @@ import {
 	BLACK_KNIGHT,
 	WHITE_KNIGHT,
 	PIECE_COLORS,
-	INITIAL_FEN,
+	INITIAL_FEN, BLACK_BISHOP,
 } from "consts";
 import translateFenToState from "../translateFenToState";
 
@@ -85,10 +85,29 @@ describe("translateFenToState tests", () => {
 		expect(state.move).toBe(28);
 		expect(state.turn).toBe(PIECE_COLORS.BLACK);
 
-
 		expect(state.blackPositions["E8"]).toBe(BLACK_QUEEN);
 		expect(state.whitePositions["B4"]).toBe(WHITE_PAWN);
 		expect(state.whitePositions["G3"]).toBe(WHITE_PAWN);
 	});
 
+	it("should register 0 takes for init FEN", () => {
+		const state = translateFenToState(INITIAL_FEN);
+		expect(state.takes).toHaveLength(0);
+	});
+
+	it("should register missing pieces as takes", () => {
+		const state = translateFenToState("1nbqk1nr/ppp3pp/8/8/8/8/PPPPP2P/R1B1KB1R w KQk - 0 1");
+
+		const countTakesForPiece = (symbol) =>
+			state.takes.filter(({ symbol: takeSymbol }) => takeSymbol === symbol).length;
+
+		expect(countTakesForPiece(WHITE_KING)).toBe(0);
+		expect(countTakesForPiece(BLACK_QUEEN)).toBe(0);
+		expect(countTakesForPiece(WHITE_KNIGHT)).toBe(2);
+		expect(countTakesForPiece(WHITE_ROOK)).toBe(0);
+		expect(countTakesForPiece(BLACK_ROOK)).toBe(1);
+		expect(countTakesForPiece(WHITE_PAWN)).toBe(2);
+		expect(countTakesForPiece(BLACK_PAWN)).toBe(3);
+		expect(countTakesForPiece(BLACK_BISHOP)).toBe(1);
+	});
 });
