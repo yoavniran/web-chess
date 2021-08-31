@@ -1,5 +1,5 @@
 const getColorPiecePositions = (color, squares) => {
-	return squares
+	return Object.values(squares)
 		.filter(({ pieceColor }) => pieceColor === color)
 		.reduce((res, square) => {
 			res[square.name] = square.symbol;

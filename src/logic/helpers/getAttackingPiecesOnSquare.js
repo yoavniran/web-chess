@@ -1,7 +1,7 @@
 import { calculateSquares } from "../moves";
 import getColorFromSymbol from "./getColorFromSymbol";
 
-const getAttackingPiecesOnSquare = (startSquare, targetSquare, opponentPositions, state) =>
+const getAttackingPiecesOnSquare = (targetSquare, opponentPositions, considerEmpty, state) =>
 	Object.entries(opponentPositions)
 		.reduce((res, [square, symbol]) => {
 			const moves = calculateSquares(
@@ -9,7 +9,7 @@ const getAttackingPiecesOnSquare = (startSquare, targetSquare, opponentPositions
 					ignoreTurn: true,
 					expectedTake: [targetSquare],
 					expectedOccupied: [targetSquare],
-					considerEmpty: [startSquare],
+					considerEmpty, //: [startSquare],
 					//important! not to get into infinite loop!
 					noTakeCheck: true,
 				});
