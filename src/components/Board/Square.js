@@ -62,13 +62,13 @@ const Square = memo(({
 	                     movePiece,
                      }) => {
 
-	const previousSymbol = usePreviousValue(symbol);
+	// const previousSymbol = usePreviousValue(symbol);
 
 	const onSquareClick = useCallback(() => {
 		if (isAllowedMove) {
 			movePiece({ square: name });
 		}
-	}, [isAllowedMove, name]);
+	}, [isAllowedMove, name, movePiece]);
 
 	return (
 		<SquareContainer

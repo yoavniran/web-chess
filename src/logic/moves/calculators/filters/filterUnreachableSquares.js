@@ -5,6 +5,7 @@ import getDistance from "../../../helpers/getDistance";
 import calculatePieceAllMoveSquares from "../calculatePieceAllMoveSquares";
 import getMoveDirection from "../../getMoveDirection";
 import getMoveDiagonalVector from "../../getMoveDiagonalVector";
+import getMoveSidewaysVector from "../../getMoveSidewaysVector";
 
 /**
  * filter out squares that cannot be reached because a square in the path was removed (by another filter)
@@ -33,12 +34,15 @@ const filterUnreachableSquares = (startSquare, moveSquares) => {
 		const diagonalVector = direction === MOVE_DIRECTIONS.DIAGONAL ?
 			getMoveDiagonalVector(startCoordinates, moveCoordinates) : undefined;
 
+		const sidewaysVector = direction === MOVE_DIRECTIONS.SIDEWAYS ?
+			getMoveSidewaysVector(startCoordinates, moveCoordinates) : undefined;
+
 		const possibleMovesForDirection = calculatePieceAllMoveSquares(
 			startSquare,
 			PIECE_COLORS.WHITE,
 			direction,
 			getDistance(startCoordinates, moveCoordinates),
-			{ diagonalVector } );
+			{ diagonalVector, sidewaysVector } );
 
 		let removeStartIndex = 0;
 
@@ -47,7 +51,7 @@ const filterUnreachableSquares = (startSquare, moveSquares) => {
 			addArrayToSet(possibleMovesForDirection, allowedSquares);
 		} else {
 			//remove the squares that cannot be reached
-			removeStartIndex = possibleMovesForDirection.findIndex((ps) => !~moveSquares.indexOf(ps));
+			removeStartIndex = possibleMovesForDirection.findIndex((ps) => !moveSquares.includes(ps));
 		}
 
 		let removeSquares = possibleMovesForDirection.slice(removeStartIndex);

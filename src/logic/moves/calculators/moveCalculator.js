@@ -14,7 +14,7 @@ const runThroughFilters = (moveSquares, square, state, pieceColor, squareState, 
 	//Filter out squares that are beyond possible takes
 	moveSquares = filterBeyondTakeSquares(square, pieceColor, moveSquares, state, options);
 
-	if (!canBeTaken && !options.noTakeCheck) {
+	if (!canBeTaken) {
 		//filter out squares can be taken on if canBeTaken === false
 		moveSquares = filterCanBeTakenSquares(pieceColor, square, moveSquares, state);
 	}
@@ -24,6 +24,10 @@ const runThroughFilters = (moveSquares, square, state, pieceColor, squareState, 
 		moveSquares = filterNonEmptySquares(moveSquares, state, options.expectedTake);
 	} else if (squareState === MOVE_SQUARE_STATE.ONLY_OCCUPIED) {
 		moveSquares = filterNonOccupiedSquares(moveSquares, state, options.expectedTake);
+	}
+
+	if (state.squares[square].symbol === "k"){
+		console.log("king move after filters = ", moveSquares);
 	}
 
 	//Filter out all unreachable squares left from previous filters
@@ -49,6 +53,10 @@ const moveCalculator = (square, symbol, state, pieceColor, definition, options =
 			canBeTaken,
 			options,
 		);
+	}
+
+	if (symbol === "k"){
+		console.log("king move after all filters = ", moveSquares);
 	}
 
 	//add new allowed moves to those calculated by (possibly) previous calculators

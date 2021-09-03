@@ -1,7 +1,7 @@
-const getDistance = (squareA, squareB) =>
+const getDistance = (coordA, coordB) =>
 	Math.max(
-		Math.abs(squareA[0] - squareB[0]),
-		Math.abs(squareA[1] - squareB[1])
+		Math.abs(coordA[0] - coordB[0]),
+		Math.abs(coordA[1] - coordB[1])
 	);
 
 export default getDistance;

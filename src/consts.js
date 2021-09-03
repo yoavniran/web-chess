@@ -8,8 +8,15 @@ export const SQUARE_TONES = {
 	DARK: "DARK",
 };
 
+/**
+ * Enum for pieces colors
+ * @readonly
+ * @enum {string}
+ */
 export const PIECE_COLORS = {
+	/** WHITE COLOR */
 	WHITE: "WHITE",
+	/** BLACK COLOR */
 	BLACK: "BLACK",
 };
 
@@ -38,11 +45,21 @@ export const MOVE_TYPES = {
 	EN_PASSANT: "EN_PASSANT",
 };
 
+/**
+ * Enum for move directions
+ * @readonly
+ * @enum {number}
+ */
 export const MOVE_DIRECTIONS = {
+	/** FORWARD */
 	"FORWARD": 1,
+	/** BACKWARD */
 	"BACKWARD": 2,
+	/** SIDEWAYS */
 	"SIDEWAYS": 4,
+	/** DIAGONAL */
 	"DIAGONAL": 8,
+	/** KNIGHT */
 	"KNIGHT": 16,
 };
 
@@ -65,14 +82,14 @@ export const SIDEWAYS_VECTORS = {
 export const MOVE_SQUARE_STATE = {
 	ONLY_EMPTY: "ONLY_EMPTY",
 	ONLY_OCCUPIED: "ONLY_OCCUPIED",
-	EITHER: "EITHER"
+	EITHER: "EITHER",
 };
 
 export const MOVE_ANIMATIONS = {
 	NONE: "NONE",
 	TELEPORT: "TELEPORT",
 	SLIDE: "SLIDE",
-}
+};
 
 export const CASTLE_SIDES = {
 	QUEEN: "q",

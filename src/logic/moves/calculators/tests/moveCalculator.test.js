@@ -109,7 +109,23 @@ describe("moveCalculator tests", () => {
 			PIECE_COLORS.BLACK,
 			kingMovesDefinitions[0].slice(1));
 
-		console.log(moveSquares);
+		expect(moveSquares).toHaveLength(0);
+	});
+
+	it("should calculate normal moves for Black King near White King", () => {
+		const state = translateFenToState("8/8/6p1/1k6/8/2K5/8/8 b - - 0 1");
+		const moveSquares = moveCalculator(
+			"B5",
+			BLACK_KING,
+			state,
+			PIECE_COLORS.BLACK,
+			kingMovesDefinitions[0].slice(1)
+		);
+
+		expect(moveSquares).toHaveLength(6);
+		expect(findSquare("B4", moveSquares)).toBe(false);
+		expect(findSquare("C4", moveSquares)).toBe(false);
+		expect(findSquare("A4", moveSquares)).toBe(true);
 	});
 
 });

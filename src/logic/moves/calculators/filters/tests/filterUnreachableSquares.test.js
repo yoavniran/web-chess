@@ -21,6 +21,19 @@ describe("filterUnreachableSquares tests", () => {
 		expect(filtered).toHaveLength(0);
 	});
 
+	it("should keep rook side moves", () => {
+		const moveSquares = removeSquares(calculatePieceAllMoveSquares(
+			"G8",
+			PIECE_COLORS.BLACK,
+			MOVE_DIRECTIONS.FORWARD | MOVE_DIRECTIONS.BACKWARD | MOVE_DIRECTIONS.SIDEWAYS,
+			Infinity
+		), ["H8", "D8", "G6"]);
+
+		const filtered = filterUnreachableSquares("G8", moveSquares);
+
+		expect(filtered).toHaveLength(3);
+	});
+
 	it("should filter forward squares for Rook on A1", () => {
 		const moveSquares = calculatePieceAllMoveSquares(
 			"A1",
@@ -107,5 +120,12 @@ describe("filterUnreachableSquares tests", () => {
 
 			const filtered = filterUnreachableSquares("G1", moveSquares);
 			expect(filtered).toHaveLength(2);
+	});
+
+	it("should not filter king move from B8 to A8", () => {
+		const moveSquares = ["A8"];
+
+		const filtered = filterUnreachableSquares("B8", moveSquares);
+		expect(filtered).toHaveLength(1);
 	});
 });

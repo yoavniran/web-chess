@@ -1,10 +1,7 @@
-import { MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
-import getMoveDirection from "../../getMoveDirection";
-import getSquareCoordinates from "logic/helpers/getSquareCoordinates";
+import { PIECE_COLORS } from "consts";
 import getOppositeColor from "logic/helpers/getOppositeColor";
 import calculatePieceAllMoveSquares from "../calculatePieceAllMoveSquares";
-import getMoveDiagonalVector from "../../getMoveDiagonalVector";
-import getMoveSidewaysVector from "../../getMoveSidewaysVector";
+import getDirectionParamsForMoveCalc from "../../../helpers/getDirectionParamsForMoveCalc";
 
 const findTakes = (startSquare, pieceColor, moveSquares, state, options) => {
 	const { expectedTake, considerEmpty } = options;
@@ -20,13 +17,11 @@ const findTakes = (startSquare, pieceColor, moveSquares, state, options) => {
 };
 
 const getSquareBeyondTake = (startSquare, takeSquare) => {
-	const startCoordinates = getSquareCoordinates(startSquare),
-		takeCoordinates = getSquareCoordinates(takeSquare),
-		direction = getMoveDirection(startCoordinates, takeCoordinates),
-		sidewaysVector = direction === MOVE_DIRECTIONS.SIDEWAYS ?
-			getMoveSidewaysVector(startCoordinates, takeCoordinates) : undefined,
-		diagonalVector = direction === MOVE_DIRECTIONS.DIAGONAL ?
-			getMoveDiagonalVector(startCoordinates, takeCoordinates) : undefined;
+	const {
+		direction,
+		diagonalVector,
+		sidewaysVector,
+	} = getDirectionParamsForMoveCalc(startSquare, takeSquare);
 
 	const moves = calculatePieceAllMoveSquares(
 		takeSquare,
@@ -40,9 +35,9 @@ const getSquareBeyondTake = (startSquare, takeSquare) => {
 
 /**
  * filter out squares that cannot be reached because they are after a possible take
- * @param startSquare
- * @param pieceColor
- * @param moveSquares
+ * @param {string} startSquare
+ * @param {PIECE_COLORS} pieceColor
+ * @param {string[]} moveSquares
  * @param {State} state
  * @param {{expectedTake: string[] | undefined, considerEmpty: string[] | undefined }} options
  */

@@ -1,7 +1,7 @@
 import translateFenToState from "../translateFenToState";
 import {
 	BLACK_KING,
-	BLACK_PAWN,
+	BLACK_PAWN, CHECK_TYPES,
 	INITIAL_FEN,
 	PIECE_COLORS,
 	WHITE_PAWN,
@@ -47,7 +47,7 @@ describe("applyMoveToState tests", () => {
 	});
 
 	it("should disable BLACK King castling for king move", () => {
-		const state = translateFenToState("r1bqk1r1/ppp12pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b kq - 9 13");
+		const state = translateFenToState("r1bqk1r1/ppp3pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b kq - 9 13");
 		const newState = applyMoveToState(state, "E8", "F8");
 
 		expect(newState.blackPositions["F8"]).toBe(BLACK_KING);
@@ -72,7 +72,7 @@ describe("applyMoveToState tests", () => {
 	it("should register take BLACK", () => {
 		const state = translateFenToState("rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2");
 		state.takes = [{}];
-		const newState = applyMoveToState(state, "D8",  "D5");
+		const newState = applyMoveToState(state, "D8", "D5");
 
 		expect(newState.halfmoveClock).toBe(0);
 		expect(newState.move).toBe(2);
@@ -85,4 +85,25 @@ describe("applyMoveToState tests", () => {
 		});
 	});
 
+	it("should identify move is check on Black King", () => {
+		const state = translateFenToState("8/4pr2/4nk2/4r3/8/2B3Q1/8/K5R1 w - - 0 1");
+		expect(state.whiteCheck).toBe(CHECK_TYPES.NONE);
+		expect(state.blackCheck).toBe(CHECK_TYPES.NONE);
+
+		const newState = applyMoveToState(state, "G3", "F3");
+
+		expect(newState.blackCheck).toBe(CHECK_TYPES.CHECK); //knight can block
+		expect(newState.whiteCheck).toBe(CHECK_TYPES.NONE);
+	});
+
+	it("should identify move is check mate on Black King", () => {
+		const state = translateFenToState("8/4pr2/4nk2/4r3/8/2B3Q1/8/K5R1 w - - 0 1");
+		expect(state.whiteCheck).toBe(CHECK_TYPES.NONE);
+		expect(state.blackCheck).toBe(CHECK_TYPES.NONE);
+
+		const newState = applyMoveToState(state, "G3", "E5");
+
+		expect(newState.blackCheck).toBe(CHECK_TYPES.MATE);
+		expect(newState.whiteCheck).toBe(CHECK_TYPES.NONE);
+	});
 });

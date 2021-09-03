@@ -64,7 +64,7 @@ const useUnselectPieceSetter = createStateHookSetter(
 const usePieceDestinationSetter = createStateHookSetter(
 	"PieceDestinationState",
 	(set, { square }, get) => {
-		const moves = get(GameMoves);
+		// const moves = get(GameMoves);
 		// const currentPosition = get(selectGameCurrentPosition);
 		const pieceSquare = get(useSelectedPieceSquareSelector.selector);
 

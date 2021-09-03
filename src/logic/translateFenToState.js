@@ -1,6 +1,7 @@
 import FenParser from "@chess-fu/fen-parser";
 import {
-	BLACK_INIT_PIECES, BLACK_KING,
+	BLACK_INIT_PIECES,
+	BLACK_KING,
 	EMPTY,
 	PIECE_COLORS,
 	TURN_PIECE,
@@ -12,13 +13,32 @@ import getColorFromSymbol from "./helpers/getColorFromSymbol";
 import getCheckType from "./helpers/getCheckType";
 import findPieceTypeSquares from "./helpers/findPieceTypeSquares";
 
-const getRowCol = (row, col, isFlipped) => {
-	return [
-		isFlipped ? row : 7 - row,
-		isFlipped ? 7 - col : col,
-	];
-};
+const ALLOWED_PIECES_CHARS = Object.keys(BLACK_INIT_PIECES);
 
+const getRowCol = (row, col, isFlipped) => [
+	isFlipped ? row : 7 - row,
+	isFlipped ? 7 - col : col,
+];
+
+const getFenRowSquares = (rowChars, row, isFlipped) => {
+	const chars = isFlipped ? rowChars.split("").reverse() : rowChars.split("");
+	return chars
+		.map((c, col) => {
+			const symbol = c !== EMPTY ? c : false;
+			const pieceColor = symbol ? getColorFromSymbol(symbol) : null;
+
+			if (symbol && !ALLOWED_PIECES_CHARS.includes(symbol.toLowerCase())) {
+				throw new Error(`INVALID FEN! Unknown piece symbol = ${symbol}`);
+			}
+
+			return {
+				name: getSquareName(...getRowCol(row, col, isFlipped)),
+				symbol,
+				pieceColor,
+				isEmpty: c === EMPTY,
+			};
+		});
+};
 
 /**
  * Returns:
@@ -32,21 +52,10 @@ const getRowCol = (row, col, isFlipped) => {
 const getSquaresData = (parser, isFlipped) => {
 	const ranks = isFlipped ? parser.ranks.reverse() : parser.ranks;
 
-	return [].concat(ranks.map((rowChars, row) => {
-		const chars = isFlipped ? rowChars.split("").reverse() : rowChars.split("");
-		return chars
-			.map((c, col) => {
-				const symbol = c !== EMPTY ? c : false;
-				const pieceColor = symbol ? getColorFromSymbol(symbol) : null;
-
-				return {
-					name: getSquareName(...getRowCol(row, col, isFlipped)),
-					symbol,
-					pieceColor,
-					isEmpty: c === EMPTY,
-				};
-			});
-	})).flat()
+	return []
+		.concat(ranks.map((rowChars, row) =>
+			getFenRowSquares(rowChars, row, isFlipped)))
+		.flat()
 		.reduce((res, square) => {
 			res.squares[square.name] = square;
 
@@ -73,12 +82,12 @@ const getTakesForColor = (color, initPieces, state) => {
 
 			return piecePositions.length < count ?
 				new Array(count - piecePositions.length)
-					.fill({symbol, color}) : [];
-		}).flat()
+					.fill({ symbol, color }) : [];
+		}).flat();
 };
 
 const getTakes = (positions) => {
-	return getTakesForColor(PIECE_COLORS.WHITE, WHITE_INIT_PIECES,positions)
+	return getTakesForColor(PIECE_COLORS.WHITE, WHITE_INIT_PIECES, positions)
 		.concat(getTakesForColor(PIECE_COLORS.BLACK, BLACK_INIT_PIECES, positions));
 };
 
@@ -90,7 +99,7 @@ const getTakes = (positions) => {
  */
 const translateFenToState = (fen, isFlipped = false) => {
 	if (!FenParser.isFen(fen)) {
-		throw new Error("PROVIDED FEN ISNT VALID !!!! ", fen);
+		throw new Error("Invalid FEN - Could not parse", fen);
 	}
 
 	const parser = new FenParser(fen);
@@ -106,8 +115,8 @@ const translateFenToState = (fen, isFlipped = false) => {
 		move: parser.moveNumber - 1,
 		turn: TURN_PIECE[parser.turn],
 		enpass: parser.enpass !== EMPTY ? `${parser.enpass[0].toUpperCase()}${parser.enpass[1]}` : false,
-		// whiteCheck: getCheckType(WHITE_KING, { squares, whitePositions, blackPositions }),
-		// blackCheck: getCheckType(BLACK_KING, { squares, whitePositions, blackPositions }),
+		whiteCheck: getCheckType(WHITE_KING, { squares, whitePositions, blackPositions }),
+		blackCheck: getCheckType(BLACK_KING, { squares, whitePositions, blackPositions }),
 	};
 };
 

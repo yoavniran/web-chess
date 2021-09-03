@@ -9,12 +9,12 @@ const getSquaresAfterNormalMove = (squares, startSquare, targetSquare, symbol, c
 			symbol: false,
 			pieceColor: null,
 		},
-		[targetSquare]: {
+		...(targetSquare ? {[targetSquare]: {
 			...squares[targetSquare],
 			isEmpty: false,
 			symbol,
 			pieceColor: color,
-		},
+		}} : {}),
 	};
 };
 

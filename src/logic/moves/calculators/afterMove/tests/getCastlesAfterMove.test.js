@@ -39,28 +39,28 @@ describe("getCastlesAfterMove tests", () => {
 	});
 
 	it("should disable BLACK King castling for king move", () => {
-		const state = translateFenToState("r1bqk1r1/ppp12pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b kq - 9 13");
+		const state = translateFenToState("r1bqk1r1/ppp3pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b kq - 9 13");
 		const castles = getCastlesAfterMove(state, "k", PIECE_COLORS.BLACK, "E8");
 
 		expect(isEmptyChar(castles)).toBe(true);
 	});
 
 	it("should disable BLACK King castling for king move - leave WHITE castles", () => {
-		const state = translateFenToState("r1bqk1r1/ppp12pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b KQkq - 9 13");
+		const state = translateFenToState("r1bqk1r1/ppp3pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b KQkq - 9 13");
 		const castles = getCastlesAfterMove(state, "k", PIECE_COLORS.BLACK, "E8");
 
 		expect(castles).toBe("KQ");
 	});
 
 	it("should disable BLACK King side castling for H Rook move", () => {
-		const state = translateFenToState("r1bqk2r/ppp12pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b KQkq - 9 13");
+		const state = translateFenToState("r1bqk2r/ppp3pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b KQkq - 9 13");
 		const castles = getCastlesAfterMove(state, "r", PIECE_COLORS.BLACK, "H8");
 
 		expect(castles).toBe("KQq");
 	});
 
 	it("should disable BLACK Queen side castling for A Rook move", () => {
-		const state = translateFenToState("r1bqk2r/ppp12pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b KQkq - 9 13");
+		const state = translateFenToState("r1bqk2r/ppp3pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b KQkq - 9 13");
 		const castles = getCastlesAfterMove(state, "r", PIECE_COLORS.BLACK, "A8");
 
 		expect(castles).toBe("KQk");

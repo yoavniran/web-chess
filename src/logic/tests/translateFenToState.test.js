@@ -8,9 +8,11 @@ import {
 	WHITE_KING,
 	WHITE_ROOK,
 	BLACK_KNIGHT,
+	BLACK_BISHOP,
 	WHITE_KNIGHT,
-	PIECE_COLORS,
-	INITIAL_FEN, BLACK_BISHOP,
+
+	INITIAL_FEN,
+	PIECE_COLORS, CHECK_TYPES,
 } from "consts";
 import translateFenToState from "../translateFenToState";
 
@@ -109,5 +111,17 @@ describe("translateFenToState tests", () => {
 		expect(countTakesForPiece(WHITE_PAWN)).toBe(2);
 		expect(countTakesForPiece(BLACK_PAWN)).toBe(3);
 		expect(countTakesForPiece(BLACK_BISHOP)).toBe(1);
+	});
+
+	it("should mark white king is in check", () => {
+		const state = translateFenToState("8/1R2P1rk/p1bBp1pp/8/1P6/6PN/5PKP/q7 w - - 0 29");
+
+		expect(state.whiteCheck).toBe(CHECK_TYPES.CHECK);
+	});
+
+	it("should throw on invalid FEN", () => {
+		expect(() => translateFenToState("abd")).toThrow("Invalid FEN - Could not parse");
+
+		expect(() => translateFenToState("r1bqk1r1/ppp12pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b KQkq - 9 13")).toThrow("INVALID FEN! Unknown piece symbol")
 	});
 });

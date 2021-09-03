@@ -19,7 +19,7 @@ const getEnpassantAfterMove = (state, symbol, color, startSquare, targetSquare) 
 		const targetCoordinates = getSquareCoordinates(targetSquare);
 		if (Math.abs(getSquareCoordinates(startSquare)[1] - targetCoordinates[1]) === 2) {
 			const enpRow = color === PIECE_COLORS.WHITE ?
-				targetCoordinates[1] - 1 : targetCoordinates[1] + 1
+				targetCoordinates[1] - 1 : targetCoordinates[1] + 1;
 			enpassant = getSquareName(enpRow, targetCoordinates[0]);
 		}
 	}

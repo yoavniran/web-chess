@@ -1,4 +1,4 @@
-import { INITIAL_FEN, PIECE_COLORS } from "consts";
+import { INITIAL_FEN } from "consts";
 import translateFenToState from "logic/translateFenToState";
 import getColorFromSymbol from "logic/helpers/getColorFromSymbol";
 import getEnpassantAfterMove from "../getEnpassantAfterMove";
@@ -21,6 +21,4 @@ describe("getEnpassantAfterMove tests", () => {
 			expect(getEnpassantAfterMove(state, symbol, color, start, target))
 				.toBe(expected);
 		});
-
-
 });

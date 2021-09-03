@@ -17,7 +17,6 @@ import {
 } from "consts";
 import { addArrayToSet } from "../../utils";
 import getColorFromSymbol from "../helpers/getColorFromSymbol";
-import getCheckType from "../helpers/getCheckType";
 import { isKing } from "../helpers/is";
 import kingMovesDefinitions from "./calculators/definitions/kingMovesDefinitions";
 import queenMovesDefinitions from "./calculators/definitions/queenMovesDefinitions";
@@ -26,6 +25,7 @@ import bishopMovesDefinitions from "./calculators/definitions/bishopMovesDefinit
 import knightMovesDefinitions from "./calculators/definitions/knightMovesDefinitions";
 import pawnMovesDefinitions from "./calculators/definitions/pawnMovesDefinitions";
 import moveCalculator from "./calculators/moveCalculator";
+import filterAbsolutePinSquares from "./calculators/filters/filterAbsolutePinSquares";
 
 const PIECE_DEFINITIONS = {
 	[BLACK_KING]: kingMovesDefinitions,
@@ -70,19 +70,22 @@ const calculateForDefinitions = (definitions, square, symbol, state, pieceColor,
 	return [...movesSet.values()];
 };
 
-const getNotInCheck = (state, pieceColor) =>
-		getCheckType(pieceColor, state) === CHECK_TYPES.NONE;
+const canCalculate = (pieceColor, symbol, state, options) => {
+	return (
+		//when ignoreTurn is on, we dont care about check or who's turn it is
+		options.ignoreTurn ||
+		//if checkmate no more moves allowed
+		state.whiteCheck !== CHECK_TYPES.MATE &&
+		state.blackCheck !== CHECK_TYPES.MATE &&
+		//check if the right turn
+		isRightTurn(state, pieceColor)
+	);
+};
 
-const canCalculate = (state, pieceColor, symbol, options) =>
-	//when ignoreTurn is on, we dont care about check or who's turn it is
-	(options.ignoreTurn || (
-		(!isKing(symbol) || !getNotInCheck(state, pieceColor)) &&
-		isRightTurn(state, pieceColor)));
-
-export const calculateSquares = (square, symbol, state, pieceColor, options = {}) => {
+export const calculateSquares = (square, symbol, pieceColor, state, options = {}) => {
 	const definitions = PIECE_DEFINITIONS[symbol];
 
-	return calculateForDefinitions(
+	const moves = calculateForDefinitions(
 		definitions,
 		square,
 		symbol,
@@ -90,13 +93,20 @@ export const calculateSquares = (square, symbol, state, pieceColor, options = {}
 		pieceColor,
 		options,
 	);
+
+	if (isKing(symbol)) {
+		console.log("calculated mvoes = ", { symbol, moves });
+	}
+	return (options.ignorePin || isKing(symbol)) ?
+		moves :
+		filterAbsolutePinSquares(square, symbol, pieceColor, moves, state);
 };
 
 const getMoveSquares = (square, symbol, state, options = {}) => {
 	const pieceColor = getColorFromSymbol(symbol);
 
-	return canCalculate(state, pieceColor, symbol, options) ?
-		calculateSquares(square, symbol, state, pieceColor, options) : [];
+	return canCalculate(pieceColor, symbol, state, options) ?
+		calculateSquares(square, symbol, pieceColor, state, options) : [];
 };
 
 export default getMoveSquares;

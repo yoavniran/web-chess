@@ -41,3 +41,11 @@
  * @property {PIECE_COLORS} pieceColor
  * @property {boolean} isEmpty
  */
+
+/**
+ * @typedef AttackInfo
+ * @type {object}
+ * @property {string} symbol
+ * @property {string} square
+ * @property {string[]} moves
+ */
