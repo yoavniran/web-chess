@@ -18,6 +18,25 @@ An implementation of a playable chess board using web technologies:
 
 ## Features
 
+Supports all rules of classical Chess:
+
+- only legal moves
+- castling
+- enpassant
+- 50 move count rule
+- pawn promotion (TBD)
+- move algebraic notation (TBD)
+
+### Capabilities 
+
+- Start from any legal FEN
+- Check(mate) identification & highlighting
+- legal moves identification & highlighting
+- take identification & highlighting
+- pinned piece (absolute) identification
+
+## Roadmap
+
 ### P1
 
 | Feature | Area | Status

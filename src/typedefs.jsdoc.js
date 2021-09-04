@@ -8,6 +8,7 @@
  * @property {boolean} [allowMoveByDrag=true] - User can drag&drop pieces on the board
  *
  */
+
 /**
  * @typedef Take
  * @type {object}
@@ -16,6 +17,17 @@
  * @property {PIECE_COLORS} color
  * @property {number | undefined} move
  */
+
+/**
+ * @typedef CalcOptions
+ * @type {object}
+ * @property {?boolean} expectedTake
+ * @property {?number} sidewaysVector
+ * @property {?number} diagonalVector
+ * @property {?boolean} ignoreTurn
+ * @property  {?boolean} ignorePin
+ */
+
 
 /**
  * @typedef State
@@ -28,9 +40,13 @@
  * @property {number} halfMoveClock
  * @property {number} move
  * @property {TURN_PIECE} turn
- * @property {boolean | string} enpass
+ * @property {boolean | string} enpassant
  * @property {CHECK_TYPES} whiteCheck
  * @property {CHECK_TYPES} blackCheck
+ *
+ * @property {(startSquare: string, targetSquare: string) => State} updateWithNextMove - update state with the next ply in the game
+ * @property {(startSquare: string, color: PIECE_COLORS, directions: number, count: number, options: CalcOptions) => string[]} getCachedCalculation
+ * @property {(startSquare: string, color: PIECE_COLORS, directions: number, count: number, options: CalcOptions) => void} cacheCalculation
  */
 
 /**

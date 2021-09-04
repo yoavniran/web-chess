@@ -1,6 +1,6 @@
 import { selector, useRecoilState } from "recoil";
 import isString from "lodash/isString";
-import { getMoves, translateFenToState, translateStateToFen, applyMoveToState } from "logic";
+import { getMoveSquares, translateFenToState, translateStateToFen, applyMoveToState } from "logic";
 import {
 	GameMoves,
 	GameStartingPosition,
@@ -46,7 +46,7 @@ const useSelectedPieceSetter = createStateHookSetter(
 		const currentPosition = get(selectGameCurrentPosition);
 
 		if (currentPosition) {
-			set(SelectedPieceAvailableMoves, getMoves(square, symbol, currentPosition));
+			set(SelectedPieceAvailableMoves, getMoveSquares(square, symbol, currentPosition));
 		}
 	},
 );

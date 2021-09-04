@@ -1,7 +1,7 @@
 import { MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
 import { addArrayToSet } from "utils";
-import getSquareCoordinates from "../../../helpers/getSquareCoordinates";
-import getDistance from "../../../helpers/getDistance";
+import getSquareCoordinates from "logic/helpers/getSquareCoordinates";
+import getDistance from "logic/helpers/getDistance";
 import calculatePieceAllMoveSquares from "../calculatePieceAllMoveSquares";
 import getMoveDirection from "../../getMoveDirection";
 import getMoveDiagonalVector from "../../getMoveDiagonalVector";
@@ -13,7 +13,7 @@ import getMoveSidewaysVector from "../../getMoveSidewaysVector";
  * @param {string[]} moveSquares
  * @returns {string[]}
  */
-const filterUnreachableSquares = (startSquare, moveSquares) => {
+const filterUnreachableSquares = (startSquare, moveSquares, state) => {
 	const allowedSquares = new Set();
 	const startCoordinates = getSquareCoordinates(startSquare);
 
@@ -42,6 +42,7 @@ const filterUnreachableSquares = (startSquare, moveSquares) => {
 			PIECE_COLORS.WHITE,
 			direction,
 			getDistance(startCoordinates, moveCoordinates),
+			state,
 			{ diagonalVector, sidewaysVector } );
 
 		let removeStartIndex = 0;

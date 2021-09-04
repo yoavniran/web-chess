@@ -1,17 +1,12 @@
 import FenParser from "@chess-fu/fen-parser";
 import {
 	BLACK_INIT_PIECES,
-	BLACK_KING,
 	EMPTY,
 	PIECE_COLORS,
-	TURN_PIECE,
-	WHITE_INIT_PIECES,
-	WHITE_KING,
 } from "consts";
 import getSquareName from "./helpers/getSquareName";
 import getColorFromSymbol from "./helpers/getColorFromSymbol";
-import getCheckType from "./helpers/getCheckType";
-import findPieceTypeSquares from "./helpers/findPieceTypeSquares";
+import getBoardState from "./boardState";
 
 const ALLOWED_PIECES_CHARS = Object.keys(BLACK_INIT_PIECES);
 
@@ -75,22 +70,6 @@ const getSquaresData = (parser, isFlipped) => {
 		});
 };
 
-const getTakesForColor = (color, initPieces, state) => {
-	return Object.entries(initPieces)
-		.map(([symbol, count]) => {
-			const piecePositions = findPieceTypeSquares(state, symbol);
-
-			return piecePositions.length < count ?
-				new Array(count - piecePositions.length)
-					.fill({ symbol, color }) : [];
-		}).flat();
-};
-
-const getTakes = (positions) => {
-	return getTakesForColor(PIECE_COLORS.WHITE, WHITE_INIT_PIECES, positions)
-		.concat(getTakesForColor(PIECE_COLORS.BLACK, BLACK_INIT_PIECES, positions));
-};
-
 /**
  * translateFenToState
  * @param fen
@@ -105,19 +84,16 @@ const translateFenToState = (fen, isFlipped = false) => {
 	const parser = new FenParser(fen);
 	const { squares, whitePositions, blackPositions } = getSquaresData(parser, isFlipped);
 
-	return {
+	return getBoardState(
 		squares,
 		whitePositions,
 		blackPositions,
-		takes: getTakes({ whitePositions, blackPositions }),
-		castles: parser.castles,
-		halfmoveClock: parser.halfmoveClock,
-		move: parser.moveNumber - 1,
-		turn: TURN_PIECE[parser.turn],
-		enpass: parser.enpass !== EMPTY ? `${parser.enpass[0].toUpperCase()}${parser.enpass[1]}` : false,
-		whiteCheck: getCheckType(WHITE_KING, { squares, whitePositions, blackPositions }),
-		blackCheck: getCheckType(BLACK_KING, { squares, whitePositions, blackPositions }),
-	};
+		parser.castles,
+		parser.halfmoveClock,
+		parser.enpass,
+		parser.moveNumber,
+		parser.turn
+	);
 };
 
 export default translateFenToState;

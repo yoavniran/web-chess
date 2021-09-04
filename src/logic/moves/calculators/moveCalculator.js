@@ -26,10 +26,6 @@ const runThroughFilters = (moveSquares, square, state, pieceColor, squareState, 
 		moveSquares = filterNonOccupiedSquares(moveSquares, state, options.expectedTake);
 	}
 
-	if (state.squares[square].symbol === "k"){
-		console.log("king move after filters = ", moveSquares);
-	}
-
 	//Filter out all unreachable squares left from previous filters
 	return filterUnreachableSquares(square, moveSquares);
 };
@@ -45,7 +41,7 @@ const moveCalculator = (square, symbol, state, pieceColor, definition, options =
 	if (canCalculate) {
 		moveSquares = runThroughFilters(
 			//first get all squares the piece could potentially move to (without limitations)
-			calculatePieceAllMoveSquares(square, pieceColor, directions, count),
+			calculatePieceAllMoveSquares(square, pieceColor, directions, count, state),
 			square,
 			state,
 			pieceColor,
@@ -53,10 +49,6 @@ const moveCalculator = (square, symbol, state, pieceColor, definition, options =
 			canBeTaken,
 			options,
 		);
-	}
-
-	if (symbol === "k"){
-		console.log("king move after all filters = ", moveSquares);
 	}
 
 	//add new allowed moves to those calculated by (possibly) previous calculators

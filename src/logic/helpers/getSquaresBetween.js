@@ -4,7 +4,7 @@ import calculatePieceAllMoveSquares from "../moves/calculators/calculatePieceAll
 import { PIECE_COLORS } from "../../consts";
 import getSquareCoordinates from "./getSquareCoordinates";
 
-const getSquaresBetween = (start, end, infinite = false) => {
+const getSquaresBetween = (start, end, state, infinite = false) => {
 	const distance = infinite ? Infinity :
 		getDistance(getSquareCoordinates(start), getSquareCoordinates(end));
 
@@ -19,6 +19,7 @@ const getSquaresBetween = (start, end, infinite = false) => {
 		PIECE_COLORS.WHITE,
 		direction,
 		distance - 1,
+		state,
 		{ diagonalVector, sidewaysVector });
 };
 

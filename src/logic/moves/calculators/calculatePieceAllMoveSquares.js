@@ -97,20 +97,28 @@ const getSquaresFromParams = (params, startCoordinates, count) => {
 	return squares;
 };
 
-const calculatePieceAllMoveSquares = (startSquare, color, directions, count, options = {}) => {
-	const startCoordinates = getSquareCoordinates(startSquare);
-	const allowedDirections = getAllowedDirections(directions);
+const calculatePieceAllMoveSquares = (startSquare, color, directions, count, state, options = {}) => {
+	let result = state?.getCachedCalculation(startSquare, color, directions, count, options);
 
-	const squares = allowedDirections.map(({ direction }) => {
-		const paramsSets = getDirectionParams(direction, color, options);
+	if (!result) {
+		const startCoordinates = getSquareCoordinates(startSquare);
+		const allowedDirections = getAllowedDirections(directions);
 
-		return paramsSets
-			.map((params) => getSquaresFromParams(params, startCoordinates, count))
-			.flat();
-	}).flat();
+		const squares = allowedDirections.map(({ direction }) => {
+			const paramsSets = getDirectionParams(direction, color, options);
 
-	//return squares sorted by closest to starting square
-	return sortSquaresByClosest(startSquare, squares);
+			return paramsSets
+				.map((params) => getSquaresFromParams(params, startCoordinates, count))
+				.flat();
+		}).flat();
+
+		//return squares sorted by closest to starting square
+		result = sortSquaresByClosest(startSquare, squares);
+
+		state?.cacheCalculation(result, startSquare, color, directions, count, options);
+	}
+
+	return result;
 };
 
 export default calculatePieceAllMoveSquares;

@@ -94,9 +94,6 @@ export const calculateSquares = (square, symbol, pieceColor, state, options = {}
 		options,
 	);
 
-	if (isKing(symbol)) {
-		console.log("calculated mvoes = ", { symbol, moves });
-	}
 	return (options.ignorePin || isKing(symbol)) ?
 		moves :
 		filterAbsolutePinSquares(square, symbol, pieceColor, moves, state);

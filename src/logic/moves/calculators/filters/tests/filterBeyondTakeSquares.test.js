@@ -1,4 +1,5 @@
 import { MOVE_DIRECTIONS, PIECE_COLORS } from "consts";
+import getStateMock from "logic/tests/mocks/boardState.mock";
 import calculatePieceAllMoveSquares from "../../calculatePieceAllMoveSquares";
 import filterBeyondTakeSquares from "../filterBeyondTakeSquares";
 
@@ -14,15 +15,15 @@ describe("filterBeyondTakeSquares tests", () => {
 			Infinity,
 		);
 
-		const state = {
-			squares: {
-				F5: { pieceColor: PIECE_COLORS.BLACK },
-				E2: { pieceColor: PIECE_COLORS.WHITE },
-				G3: { pieceColor: PIECE_COLORS.BLACK },
-				D6: { pieceColor: PIECE_COLORS.BLACK },
-				A3: { pieceColor: PIECE_COLORS.BLACK },
-			},
-		};
+		const state = getStateMock({
+				squares: {
+					F5: { pieceColor: PIECE_COLORS.BLACK },
+					E2: { pieceColor: PIECE_COLORS.WHITE },
+					G3: { pieceColor: PIECE_COLORS.BLACK },
+					D6: { pieceColor: PIECE_COLORS.BLACK },
+					A3: { pieceColor: PIECE_COLORS.BLACK },
+				},
+			});
 
 		const filtered = filterBeyondTakeSquares(
 			"D3",

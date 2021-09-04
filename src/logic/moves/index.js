@@ -1,7 +1,8 @@
-import { calculateSquares } from "./getMoveSquares";
+import getMoveSquares, { calculateSquares } from "./getMoveSquares";
 
-export default from "./getMoveSquares";
+// export default from "./getMoveSquares";
 
 export {
-	calculateSquares
+	getMoveSquares,
+	calculateSquares,
 };

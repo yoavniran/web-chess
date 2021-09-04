@@ -5,9 +5,9 @@ import getSquaresBetween from "./getSquaresBetween";
 import { isKing } from "./is";
 import { PIECE_COLORS } from "../../consts";
 
-const filterToAttackSquares = (attackerSquare, targetSquare, moves) => {
+const filterToAttackSquares = (attackerSquare, targetSquare, moves, state) => {
 	return intersection(
-		getSquaresBetween(attackerSquare, targetSquare, true),
+		getSquaresBetween(attackerSquare, targetSquare, state, true),
 		moves,
 	);
 };
@@ -48,7 +48,7 @@ const getAttackingPiecesOnSquare = (targetSquare, color, considerEmpty, state) =
 			return moves.includes(targetSquare) ? res.concat({
 				symbol,
 				square,
-				moves: filterToAttackSquares(square, targetSquare, moves),
+				moves: filterToAttackSquares(square, targetSquare, moves, state),
 			}) : res;
 		}, []);
 };
