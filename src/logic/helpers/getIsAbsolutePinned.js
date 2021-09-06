@@ -22,19 +22,19 @@ export const getAbsolutePinAttacks = (square, moveSquare, color, symbol, checkSq
 		symbol,
 		color);
 
-	//get state as if blocking piece moved
-	const nextState = {
-		...state,
-		squares: afterMoveSquares,
-		whitePositions: getColorPiecePositions(PIECE_COLORS.WHITE, afterMoveSquares),
-		blackPositions: getColorPiecePositions(PIECE_COLORS.BLACK, afterMoveSquares),
-	};
-
 	const attacks = getAttackingPiecesOnSquare(
 		checkSquare,
 		color,
 		[],
-		nextState,
+		//get state as if blocking piece moved
+		state.clone({
+			squares: afterMoveSquares,
+			whitePositions: getColorPiecePositions(PIECE_COLORS.WHITE, afterMoveSquares),
+			blackPositions: getColorPiecePositions(PIECE_COLORS.BLACK, afterMoveSquares),
+		}),
+		{
+			bailOnFirst: true,
+		}
 	);
 
 	//find if king is attacked(checked) after blocking piece moved

@@ -2,7 +2,7 @@ import React from "react";
 import Board from "../Board";
 import {
 	useAllowedMovesSquaresSelector,
-	useBoardSquaresSelector,
+	useBoardSquaresSelector, useChecksSelector,
 	useIsFlippedSelector, usePieceDestinationSetter,
 	useSelectedPieceSetter,
 	useSelectedPieceSquareSelector,
@@ -19,7 +19,8 @@ const GameBoard = ({ className }) => {
 		setSelectedPiece = useSelectedPieceSetter(),
 		unselectPiece = useUnselectPieceSetter(),
 		allowedMovesSquares = useAllowedMovesSquaresSelector(),
-		setPieceDestinationSquare = usePieceDestinationSetter();
+		setPieceDestinationSquare = usePieceDestinationSetter(),
+		checks = useChecksSelector();
 
 	return (<Board
 		className={className}
@@ -30,6 +31,7 @@ const GameBoard = ({ className }) => {
 		unselectPiece={unselectPiece}
 		allowedMoveSquares={allowedMovesSquares}
 		movePiece={setPieceDestinationSquare}
+		checks={checks}
 	/>);
 };
 

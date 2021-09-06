@@ -1,4 +1,4 @@
-import { selector, useRecoilValue } from "recoil";
+import { selector, useRecoilValue, isRecoilValue } from "recoil";
 import {
 	// GameCurrentPosition,
 	// GameStartingPosition,
@@ -7,11 +7,16 @@ import {
 	SelectedPieceAvailableMoves,
 } from "./atoms";
 import { selectGameCurrentPosition } from "./selectors";
+import { PIECE_COLORS } from "../../../consts";
 
 const createSelectorHook = (key, getter) => {
 	const hookSelector = selector({
 		key,
-		get: ({ get }) => getter(get),
+		get: ({ get }) => isRecoilValue(getter) ?
+			//get atom directly
+			get(getter) :
+			//execute getter callback
+			getter(get),
 	});
 
 	const useHook = () => useRecoilValue(hookSelector);
@@ -53,12 +58,23 @@ const useTurnSelector = createSelectorHook(
 
 const useSelectedPieceSquareSelector = createSelectorHook(
 	"SelectedPieceSquareSelector",
-	(get) => get(SelectedPieceData),
+	SelectedPieceData,
 );
 
 const useAllowedMovesSquaresSelector = createSelectorHook(
 	"AllowedMovesSquaresSelector",
-	(get) => get(SelectedPieceAvailableMoves),
+	SelectedPieceAvailableMoves,
+);
+
+const useChecksSelector = createSelectorHook(
+	"ChecksSelector",
+	(get) => {
+		const currentPosition = get(selectGameCurrentPosition);
+		return {
+			[PIECE_COLORS.WHITE]: currentPosition.whiteCheck,
+			[PIECE_COLORS.BLACK]: currentPosition.blackCheck
+		};
+	},
 );
 
 export {
@@ -68,4 +84,5 @@ export {
 	useTurnSelector,
 	useSelectedPieceSquareSelector,
 	useAllowedMovesSquaresSelector,
+	useChecksSelector,
 };

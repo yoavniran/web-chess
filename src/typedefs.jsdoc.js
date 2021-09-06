@@ -25,28 +25,68 @@
  * @property {?number} sidewaysVector
  * @property {?number} diagonalVector
  * @property {?boolean} ignoreTurn
- * @property  {?boolean} ignorePin
+ * @property {?boolean} ignorePin
+ * @property {?boolean} ignoreCanBeTaken
  */
 
+/**
+ * @callback StateUpdateWithNextMove
+ * @param {string} startSquare
+ * @param {string} targetSquare
+ * @returns {State}
+ */
+
+/**
+ * @callback StateGetCachedCalculation
+ * @param {string} startSquare
+ * @param {PIECE_COLORS} color
+ * @param {number} directions
+ * @param {number} count
+ * @param {CalcOptions} options
+ * @returns {string[]}
+ */
+
+/**
+ * @callback StateCacheCalculation
+ * @param {string} startSquare
+ * @param {PIECE_COLORS} color
+ * @param {number} directions
+ * @param {number} count
+ * @param {CalcOptions} options
+ * @returns {undefined}
+ */
+
+/**
+ * @callback StateGetCacheSize
+ * @returns {number}
+ */
+
+/**
+ * @callback StateClone
+ * @param {?Object} overrides
+ * @returns {State}
+ */
 
 /**
  * @typedef State
- * @type {object}
+ * @type {Object}
  * @property {Object.<string, PieceSquare>} squares
  * @property {Object.<string, string>} whitePositions
  * @property {Object.<string, string>} blackPositions
  * @property {Take[]} takes
  * @property {string} castles
- * @property {number} halfMoveClock
+ * @property {number} halfmoveClock
  * @property {number} move
  * @property {TURN_PIECE} turn
  * @property {boolean | string} enpassant
  * @property {CHECK_TYPES} whiteCheck
  * @property {CHECK_TYPES} blackCheck
  *
- * @property {(startSquare: string, targetSquare: string) => State} updateWithNextMove - update state with the next ply in the game
- * @property {(startSquare: string, color: PIECE_COLORS, directions: number, count: number, options: CalcOptions) => string[]} getCachedCalculation
- * @property {(startSquare: string, color: PIECE_COLORS, directions: number, count: number, options: CalcOptions) => void} cacheCalculation
+ * @property {StateUpdateWithNextMove} updateWithNextMove - update state with the next ply in the game
+ * @property {StateClone} clone - get a copy of the state with optional overrides
+ * @property {StateGetCachedCalculation} getCachedCalculation
+ * @property {StateCacheCalculation} cacheCalculation
+ * @property {StateGetCacheSize} getCacheSize
  */
 
 /**

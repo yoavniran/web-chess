@@ -176,7 +176,9 @@ describe("calculatePieceAllMoveSquares tests", () => {
 			"H3",
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.DIAGONAL,
-			1);
+			1,
+			null
+		);
 
 		expect(possibleMovesForDirection).toHaveLength(2);
 	});
@@ -188,6 +190,7 @@ describe("calculatePieceAllMoveSquares tests", () => {
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.DIAGONAL,
 			1,
+			null,
 			{ diagonalVector: DIAGONAL_VECTORS.SW });
 
 		expect(possibleMovesForDirection).toHaveLength(1);
@@ -199,6 +202,7 @@ describe("calculatePieceAllMoveSquares tests", () => {
 			PIECE_COLORS.WHITE,
 			MOVE_DIRECTIONS.SIDEWAYS,
 			Infinity,
+			null,
 			{ sidewaysVector: SIDEWAYS_VECTORS.RIGHT },
 		);
 

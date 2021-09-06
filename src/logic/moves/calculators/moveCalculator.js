@@ -14,8 +14,8 @@ const runThroughFilters = (moveSquares, square, state, pieceColor, squareState, 
 	//Filter out squares that are beyond possible takes
 	moveSquares = filterBeyondTakeSquares(square, pieceColor, moveSquares, state, options);
 
-	if (!canBeTaken) {
-		//filter out squares can be taken on if canBeTaken === false
+	if (!canBeTaken && !options.ignoreCanBeTaken) {
+		//filter out squares can be taken on
 		moveSquares = filterCanBeTakenSquares(pieceColor, square, moveSquares, state);
 	}
 

@@ -63,6 +63,8 @@ export const MOVE_DIRECTIONS = {
 	"KNIGHT": 16,
 };
 
+export const INIT_CASTLES = "KQkq";
+
 export const INITIAL_FEN = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
 export const EMPTY = "-";

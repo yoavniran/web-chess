@@ -5,6 +5,7 @@ import {
 	EMPTY,
 	PIECE_COLORS,
 	TURN_PIECE,
+	INIT_CASTLES,
 	BLACK_KING,
 	WHITE_KING,
 } from "consts";
@@ -16,6 +17,7 @@ import {
 	getFiftyMoveRuleCount,
 } from "./moves/calculators/afterMove";
 import getSquaresAfterMove from "./helpers/getSquaresAfterMove";
+import getOppositeColor from "./helpers/getOppositeColor";
 
 const getTakesForColor = (color, initPieces, state) => {
 	return Object.entries(initPieces)
@@ -28,8 +30,9 @@ const getTakesForColor = (color, initPieces, state) => {
 		}).flat();
 };
 
-const getTakeInfo = (state, startSquare, targetSquare, move) => {
+const getTakeInfo = (state, targetSquare, move) => {
 	const targetInfo = state.squares[targetSquare];
+
 	return !targetInfo.isEmpty ?
 		{
 			square: targetSquare,
@@ -40,75 +43,76 @@ const getTakeInfo = (state, startSquare, targetSquare, move) => {
 		null;
 };
 
-const getTakes = (positions) =>
-	getTakesForColor(PIECE_COLORS.WHITE, WHITE_INIT_PIECES, positions)
-		.concat(getTakesForColor(PIECE_COLORS.BLACK, BLACK_INIT_PIECES, positions));
-
-const updateState = produce((draft, payload) => {
-	const next = { ...draft, ...payload };
-
-	return {
-		...next,
-		whiteCheck: getCheckType(WHITE_KING, next),
-		blackCheck: getCheckType(BLACK_KING, next),
-	};
-});
+const getTakes = (data) =>
+	getTakesForColor(PIECE_COLORS.WHITE, WHITE_INIT_PIECES, data)
+		.concat(getTakesForColor(PIECE_COLORS.BLACK, BLACK_INIT_PIECES, data));
 
 const getCacheKey = (startSquare, color, directions, count, options) =>
 	`${startSquare}_${color}_${directions}_${count}_${JSON.stringify(options)}`;
 
+const producer = produce((draft, { data } = {}) => {
+	return {
+		...draft,
+		...data,
+	};
+});
+
 /**
- *
- * @param squares
- * @param whitePositions
- * @param blackPositions
- * @param castles
- * @param halfmoveClock
- * @param enpassant
- * @param moveNumber
- * @param turn
  * @returns {State}
  */
-const getBoardState = (squares, whitePositions, blackPositions, castles, halfmoveClock, enpassant, moveNumber, turn) => {
-	let state;
+const getBoardStateForNextMove = (state, startSquare, targetSquare) => {
+	const takeInfo = getTakeInfo(state, targetSquare, state.move),
+		movingSymbol = state.squares[startSquare].symbol,
+		movingColor = state.squares[startSquare].pieceColor;
+
+	const newSquares = getSquaresAfterMove(state.squares, startSquare, targetSquare, movingSymbol, movingColor, takeInfo);
+
+	const newWhitePositions = movingColor === PIECE_COLORS.WHITE ?
+		getColorPiecePositions(movingColor, newSquares) : state.whitePositions;
+
+	const newBlackPositions = movingColor === PIECE_COLORS.BLACK ?
+		getColorPiecePositions(movingColor, newSquares) : state.blackPositions;
+
+	return getStateBoardFromData({
+		squares: newSquares,
+		whitePositions: newWhitePositions,
+		blackPositions: newBlackPositions,
+		move: movingColor === PIECE_COLORS.BLACK ? state.move + 1 : state.move,
+		turn: getOppositeColor(movingColor),
+		castles: getCastlesAfterMove(state, movingSymbol, movingColor, startSquare),
+		enpassant: getEnpassantAfterMove(state, movingSymbol, movingColor, startSquare, targetSquare),
+		halfmoveClock: getFiftyMoveRuleCount(state.halfmoveClock, movingSymbol, !!takeInfo),
+		takes: takeInfo ? state.takes.concat(takeInfo) : state.takes,
+	});
+};
+
+const getStateBoardFromData = (data, calculateChecks = true) => {
+	let state = null;
 	let calculationsCache = {};
 
-	/**
-	 * @returns {State}
-	 */
-	const updateWithNextMove = (startSquare, targetSquare) => {
-		//reset cache on update
-		calculationsCache = {};
-
-		const takeInfo = getTakeInfo(state, startSquare, targetSquare, state.move),
-		 movingSymbol = state.squares[startSquare].symbol,
-			movingColor = squares[startSquare].pieceColor;
-
-		console.log("TAKE INFO - ", {
-			startSquare, targetSquare, takeInfo
+	const updateState = (next, calculateChecks) => {
+		//enrich with methods
+		state = producer(state, {
+			data: {
+				...next,
+				updateWithNextMove: (startSquare, targetSquare) =>
+					getBoardStateForNextMove(state, startSquare, targetSquare),
+				getCachedCalculation,
+				cacheCalculation,
+				clone,
+				getCacheSize,
+			},
 		});
 
-		const newSquares = getSquaresAfterMove(squares, startSquare, targetSquare, movingSymbol, movingColor, takeInfo);
-
-		const newWhitePositions = movingColor === PIECE_COLORS.WHITE ?
-			 		getColorPiecePositions(movingColor, newSquares) : whitePositions;
-
-		const newBlackPositions = movingColor === PIECE_COLORS.BLACK ?
-					getColorPiecePositions(movingColor, newSquares) : blackPositions;
-
-		state = updateState(state, {
-			squares: newSquares,
-			whitePositions: newWhitePositions,
-			blackPositions: newBlackPositions,
-			move: movingColor === PIECE_COLORS.BLACK ? state.move + 1 : state.move,
-			turn: movingColor === PIECE_COLORS.WHITE ? PIECE_COLORS.BLACK : PIECE_COLORS.WHITE,
-			castles: getCastlesAfterMove(state, movingSymbol, movingColor, startSquare),
-			enpassant: getEnpassantAfterMove(state, movingSymbol, movingColor, startSquare, targetSquare),
-			halfmoveClock: getFiftyMoveRuleCount(state.halfMoveClock, movingSymbol, !!takeInfo),
-			takes: takeInfo ? state.takes.concat(takeInfo) : state.takes,
-		});
-
-		return state;
+		if (calculateChecks) {
+			//enrich with checks
+			state = producer(state, {
+				data: {
+					whiteCheck: getCheckType(WHITE_KING, state),
+					blackCheck: getCheckType(BLACK_KING, state),
+				},
+			});
+		}
 	};
 
 	const getCachedCalculation = (...params) => {
@@ -119,23 +123,36 @@ const getBoardState = (squares, whitePositions, blackPositions, castles, halfmov
 		calculationsCache[getCacheKey(...params)] = moves;
 	};
 
-	state = updateState({
-		squares,
-		whitePositions,
-		blackPositions,
-		takes: getTakes({ whitePositions, blackPositions }),
-		castles,
-		halfmoveClock,
-		move: moveNumber - 1,
-		turn: TURN_PIECE[turn],
-		enpassant: enpassant !== EMPTY ? `${enpassant[0].toUpperCase()}${enpassant[1]}` : false,
+	const getCacheSize = () => Object.keys(calculationsCache).length;
 
-		updateWithNextMove,
-		getCachedCalculation,
-		cacheCalculation,
-	});
+	const clone = (overrides = {}) => {
+		return getStateBoardFromData({
+			...state,
+			...overrides,
+		}, false);
+	};
+
+	updateState({
+			...data,
+			takes: data.takes ?? getTakes(data),
+			castles: data.castles ?? INIT_CASTLES,
+			halfmoveClock: data.halfmoveClock ?? 0,
+			move: data.move ?? 0,
+			turn: data.turn,
+			enpassant: data.enpassant && data.enpassant !== EMPTY ? `${data.enpassant[0].toUpperCase()}${data.enpassant[1]}` : false,
+		},
+		calculateChecks,
+	);
 
 	return state;
 };
 
-export default getBoardState;
+/**
+ *
+ * @param {object} data
+ * @returns {State}
+ */
+const createBoardState = (data) =>
+	getStateBoardFromData(data);
+
+export default createBoardState;

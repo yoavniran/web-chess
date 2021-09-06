@@ -52,7 +52,7 @@ describe("filterBeyondTakeSquares tests", () => {
 			Infinity,
 		);
 
-		const state = {
+		const state = getStateMock({
 			squares: {
 				F7: { pieceColor: PIECE_COLORS.WHITE }, //cause remove: F8
 				G6: { pieceColor: PIECE_COLORS.BLACK },
@@ -60,7 +60,7 @@ describe("filterBeyondTakeSquares tests", () => {
 				D6: { pieceColor: PIECE_COLORS.WHITE }, //cause remove: C6
 				F5: { isEmpty: true },
 			},
-		};
+		});
 
 		const filtered = filterBeyondTakeSquares("F6", PIECE_COLORS.BLACK, moveSquares, state);
 
@@ -88,12 +88,12 @@ describe("filterBeyondTakeSquares tests", () => {
 			Infinity,
 		);
 
-		const state = {
+		const state = getStateMock({
 			squares: {
 				B2: { pieceColor: PIECE_COLORS.BLACK }, //cause remove: A2
 				F6: { pieceColor: PIECE_COLORS.WHITE }, //cause remove: F7
 			},
-		};
+		});
 
 		const filtered = filterBeyondTakeSquares("F2", PIECE_COLORS.BLACK, moveSquares, state, { expectedTake: ["B2"] });
 
@@ -111,12 +111,12 @@ describe("filterBeyondTakeSquares tests", () => {
 			Infinity,
 		);
 
-		const state = {
+		const state = getStateMock({
 			squares: {
 				E3: { pieceColor: PIECE_COLORS.BLACK }, //cause remove: F3
 				C7: { pieceColor: PIECE_COLORS.BLACK }, //cause remove: C8
 			},
-		};
+		});
 
 		const filtered = filterBeyondTakeSquares(
 			"C3",

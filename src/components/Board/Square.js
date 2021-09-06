@@ -4,7 +4,7 @@ import { AnimatePresence } from "framer-motion";
 import { SQUARE_TONES } from "consts";
 import Piece from "./Piece";
 import MoveIndicator from "./MoveIndicator";
-import { usePreviousValue } from "beautiful-react-hooks";
+import CheckIndicator from "./CheckIndicator";
 
 const darkSquareCss = css`
   ${({ theme }) => `
@@ -60,9 +60,8 @@ const Square = memo(({
 	                     showAllowedMoveIndication = true,
 	                     isAllowedMove = false,
 	                     movePiece,
+	                     check,
                      }) => {
-
-	// const previousSymbol = usePreviousValue(symbol);
 
 	const onSquareClick = useCallback(() => {
 		if (isAllowedMove) {

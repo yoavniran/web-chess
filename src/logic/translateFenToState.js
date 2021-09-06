@@ -3,6 +3,7 @@ import {
 	BLACK_INIT_PIECES,
 	EMPTY,
 	PIECE_COLORS,
+	TURN_PIECE,
 } from "consts";
 import getSquareName from "./helpers/getSquareName";
 import getColorFromSymbol from "./helpers/getColorFromSymbol";
@@ -78,22 +79,22 @@ const getSquaresData = (parser, isFlipped) => {
  */
 const translateFenToState = (fen, isFlipped = false) => {
 	if (!FenParser.isFen(fen)) {
-		throw new Error("Invalid FEN - Could not parse", fen);
+		throw new Error(`Invalid FEN - Could not parse: ${fen}`, );
 	}
 
 	const parser = new FenParser(fen);
 	const { squares, whitePositions, blackPositions } = getSquaresData(parser, isFlipped);
 
-	return getBoardState(
+	return getBoardState({
 		squares,
 		whitePositions,
 		blackPositions,
-		parser.castles,
-		parser.halfmoveClock,
-		parser.enpass,
-		parser.moveNumber,
-		parser.turn
-	);
+		castles: parser.castles,
+		halfmoveClock: parser.halfmoveClock,
+		enpassant: parser.enpass,
+		move: (parser.moveNumber - 1),
+		turn: TURN_PIECE[parser.turn],
+	});
 };
 
 export default translateFenToState;

@@ -1,4 +1,4 @@
-import { INITIAL_FEN } from "../../../../consts";
+import { INITIAL_FEN } from "consts";
 
 describe("castleCalculator tests", () => {
 

@@ -6,7 +6,13 @@ const getCanBeTakenOnSquare = (startSquare, targetSquare, color, opponentPieces,
 		targetSquare,
 		color,
 		[startSquare],
-		state)
+		state,
+		{
+			//1 attacker is enough, we dont need all of them
+			bailOnFirst: true,
+			//need to account for king's repelling force against another king
+			ignoreTakesOnAttacker: true
+		})
 		.length;
 
 const filterCanBeTakenSquares = (pieceColor, startSquare, moveSquares, state) => {

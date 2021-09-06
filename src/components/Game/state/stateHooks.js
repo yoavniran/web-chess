@@ -69,9 +69,8 @@ const usePieceDestinationSetter = createStateHookSetter(
 		const pieceSquare = get(useSelectedPieceSquareSelector.selector);
 
 		//TODO: update current position
-		console.log("MOVING PIECE !!!!!!!!!!");
 		set(GameCurrentPosition, (state) =>
-			applyMoveToState(state, pieceSquare,square));
+			state.updateWithNextMove(pieceSquare, square));
 
 		unselectPiece(set);
 		// set(GameMoves, moves.concat({

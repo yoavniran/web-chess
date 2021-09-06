@@ -11,6 +11,16 @@ import { isEmptyChar } from "../helpers/is";
 
 describe("boardState tests", () => {
 
+	it("should create new state on update ", () => {
+		const state = translateFenToState(INITIAL_FEN);
+		const newState = state.updateWithNextMove("E2", "E4");
+
+		expect(state).not.toBe(newState);
+		expect(state.squares["E4"].isEmpty).toBe(true);
+		expect(newState.squares["E4"].isEmpty).toBe(false);
+		expect(newState.getCacheSize()).not.toBe(state.getCacheSize());
+	});
+
 	it("should apply E3 from initial FEN", () => {
 		const state = translateFenToState(INITIAL_FEN);
 		const newState = state.updateWithNextMove("E2", "E3");
@@ -113,5 +123,19 @@ describe("boardState tests", () => {
 
 		expect(newState.blackCheck).toBe(CHECK_TYPES.MATE);
 		expect(newState.whiteCheck).toBe(CHECK_TYPES.NONE);
+	});
+
+	it("should identify moves for scholar's mate", () => {
+		let newState = translateFenToState(INITIAL_FEN)
+			.updateWithNextMove("E2", "E4")
+			.updateWithNextMove("E7", "E5")
+			.updateWithNextMove("D1", "H4")
+			.updateWithNextMove("B8", "C6")
+			.updateWithNextMove("F1", "C4")
+			.updateWithNextMove("G8", "F6") //blunder
+			.updateWithNextMove("H4", "F7"); //mate
+
+		expect(newState.blackCheck).toBe(CHECK_TYPES.MATE);
+		expect(newState.takes).toHaveLength(1);
 	});
 });
