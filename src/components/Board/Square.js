@@ -1,7 +1,7 @@
 import React, { memo, useCallback } from "react";
 import styled, { css } from "styled-components";
 import { AnimatePresence } from "framer-motion";
-import { SQUARE_TONES } from "consts";
+import { CHECK_TYPES, SQUARE_TONES } from "consts";
 import Piece from "./Piece";
 import MoveIndicator from "./MoveIndicator";
 import CheckIndicator from "./CheckIndicator";
@@ -48,7 +48,6 @@ const SquareName = styled.span`
           $tone === SQUARE_TONES.LIGHT ? theme.lightOverlayText : theme.darkOverlayText}
 `;
 
-
 const Square = memo(({
 	                     tone,
 	                     name,
@@ -92,7 +91,19 @@ const Square = memo(({
 				<SquareName $tone={tone}>{name}</SquareName>}
 
 				{showAllowedMoveIndication && isAllowedMove &&
-				<MoveIndicator isTake={!!symbol}/>}
+				<MoveIndicator
+					key={`square-move-${name}-${symbol}`}
+					name={name}
+					symbol={symbol}
+					isTake={!!symbol}
+				/>}
+
+				{symbol && check && check !== CHECK_TYPES.NONE &&
+				<CheckIndicator
+					name={name}
+					symbol={symbol}
+					check={check}
+				/>}
 			</AnimatePresence>
 		</SquareContainer>
 	);

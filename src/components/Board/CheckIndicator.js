@@ -1,63 +1,54 @@
 import React from "react";
 import styled, { css } from "styled-components";
 import { motion } from "framer-motion";
+import { CHECK_TYPES } from "../../consts";
 
-const takeIndicationCss = css`
-  left: 50%;
-  top: 50%;
-  border-radius: 10%;
-
-  box-shadow: inset 0 0 10px 1px ${({ theme }) => theme.indicators.allowedTake};
+const checkIndicationCss = css`
+	height: 100%;
+	width: 100%;
+  box-shadow: inset 0 0 10px 1px ${({ theme }) => theme.indicators.check};
 `;
 
-const allowedIndicationCss = css`
-  left: 50%;
-  top: 50%;
-  border-radius: 100%;
-
-  box-shadow: inset 0 0 10px 1px ${({ theme }) => theme.indicators.allowed};
+const mateIndicationCss = css`
+  box-shadow: inset 0 0 20px 4px ${({ theme }) => theme.indicators.mate};
 `;
 
-const moveIndicatorAnimationVariants = {
-	visible: ({ isTake }) => ({
-		height: isTake ? "90%" : "30%",
-		width: isTake ? "90%" : "30%",
+const checkIndicatorAnimationVariants = {
+	visible: {
 		opacity: "100%",
-	}),
-	hidden: { height: 0, width: 0, opacity: 0 },
-	exit: { height: 0, width: 0, opacity: 0 },
-	hover: ({ isTake }) => isTake ? {
-		width: "85%",
-		height: "85%",
-		transition: { duration: 0.5 },
-	} : {
-		width: "20%",
-		height: "20%",
-		transition: { duration: 0.5 },
 	},
+	hidden: { opacity: 0 },
+	exit: { opacity: 0 },
+	hover: {
+		opacity: "80%",
+		transition: { duration: 0.5 },
+	}
 };
 
 const Indicator = styled(motion.div)`
   position: absolute;
-  transform: translate(-50%, -50%);
-
-  ${({ $isTake }) => $isTake ? takeIndicationCss : allowedIndicationCss}
+  height: 100%;
+  width: 100%;
+	
+  ${({ $isMate }) => $isMate ? mateIndicationCss : checkIndicationCss}
 `;
 
-const MoveIndicator = ({ symbol, isTake }) => {
+const CheckIndicator = ({ name, check }) => {
+	const isMate = check === CHECK_TYPES.MATE;
+
 	return (
 		<Indicator
-			key={`${name}-${symbol}-moveIndicator`}
+			key={`${name}-checkIndicator`}
+			$isMate={isMate}
 			initial="hidden"
 			animate="visible"
 			exit="exit"
 			whileHover="hover"
-			variants={moveIndicatorAnimationVariants}
-			$isTake={isTake}
-			custom={{ isTake }}
+			variants={checkIndicatorAnimationVariants}
+			custom={{ isMate }}
 		/>
 	);
 };
 
-export default MoveIndicator;
+export default CheckIndicator;
 

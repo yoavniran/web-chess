@@ -93,8 +93,6 @@ describe("boardState tests", () => {
 		expect(newState.move).toBe(2);
 		expect(newState.takes).toHaveLength(2);
 
-		console.log(newState.takes);
-
 		expect(newState.takes[1]).toEqual({
 			square: "D5",
 			symbol: WHITE_PAWN,
@@ -126,7 +124,7 @@ describe("boardState tests", () => {
 	});
 
 	it("should identify moves for scholar's mate", () => {
-		let newState = translateFenToState(INITIAL_FEN)
+		let state = translateFenToState(INITIAL_FEN)
 			.updateWithNextMove("E2", "E4")
 			.updateWithNextMove("E7", "E5")
 			.updateWithNextMove("D1", "H4")
@@ -135,7 +133,17 @@ describe("boardState tests", () => {
 			.updateWithNextMove("G8", "F6") //blunder
 			.updateWithNextMove("H4", "F7"); //mate
 
-		expect(newState.blackCheck).toBe(CHECK_TYPES.MATE);
-		expect(newState.takes).toHaveLength(1);
+		expect(state.blackCheck).toBe(CHECK_TYPES.MATE);
+		expect(state.takes).toHaveLength(1);
+	});
+
+	it("should identify black getting out of check", () => {
+		let state = translateFenToState("rn1qkbnr/pb1ppppp/8/2p5/8/4Q3/PPP1PPPP/RNB1KBNR w KQkq - 2 5")
+			.updateWithNextMove("E3", "E7"); //queen checks king
+
+		expect(state.blackCheck).toBe(CHECK_TYPES.CHECK);
+
+		state = state.updateWithNextMove("F8", "E7"); //bishop takes queen
+		expect(state.blackCheck).toBe(CHECK_TYPES.NONE);
 	});
 });

@@ -44,7 +44,7 @@ const Indicator = styled(motion.div)`
   ${({ $isTake }) => $isTake ? takeIndicationCss : allowedIndicationCss}
 `;
 
-const MoveIndicator = ({ symbol, isTake }) => {
+const MoveIndicator = ({ name, symbol, isTake }) => {
 	return (
 		<Indicator
 			key={`${name}-${symbol}-moveIndicator`}

@@ -4,7 +4,6 @@ import {
 	WHITE_INIT_PIECES,
 	EMPTY,
 	PIECE_COLORS,
-	TURN_PIECE,
 	INIT_CASTLES,
 	BLACK_KING,
 	WHITE_KING,
@@ -33,8 +32,7 @@ const getTakesForColor = (color, initPieces, state) => {
 const getTakeInfo = (state, targetSquare, move) => {
 	const targetInfo = state.squares[targetSquare];
 
-	return !targetInfo.isEmpty ?
-		{
+	return !targetInfo.isEmpty ? {
 			square: targetSquare,
 			symbol: targetInfo.symbol,
 			pieceColor: targetInfo.pieceColor,
@@ -67,16 +65,10 @@ const getBoardStateForNextMove = (state, startSquare, targetSquare) => {
 
 	const newSquares = getSquaresAfterMove(state.squares, startSquare, targetSquare, movingSymbol, movingColor, takeInfo);
 
-	const newWhitePositions = movingColor === PIECE_COLORS.WHITE ?
-		getColorPiecePositions(movingColor, newSquares) : state.whitePositions;
-
-	const newBlackPositions = movingColor === PIECE_COLORS.BLACK ?
-		getColorPiecePositions(movingColor, newSquares) : state.blackPositions;
-
 	return getStateBoardFromData({
 		squares: newSquares,
-		whitePositions: newWhitePositions,
-		blackPositions: newBlackPositions,
+		whitePositions: getColorPiecePositions(PIECE_COLORS.WHITE, newSquares),
+		blackPositions: getColorPiecePositions(PIECE_COLORS.BLACK, newSquares),
 		move: movingColor === PIECE_COLORS.BLACK ? state.move + 1 : state.move,
 		turn: getOppositeColor(movingColor),
 		castles: getCastlesAfterMove(state, movingSymbol, movingColor, startSquare),

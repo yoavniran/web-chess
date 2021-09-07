@@ -46,9 +46,10 @@ Supports all rules of classical Chess:
 | All legal moves (castle, castling limitations, en passant, promotion) | moves | 
 | Promotion Selector | ui, moves | 
 | Stalemate detection | moves |
-| check & checkmate detection | moves |
+| check & checkmate detection | moves | ✅
 | Check/mate Highlight | board |
 | Legal moves highlight | board | ✅
+| Last move highlight | board |
 | history board | game |
 | taken pieces bar | game | 
 | Start from any FEN | state |  ✅

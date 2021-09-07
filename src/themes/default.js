@@ -11,7 +11,9 @@ const defaultTheme = {
 	indicators: {
 		selected: "rgba(234,198,112,0.75)",
 		allowed: "rgba(51,168,233,0.75)",
-		allowedTake: "rgba(131,20,81,0.75)",
+		allowedTake: "rgba(138,69,107,0.75)",
+		check: "rgba(202,84,58,0.75)",
+		mate: "rgba(178,45,16,0.9)",
 		// allowedTakeStrong: "rgba(131,20,81,0.9)",
 	}
 };

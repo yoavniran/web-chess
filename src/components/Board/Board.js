@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { MOVE_ANIMATIONS, PIECE_COLORS } from "consts";
 import { createBoardSquares, getColorFromSymbol, isKing } from "logic";
 import Square from "./Square";
-import {  } from "../../logic/helpers/is";
+import {} from "../../logic/helpers/is";
 
 const BoardContainer = styled.div`
   display: flex;
@@ -27,6 +27,7 @@ export const BOARD_COORDINATES_POSITION = {
 const getCheck = (symbol, checks) => {
 	return isKing(symbol) && checks[getColorFromSymbol(symbol)];
 };
+
 const Board = ({
 	               className,
 	               size = "100%", //100%, px
@@ -37,7 +38,8 @@ const Board = ({
 	               selectPiece,
 	               unselectPiece,
 	               movePiece,
-	checks,
+	               checks,
+	               isPlayable = true,
 	               coordinatesPosition = BOARD_COORDINATES_POSITION.OUTSIDE,
 	               moveAnimation = MOVE_ANIMATIONS.TELEPORT,
                }) => {
@@ -54,6 +56,7 @@ const Board = ({
 		squares,
 		selectedPieceSquare,
 		allowedMoveSquares,
+		checks,
 	});
 
 	return (<BoardContainer $size={size} className={className}>
@@ -66,7 +69,7 @@ const Board = ({
 				selectPiece={selectPiece}
 				unselectPiece={unselectPiece}
 				isAllowedMove={!!~allowedMoveSquares.indexOf(square.name)}
-				check={getCheck(squares[square.name].symbol, checks)}
+				check={getCheck(squares[square.name]?.symbol, checks)}
 				movePiece={movePiece}
 			/>)}
 	</BoardContainer>);
