@@ -122,4 +122,18 @@ export const BLACK_INIT_PIECES = {
 	[BLACK_KING]: 1,
 };
 
+export const PIECES_EMOJIS = {
+	[BLACK_KING]:"♚",
+	[BLACK_QUEEN]: "♛",
+	[BLACK_ROOK]: "♜",
+	[BLACK_KNIGHT]: "♞",
+	[BLACK_BISHOP]: "♝",
+	[BLACK_PAWN]: "♟️",
 
+	[WHITE_KING]: "♔",
+	[WHITE_QUEEN]: "♕",
+	[WHITE_ROOK]: "♖",
+	[WHITE_BISHOP]: "♗",
+	[WHITE_KNIGHT]: "♘",
+	[WHITE_PAWN]: "♙",
+};

@@ -26,13 +26,13 @@ const getSquaresAfterEnpassant = () => {
 
 };
 
-const getSquaresAfterMove = (squares, startSquare, targetSquare, symbol, color, takeInfo) => {
+const getSquaresAfterMove = (squares, startSquare, targetSquare, symbol, color) => {
 	//TODO: get is enpassant! need to remove pawn from correct square (even though pwn didnt move to it)
 	//TODO: get is move is castle - calculate squares according to castle
 	//TODO: handle promotion ! dont finalize move until client (UI) returns the promoted symbol
 
 	return switchReturn(
-		[squares, startSquare, targetSquare, symbol, color, takeInfo],
+		[squares, startSquare, targetSquare, symbol, color],
 		getSquaresAfterCastle,
 		getSquaresAfterEnpassant,
 		getSquaresAfterNormalMove,

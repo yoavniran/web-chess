@@ -1,4 +1,5 @@
-import { selector, useRecoilValue, isRecoilValue } from "recoil";
+import { PIECE_COLORS } from "consts";
+// import { selector, useRecoilValue, isRecoilValue } from "recoil";
 import {
 	// GameCurrentPosition,
 	// GameStartingPosition,
@@ -6,24 +7,24 @@ import {
 	SelectedPieceData,
 	SelectedPieceAvailableMoves,
 } from "./atoms";
+import { createSelectorHook } from "./recoilHelpers";
 import { selectGameCurrentPosition } from "./selectors";
-import { PIECE_COLORS } from "../../../consts";
 
-const createSelectorHook = (key, getter) => {
-	const hookSelector = selector({
-		key,
-		get: ({ get }) => isRecoilValue(getter) ?
-			//get atom directly
-			get(getter) :
-			//execute getter callback
-			getter(get),
-	});
-
-	const useHook = () => useRecoilValue(hookSelector);
-	useHook.selector = hookSelector;
-
-	return useHook;
-};
+// const createSelectorHook = (key, getter) => {
+// 	const hookSelector = selector({
+// 		key,
+// 		get: ({ get }) => isRecoilValue(getter) ?
+// 			//get atom directly
+// 			get(getter) :
+// 			//execute getter callback
+// 			getter(get),
+// 	});
+//
+// 	const useHook = () => useRecoilValue(hookSelector);
+// 	useHook.selector = hookSelector;
+//
+// 	return useHook;
+// };
 
 const useBoardSquaresSelector = createSelectorHook(
 	"BoardSquaresSelector",
@@ -77,6 +78,17 @@ const useChecksSelector = createSelectorHook(
 	},
 );
 
+const useMovesSelector = createSelectorHook(
+	"MovesSelector",
+	(get) => {
+		const currentPosition = get(selectGameCurrentPosition);
+		console.log("MOVE SELECTOR RUNNING FOR POSITION = ", currentPosition);
+
+		return currentPosition.history.map(([whitePly, blackPly]) =>{
+			return
+		});
+	});
+
 export {
 	useBoardSquaresSelector,
 	useIsFlippedSelector,
@@ -85,4 +97,5 @@ export {
 	useSelectedPieceSquareSelector,
 	useAllowedMovesSquaresSelector,
 	useChecksSelector,
+	useMovesSelector,
 };

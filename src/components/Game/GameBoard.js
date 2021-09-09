@@ -2,8 +2,10 @@ import React from "react";
 import Board from "../Board";
 import {
 	useAllowedMovesSquaresSelector,
-	useBoardSquaresSelector, useChecksSelector,
-	useIsFlippedSelector, usePieceDestinationSetter,
+	useBoardSquaresSelector,
+	useChecksSelector,
+	useIsFlippedSelector,
+	usePieceDestinationSetter,
 	useSelectedPieceSetter,
 	useSelectedPieceSquareSelector,
 	useUnselectPieceSetter,

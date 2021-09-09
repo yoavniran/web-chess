@@ -10,15 +10,6 @@
  */
 
 /**
- * @typedef Take
- * @type {object}
- * @property {string | undefined} square,
- * @property {string} symbol,
- * @property {PIECE_COLORS} color
- * @property {number | undefined} move
- */
-
-/**
  * @typedef CalcOptions
  * @type {object}
  * @property {?boolean} expectedTake
@@ -68,12 +59,42 @@
  */
 
 /**
+ * @typedef Take
+ * @type {object}
+ * @property {string} symbol
+ * @property {PIECE_COLORS} color
+ */
+
+/**
+ * @typedef Ply
+ * @type {object}
+ * @property {string} previous
+ * @property {string} target
+ * @property {PIECE_COLORS} color
+ * @property {string} symbol
+ * @property {number} move
+ * @property {Take} take
+ */
+
+/**
+ * @typedef Move
+ * @type {Array.<Ply>}
+ */
+
+
+/**
+ * @typedef History
+ * @type {Array.<Move>}
+ */
+
+
+/**
  * @typedef State
  * @type {Object}
  * @property {Object.<string, PieceSquare>} squares
  * @property {Object.<string, string>} whitePositions
  * @property {Object.<string, string>} blackPositions
- * @property {Take[]} takes
+ * @property {History} history
  * @property {string} castles
  * @property {number} halfmoveClock
  * @property {number} move

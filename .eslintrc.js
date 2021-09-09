@@ -104,7 +104,9 @@ module.exports = {
 		"react/require-default-props": 0,
 		"react/sort-comp": 0,
 		"react-hooks/rules-of-hooks": 2,
-		"react-hooks/exhaustive-deps": 2,
+		"react-hooks/exhaustive-deps": [2, {
+			"additionalHooks": "(useRecoilCallback|useRecoilTransaction_UNSTABLE)"
+		}],
 		"jsx-a11y/href-no-hash": 0,
 		"jsx-a11y/click-events-have-key-events": 0,
 		"jsx-a11y/no-noninteractive-tabindex": 0,

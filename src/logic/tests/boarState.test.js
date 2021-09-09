@@ -64,16 +64,16 @@ describe("boardState tests", () => {
 	});
 
 	it("should register take for WHITE", () => {
-		const state = translateFenToState("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2");
-		const newState = state.updateWithNextMove("E4", "D5");
+		const state = translateFenToState("rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 2 2")
+			.updateWithNextMove("E4", "D5");
 
-		expect(newState.halfmoveClock).toBe(0);
-		expect(newState.move).toBe(1);
-		expect(newState.takes).toHaveLength(1);
-		expect(newState.takes[0]).toEqual({
+		expect(state.halfmoveClock).toBe(0);
+		expect(state.move).toBe(1);
+		expect(state.takes).toHaveLength(1);
+		expect(state.takes[0]).toEqual({
 			square: "D5",
 			symbol: BLACK_PAWN,
-			pieceColor: PIECE_COLORS.BLACK,
+			color: PIECE_COLORS.BLACK,
 			move: 1,
 		});
 	});
@@ -96,7 +96,7 @@ describe("boardState tests", () => {
 		expect(newState.takes[1]).toEqual({
 			square: "D5",
 			symbol: WHITE_PAWN,
-			pieceColor: PIECE_COLORS.WHITE,
+			color: PIECE_COLORS.WHITE,
 			move: 1,
 		});
 	});
@@ -135,6 +135,16 @@ describe("boardState tests", () => {
 
 		expect(state.blackCheck).toBe(CHECK_TYPES.MATE);
 		expect(state.takes).toHaveLength(1);
+
+		expect(state.history[0][0].previous).toBe("E2");
+		expect(state.history[0][0].target).toBe("E4");
+
+		expect(state.history[0][1].previous).toBe("E7");
+		expect(state.history[0][1].target).toBe("E5");
+
+		expect(state.history[3][1]).toBeUndefined();
+		expect(state.history[3][0].target).toBe("F7");
+		expect(state.history[3][0].take.symbol).toBe(BLACK_PAWN);
 	});
 
 	it("should identify black getting out of check", () => {

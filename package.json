@@ -22,7 +22,7 @@
     "react-chess-pieces": "^1.0.5",
     "react-dom": "^17.0.2",
     "react-resizable": "^3.0.4",
-    "recoil": "^0.4.0",
+    "recoil": "^0.4.1",
     "styled-components": "^5.3.0"
   },
   "devDependencies": {
