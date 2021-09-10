@@ -73,7 +73,9 @@
  * @property {PIECE_COLORS} color
  * @property {string} symbol
  * @property {number} move
+ * @property {NOTATION_DISAMBIGUATION_TYPES} disambiguationNeeded
  * @property {Take} take
+ * @property {CHECK_TYPES} check
  */
 
 /**

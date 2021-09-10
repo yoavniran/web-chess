@@ -9,6 +9,7 @@ import {
 } from "./atoms";
 import { createSelectorHook } from "./recoilHelpers";
 import { selectGameCurrentPosition } from "./selectors";
+import { getPlyAlgebraicNotation } from "../../../logic";
 
 // const createSelectorHook = (key, getter) => {
 // 	const hookSelector = selector({
@@ -84,9 +85,10 @@ const useMovesSelector = createSelectorHook(
 		const currentPosition = get(selectGameCurrentPosition);
 		console.log("MOVE SELECTOR RUNNING FOR POSITION = ", currentPosition);
 
-		return currentPosition.history.map(([whitePly, blackPly]) =>{
-			return
-		});
+		return currentPosition.history.map(([whitePly, blackPly]) => [
+				getPlyAlgebraicNotation(whitePly),
+				blackPly ? getPlyAlgebraicNotation(blackPly) : undefined
+			]);
 	});
 
 export {

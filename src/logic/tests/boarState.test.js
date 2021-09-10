@@ -1,16 +1,16 @@
 import translateFenToState from "../translateFenToState";
 import {
-	BLACK_KING,
+	BLACK_BISHOP,
+	BLACK_KING, BLACK_KNIGHT,
 	BLACK_PAWN, BLACK_QUEEN, CHECK_TYPES,
 	INITIAL_FEN,
-	PIECE_COLORS,
+	PIECE_COLORS, WHITE_BISHOP,
 	WHITE_PAWN,
 	WHITE_ROOK,
 } from "../../consts";
 import { isEmptyChar } from "../helpers/is";
 
 describe("boardState tests", () => {
-
 	it("should create new state on update ", () => {
 		const state = translateFenToState(INITIAL_FEN);
 		const newState = state.updateWithNextMove("E2", "E4");
@@ -102,7 +102,7 @@ describe("boardState tests", () => {
 	});
 
 	it("should identify move is check on Black King", () => {
-		const state = translateFenToState("8/4pr2/4nk2/4r3/8/2B3Q1/8/K5R1 w - - 0 1");
+		const state = translateFenToState("8/4pr2/4nk2/4r3/8/2B2nQ1/8/K5R1 w - - 0 33");
 		expect(state.whiteCheck).toBe(CHECK_TYPES.NONE);
 		expect(state.blackCheck).toBe(CHECK_TYPES.NONE);
 
@@ -110,6 +110,12 @@ describe("boardState tests", () => {
 
 		expect(newState.blackCheck).toBe(CHECK_TYPES.CHECK); //knight can block
 		expect(newState.whiteCheck).toBe(CHECK_TYPES.NONE);
+
+		const lastTake = newState.takes.slice(-1)[0];
+		expect(lastTake.symbol).toBe(BLACK_KNIGHT);
+		expect(lastTake.move).toBe(32);
+
+		expect(newState.history[0][0].check).toBe(CHECK_TYPES.CHECK);
 	});
 
 	it("should identify move is check mate on Black King", () => {
@@ -135,6 +141,9 @@ describe("boardState tests", () => {
 
 		expect(state.blackCheck).toBe(CHECK_TYPES.MATE);
 		expect(state.takes).toHaveLength(1);
+		expect(state.takes[0].square).toBe("F7");
+		expect(state.takes[0].move).toBe(3);
+		expect(state.takes[0].symbol).toBe(BLACK_PAWN);
 
 		expect(state.history[0][0].previous).toBe("E2");
 		expect(state.history[0][0].target).toBe("E4");
@@ -155,5 +164,20 @@ describe("boardState tests", () => {
 
 		state = state.updateWithNextMove("F8", "E7"); //bishop takes queen
 		expect(state.blackCheck).toBe(CHECK_TYPES.NONE);
+	});
+
+	it("should follow several moves with takes", () => {
+		const state = translateFenToState("r3k1r1/pp2p1bp/2p2qp1/3n4/P1Bp4/1P6/1BP2PPP/R2QR1K1 w q - 7 20")
+			.updateWithNextMove("B2", "D4")
+			.updateWithNextMove("F6", "D4");
+
+		expect(state.takes).toHaveLength(9);
+
+		expect(state.takes[7].symbol).toBe(BLACK_PAWN);
+		expect(state.takes[7].move).toBe(19);
+		expect(state.takes[7].color).toBe(PIECE_COLORS.BLACK);
+		expect(state.takes[8].symbol).toBe(WHITE_BISHOP);
+		expect(state.takes[8].move).toBe(19);
+		expect(state.takes[8].color).toBe(PIECE_COLORS.WHITE);
 	});
 });

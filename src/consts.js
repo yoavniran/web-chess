@@ -98,6 +98,11 @@ export const CASTLE_SIDES = {
 	KING: "k",
 };
 
+/**
+ * Enum for king check types
+ * @readonly
+ * @enum {string}
+ */
 export const CHECK_TYPES = {
 	NONE: "NONE",
 	CHECK: "CHECk",
@@ -136,4 +141,15 @@ export const PIECES_EMOJIS = {
 	[WHITE_BISHOP]: "♗",
 	[WHITE_KNIGHT]: "♘",
 	[WHITE_PAWN]: "♙",
+};
+
+/**
+ * Enum for notation disambiguation
+ * @readonly
+ * @enum {string}
+ */
+export const NOTATION_DISAMBIGUATION_TYPES = {
+	NONE: "NONE",
+	COLUMN: "COLUMN",
+	ROW: "ROW"
 };
