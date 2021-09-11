@@ -3,7 +3,6 @@ import { isBishop, isKnight, isQueen, isRook } from "./is";
 import findPieceTypeSquares from "./findPieceTypeSquares";
 import { calculateSquares } from "../moves";
 import getSquareCoordinates from "./getSquareCoordinates";
-import { switchReturn } from "../../utils";
 
 /**
  *

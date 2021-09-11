@@ -29,8 +29,6 @@ describe("filterCanBeTakenSquares tests", () => {
 				MOVE_DIRECTIONS.DIAGONAL,
 				1);
 
-			console.log("FILTERING ----------------");
-
 			const filtered = filterCanBeTakenSquares(PIECE_COLORS.WHITE, startSquare, kingMoveSquares, state);
 
 			expect(filtered).toHaveLength(count);

@@ -15,7 +15,6 @@ An implementation of a playable chess board using web technologies:
 - Styled Components
 - Framer Motion
 
-
 ## Features
 
 Supports all rules of classical Chess:
@@ -25,7 +24,7 @@ Supports all rules of classical Chess:
 - enpassant
 - 50 move count rule
 - pawn promotion (TBD)
-- move algebraic notation (TBD)
+- move algebraic notation 
 
 ### Capabilities 
 
@@ -34,6 +33,7 @@ Supports all rules of classical Chess:
 - legal moves identification & highlighting
 - take identification & highlighting
 - pinned piece (absolute) identification
+- Move history display
 
 ## Roadmap
 
@@ -43,14 +43,14 @@ Supports all rules of classical Chess:
 |-------- | -----| -----------
 | Flip Board | board |   ✅
 | Board Coordinates (inside, outside) | board |
-| All legal moves (castle, castling limitations, en passant, promotion) | moves | 
+| All legal moves (castle, castling limitations, en passant, promotion) | moves | 🚧
 | Promotion Selector | ui, moves | 
 | Stalemate detection | moves |
 | check & checkmate detection | moves | ✅
 | Check/mate Highlight | board |
 | Legal moves highlight | board | ✅
 | Last move highlight | board |
-| history board | game |
+| history board | game |  ✅
 | taken pieces bar | game | 
 | Start from any FEN | state |  ✅
 | Output to FEN | state |
@@ -76,6 +76,7 @@ Supports all rules of classical Chess:
 | Analysis mode (check moves without committing to history) | moves |
 | Game Clock (per side, bonus) | game |
 | Output to Image | extras |
+| History branches (maintain multiple history branches) | game | 
 | Create game from custom position
 
 ### P4

@@ -19,7 +19,7 @@ const GameStartingPositionFen = atom({
 
 const GameStartingPosition = atom({
 	key: "GameStartingPosition",
-	default: [],
+	default: null,
 });
 
 /**

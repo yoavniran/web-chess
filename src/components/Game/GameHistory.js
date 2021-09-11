@@ -3,15 +3,19 @@ import { useMovesSelector } from "./state";
 import MoveHistoryList from "../History/MoveHistoryList";
 
 const GameHistory = ({
+	                     className,
 	                     useAlgebraicNotation = true,
 	                     showWithEmojis = true,
+	                     showCompact = false,
                      }) => {
 
 	const moves = useMovesSelector();
 
-	console.log("RENDERING GAME HISTORY WITH MOVES = ", moves);
-
-	return (<MoveHistoryList moves={moves} />);
+	return (<MoveHistoryList
+		className={className}
+		moves={moves}
+		showWithEmojis={showWithEmojis}
+	/>);
 };
 
 export default GameHistory;

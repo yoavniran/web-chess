@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { render } from "react-dom";
 import styled from "styled-components";
 import { ResizableBox } from "react-resizable";
-import { Game, GameBoard, GameMoveCounter } from "../src/index";
+import { Game, GameBoard, GameMoveCounter, GameHistory  } from "../src/index";
 
 import "react-resizable/css/styles.css";
 
@@ -29,6 +29,15 @@ const StyledGameMoveCounter = styled(GameMoveCounter)`
   padding: 10px;
 `;
 
+const StyledGameHistory = styled(GameHistory)`
+	width: 300px;
+`;
+
+const SideBoardContainer = styled.div`
+	display: flex;
+	flex-direction: column;
+`;
+
 const Demo = () => {
 	return (
 		<Game>
@@ -45,7 +54,11 @@ const Demo = () => {
 						<StyledGameBoard/>
 					</ResizableBox>
 				</BoardContainer>
-				<StyledGameMoveCounter/>
+				<SideBoardContainer>
+					<StyledGameMoveCounter/>
+					{/*<HistoryBar/>*/}
+					<StyledGameHistory />
+				</SideBoardContainer>
 			</DemoContainer>
 		</Game>
 	);

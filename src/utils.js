@@ -8,6 +8,6 @@ export const switchReturn = (params, ...cases) => {
 		return caseResult;
 	});
 
-	return caseResult || undefined;
+	return caseResult === false ? undefined : caseResult;
 };
 

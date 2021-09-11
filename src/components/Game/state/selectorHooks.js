@@ -1,8 +1,5 @@
 import { PIECE_COLORS } from "consts";
-// import { selector, useRecoilValue, isRecoilValue } from "recoil";
 import {
-	// GameCurrentPosition,
-	// GameStartingPosition,
 	GameBoardSettings,
 	SelectedPieceData,
 	SelectedPieceAvailableMoves,
@@ -72,10 +69,10 @@ const useChecksSelector = createSelectorHook(
 	"ChecksSelector",
 	(get) => {
 		const currentPosition = get(selectGameCurrentPosition);
-		return {
+		return currentPosition ? {
 			[PIECE_COLORS.WHITE]: currentPosition.whiteCheck,
 			[PIECE_COLORS.BLACK]: currentPosition.blackCheck
-		};
+		} : {};
 	},
 );
 
@@ -85,10 +82,11 @@ const useMovesSelector = createSelectorHook(
 		const currentPosition = get(selectGameCurrentPosition);
 		console.log("MOVE SELECTOR RUNNING FOR POSITION = ", currentPosition);
 
-		return currentPosition.history.map(([whitePly, blackPly]) => [
+		return currentPosition?.history.map(([whitePly, blackPly]) => [
+			whitePly.move,
 				getPlyAlgebraicNotation(whitePly),
 				blackPly ? getPlyAlgebraicNotation(blackPly) : undefined
-			]);
+			]) ?? [];
 	});
 
 export {

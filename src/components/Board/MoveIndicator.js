@@ -22,7 +22,7 @@ const moveIndicatorAnimationVariants = {
 	visible: ({ isTake }) => ({
 		height: isTake ? "90%" : "30%",
 		width: isTake ? "90%" : "30%",
-		opacity: "100%",
+		opacity: 1,
 	}),
 	hidden: { height: 0, width: 0, opacity: 0 },
 	exit: { height: 0, width: 0, opacity: 0 },
