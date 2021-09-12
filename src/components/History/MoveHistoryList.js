@@ -14,6 +14,7 @@ const ItemWrapper = styled(motion.div)`
   justify-content: flex-start;
   align-items: center;
 	margin-bottom: 2px;
+	height: 1.5rem;
 `;
 
 const StyledPly = styled.div`

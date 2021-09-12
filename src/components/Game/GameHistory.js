@@ -1,6 +1,7 @@
 import React from "react";
 import { useMovesSelector } from "./state";
 import MoveHistoryList from "../History/MoveHistoryList";
+import CompactMoveHistoryList from "../History/CompactMoveHistoryList";
 
 const GameHistory = ({
 	                     className,
@@ -11,11 +12,17 @@ const GameHistory = ({
 
 	const moves = useMovesSelector();
 
-	return (<MoveHistoryList
-		className={className}
-		moves={moves}
-		showWithEmojis={showWithEmojis}
-	/>);
+	return (showCompact ?
+		<CompactMoveHistoryList
+			className={className}
+			moves={moves}
+			showWithEmojis={showWithEmojis}
+		/> :
+		<MoveHistoryList
+			className={className}
+			moves={moves}
+			showWithEmojis={showWithEmojis}
+		/>);
 };
 
 export default GameHistory;
