@@ -1,5 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
+import { PIECE_COLORS } from "consts";
+import PlyContent from "./PlyContent";
+import { getPlyClassName, itemAnimationVariants } from "./historyUtils";
 
 const ListContainer = styled.div`
   width: 100%;
@@ -7,11 +11,13 @@ const ListContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const Ply = styled.span`
+const StyledPly = styled.span`
   font-weight: bold;
+	display: flex;
+	align-items: center;
 `;
 
-const ListItemWrapper = styled.div`
+const ListItemWrapper = styled(motion.div)`
   margin: 4px 6px 4px 0;
   display: flex;
   align-items: center;
@@ -30,17 +36,25 @@ const Divider = styled.div`
 `;
 
 const ListItem = ({ move, white, black, showWithEmojis }) => {
-	return (<ListItemWrapper>
+	return (<ListItemWrapper
+		initial="hidden"
+		animate="visible"
+		variants={itemAnimationVariants}
+	>
 		<MoveIndex>{move + 1}.</MoveIndex>
-		<Ply>
-			{showWithEmojis ? white.emoji : white.normal}
-		</Ply>
+		<StyledPly
+			className={getPlyClassName(PIECE_COLORS.WHITE)}
+		>
+			<PlyContent ply={white} withEmoji={showWithEmojis}/>
+		</StyledPly>
 
 		{black && <>
 			<Divider/>
-			<Ply>
-				{showWithEmojis ? black.emoji : black.normal}
-			</Ply>
+			<StyledPly
+				className={getPlyClassName(PIECE_COLORS.BLACK)}
+			>
+				{<PlyContent ply={black} withEmoji={showWithEmojis}/>}
+			</StyledPly>
 		</>}
 	</ListItemWrapper>);
 };

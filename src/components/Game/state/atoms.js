@@ -71,6 +71,10 @@ const SelectedPieceAvailableMoves = atom({
 	default: [],
 });
 
+const CurrentPly = atom({
+
+})
+
 export {
 	GameStartingPosition,
 	GameCurrentPosition,

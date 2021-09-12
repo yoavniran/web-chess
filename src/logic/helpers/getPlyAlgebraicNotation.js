@@ -22,7 +22,7 @@ const getDisambiguationNotation = (ply) =>
 		(disamb, prev) => disamb === NOTATION_DISAMBIGUATION_TYPES.ROW && prev[1],
 		(disamb, prev) => disamb === NOTATION_DISAMBIGUATION_TYPES.COLUMN && prev[0],
 		(disamb, prev, symbol) => isPawn(symbol) && !!ply.take && prev[0],
-		() => ""
+		() => "",
 	);
 
 /**
@@ -54,13 +54,14 @@ const createNormalNotation = (ply, notPawn, check) => {
 	return {
 		emoji: `${notPawn ? PIECES_EMOJIS[ply.symbol] : ""}${disNot}${ply.target}${check}`,
 		normal: `${notPawn ? ply.symbol : ""}${disNot}${ply.target}${check}`,
+		isPawn: !notPawn,
 	};
 };
 
 /**
  *
  * @param {Ply} ply
- * @returns {*}
+ * @returns {{emoji: string, normal: string, isPawn: boolean}}
  */
 const createNotation = (ply) => {
 	const notPawn = !isPawn(ply.symbol);

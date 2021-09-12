@@ -180,4 +180,15 @@ describe("boardState tests", () => {
 		expect(state.takes[8].move).toBe(19);
 		expect(state.takes[8].color).toBe(PIECE_COLORS.WHITE);
 	});
+
+	it("should follow several moves with check", () => {
+		const state = translateFenToState(INITIAL_FEN)
+			.updateWithNextMove("E2", "E4")
+			.updateWithNextMove("D7", "D5")
+			.updateWithNextMove("F1", "B5")
+			.updateWithNextMove("D8", "D7")
+			.updateWithNextMove("B5", "D7");
+
+		expect(state.blackCheck).toBe(CHECK_TYPES.CHECK);
+	});
 });

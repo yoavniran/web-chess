@@ -12,6 +12,10 @@ const HistoryContainer = styled.div`
 
 const StyledGameHistory = styled(GameHistory)`
 
+	.emoji-ply {
+		font-size: 22px;
+		margin-top: -4px;
+	}
 `;
 
 const HistoryToggleBar = styled.div`
@@ -34,18 +38,21 @@ const StyledButton = styled.button`
   background-color: transparent;
   cursor: ${({ disabled }) => disabled ? "default" : "pointer"};
 
+  &:hover {
+    background-color: ${({ disabled }) => disabled ? "" : "rgba(108, 118, 118, 0.2)"};
+  }
+
   svg {
     color: ${({ disabled }) => disabled ? "#959494" : "#191818"}
   }
 `;
 
 const ToggleButton = ({ Icon, onClick, disabled, ...props }) => {
-
 	return (<StyledButton
 		onClick={onClick}
 		disabled={disabled || undefined}
 	>
-		<Icon {...props} />
+		<Icon {...props} size={26}/>
 	</StyledButton>);
 };
 
@@ -72,10 +79,10 @@ const History = () => {
 				<BarButtons>
 					<ToggleButton
 						Icon={MdInsertEmoticon} onClick={toggleEmojis} disabled={isEmojis}
-						size={32} title="Use pieces emojis"
+						title="Use pieces emojis"
 					/>
 					<ToggleButton
-						Icon={BiText} onClick={toggleEmojis} disabled={!isEmojis} size={32}
+						Icon={BiText} onClick={toggleEmojis} disabled={!isEmojis}
 						title="use pieces symbols"
 					/>
 				</BarButtons>
@@ -83,10 +90,9 @@ const History = () => {
 				<BarButtons>
 					<ToggleButton
 						Icon={GoListOrdered} onClick={toggleCompact} disabled={!isCompact}
-						size={32}
 					/>
 					<ToggleButton
-						Icon={IoMdList} onClick={toggleCompact} disabled={isCompact} size={32}
+						Icon={IoMdList} onClick={toggleCompact} disabled={isCompact}
 					/>
 				</BarButtons>
 			</HistoryToggleBar>

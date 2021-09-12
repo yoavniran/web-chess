@@ -77,6 +77,16 @@ const Square = memo(({
 			onClick={onSquareClick}
 		>
 			<AnimatePresence>
+				{showSquareName &&
+				<SquareName $tone={tone}>{name}</SquareName>}
+
+				{symbol && check && check !== CHECK_TYPES.NONE &&
+				<CheckIndicator
+					name={name}
+					symbol={symbol}
+					check={check}
+				/>}
+
 				{symbol &&
 				<Piece
 					key={`piece-${name}`}
@@ -87,22 +97,12 @@ const Square = memo(({
 					unselectPiece={unselectPiece}
 				/>}
 
-				{showSquareName &&
-				<SquareName $tone={tone}>{name}</SquareName>}
-
 				{showAllowedMoveIndication && isAllowedMove &&
 				<MoveIndicator
 					key={`square-move-${name}-${symbol}`}
 					name={name}
 					symbol={symbol}
 					isTake={!!symbol}
-				/>}
-
-				{symbol && check && check !== CHECK_TYPES.NONE &&
-				<CheckIndicator
-					name={name}
-					symbol={symbol}
-					check={check}
 				/>}
 			</AnimatePresence>
 		</SquareContainer>

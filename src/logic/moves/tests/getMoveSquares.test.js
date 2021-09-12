@@ -1,5 +1,13 @@
 import translateFenToState from "../../translateFenToState";
-import { BLACK_PAWN, BLACK_ROOK, INITIAL_FEN, WHITE_KNIGHT, WHITE_PAWN } from "../../../consts";
+import {
+	BLACK_KING,
+	BLACK_PAWN,
+	BLACK_ROOK,
+	CHECK_TYPES,
+	INITIAL_FEN,
+	WHITE_KNIGHT,
+	WHITE_PAWN,
+} from "../../../consts";
 import getMoveSquares from "../getMoveSquares";
 
 describe("getMoveSquares tests", () => {
@@ -46,5 +54,18 @@ describe("getMoveSquares tests", () => {
 		const moves = getMoveSquares("C6", BLACK_PAWN, state);
 
 		expect(moves).toHaveLength(1);
+	});
+
+	it("should allow king to take bishop giving check", () => {
+		const state = translateFenToState(INITIAL_FEN)
+			.updateWithNextMove("E2", "E4")
+			.updateWithNextMove("D7", "D5")
+			.updateWithNextMove("F1", "B5")
+			.updateWithNextMove("D8", "D7")
+			.updateWithNextMove("B5", "D7");
+
+		const moves = getMoveSquares("E8", BLACK_KING, state);
+
+		expect(moves).toEqual(["D7", "D8"]);
 	});
 });

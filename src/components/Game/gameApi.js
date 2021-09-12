@@ -15,7 +15,7 @@ const createGameApi = ({
 
 	};
 
-	const rewind = (move = 0, ply = 0) => {
+	const goToPly = (move = 0, ply = 0) => {
 
 	};
 
