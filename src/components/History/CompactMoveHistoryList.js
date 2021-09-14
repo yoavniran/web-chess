@@ -1,7 +1,8 @@
-import React from "react";
+import React, { memo } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 import { PIECE_COLORS } from "consts";
+import { clickableMixin } from "../styled.mixins";
 import PlyContent from "./PlyContent";
 import { getPlyClassName, itemAnimationVariants } from "./historyUtils";
 
@@ -13,8 +14,10 @@ const ListContainer = styled.div`
 
 const StyledPly = styled.span`
   font-weight: bold;
-	display: flex;
-	align-items: center;
+  display: flex;
+  align-items: center;
+
+  ${clickableMixin}
 `;
 
 const ListItemWrapper = styled(motion.div)`
@@ -35,7 +38,10 @@ const Divider = styled.div`
   margin: 0 4px;
 `;
 
-const ListItem = ({ move, white, black, showWithEmojis }) => {
+const ListItem = memo(({ move, white, black, showWithEmojis, onPlyClick }) => {
+	const onWhiteClick = () => onPlyClick?.(white.index);
+	const onBlackClick = () => onPlyClick?.(black.index);
+
 	return (<ListItemWrapper
 		initial="hidden"
 		animate="visible"
@@ -44,6 +50,8 @@ const ListItem = ({ move, white, black, showWithEmojis }) => {
 		<MoveIndex>{move + 1}.</MoveIndex>
 		<StyledPly
 			className={getPlyClassName(PIECE_COLORS.WHITE)}
+			$clickable={!!onPlyClick}
+			onClick={onWhiteClick}
 		>
 			<PlyContent ply={white} withEmoji={showWithEmojis}/>
 		</StyledPly>
@@ -52,14 +60,16 @@ const ListItem = ({ move, white, black, showWithEmojis }) => {
 			<Divider/>
 			<StyledPly
 				className={getPlyClassName(PIECE_COLORS.BLACK)}
+				$clickable={!!onPlyClick}
+				onClick={onBlackClick}
 			>
 				{<PlyContent ply={black} withEmoji={showWithEmojis}/>}
 			</StyledPly>
 		</>}
 	</ListItemWrapper>);
-};
+});
 
-const CompactMoveHistoryList = ({ className, moves, showWithEmojis }) => {
+const CompactMoveHistoryList = ({ className, moves, showWithEmojis, onPlyClick }) => {
 	return (<ListContainer className={className}>
 		{moves.map(([move, white, black]) =>
 			<ListItem
@@ -68,6 +78,7 @@ const CompactMoveHistoryList = ({ className, moves, showWithEmojis }) => {
 				white={white}
 				black={black}
 				showWithEmojis={showWithEmojis}
+				onPlyClick={onPlyClick}
 			/>)}
 	</ListContainer>);
 };

@@ -4,12 +4,20 @@ import {
 	PIECES_EMOJIS,
 } from "consts";
 import { switchReturn } from "utils";
-import { isPawn } from "./is";
+import { isPawn, isWhite } from "./is";
 
 const getCheckNotation = (ply) => {
 	return ply.check === CHECK_TYPES.MATE ? "#" :
 		(ply.check === CHECK_TYPES.CHECK ? "+" : "");
 };
+
+/**
+ * @typedef Notation
+ * @type {object}
+ * @property {string} emoji
+ * @property {string} normal
+ */
+
 
 /**
  *
@@ -30,7 +38,7 @@ const getDisambiguationNotation = (ply) =>
  * @param {Ply} ply
  * @param {boolean} notPawn
  * @param {string} check
- * @returns {{emoji: string, normal: string} | boolean}
+ * @returns {Notation | boolean}
  */
 const createTakeNotation = (ply, notPawn, check) => {
 	const disNot = getDisambiguationNotation(ply);
@@ -46,7 +54,7 @@ const createTakeNotation = (ply, notPawn, check) => {
  * @param {Ply} ply
  * @param {boolean} notPawn
  * @param {string} check
- * @returns {{emoji: string, normal: string}}
+ * @returns {Notation}
  */
 const createNormalNotation = (ply, notPawn, check) => {
 	const disNot = getDisambiguationNotation(ply);
@@ -54,20 +62,22 @@ const createNormalNotation = (ply, notPawn, check) => {
 	return {
 		emoji: `${notPawn ? PIECES_EMOJIS[ply.symbol] : ""}${disNot}${ply.target}${check}`,
 		normal: `${notPawn ? ply.symbol : ""}${disNot}${ply.target}${check}`,
-		isPawn: !notPawn,
 	};
 };
 
 /**
  *
  * @param {Ply} ply
- * @returns {{emoji: string, normal: string, isPawn: boolean}}
+ * @returns PlyAlgebraicNotation
  */
-const createNotation = (ply) => {
+const getPlyAlgebraicNotation = (ply) => {
 	const notPawn = !isPawn(ply.symbol);
 	const check = getCheckNotation(ply);
 
-	return switchReturn([ply, notPawn, check],
+	/**
+	 * @type {Notation}
+	 */
+	const notation = switchReturn([ply, notPawn, check],
 		//castling
 		(ply) => {
 			//tODO!!!!!!!! CASTLING NOTATION!!
@@ -75,15 +85,12 @@ const createNotation = (ply) => {
 		createTakeNotation,
 		createNormalNotation,
 	);
-};
 
-/**
- *
- * @param {Ply} ply
- * @returns {string}
- */
-const getPlyAlgebraicNotation = (ply) => {
-	return createNotation(ply);
+	return {
+		...notation,
+		index: [ply.move, isWhite(ply.symbol) ? 0 : 1],
+		isPawn: !notPawn,
+	};
 };
 
 export default getPlyAlgebraicNotation;

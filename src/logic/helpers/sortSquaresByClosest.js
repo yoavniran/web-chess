@@ -1,5 +1,5 @@
-import getSquareCoordinates from "./helpers/getSquareCoordinates";
-import getDistance from "./helpers/getDistance";
+import getSquareCoordinates from "./getSquareCoordinates";
+import getDistance from "./getDistance";
 
 const getClosenessSorter = (startCoordinates) =>
 	(a, b) => {

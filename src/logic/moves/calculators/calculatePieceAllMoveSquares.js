@@ -1,7 +1,7 @@
 import { MOVE_DIRECTIONS, PIECE_COLORS, DIAGONAL_VECTORS, SIDEWAYS_VECTORS } from "consts";
 import getSquareName from "../../helpers/getSquareName";
 import getSquareCoordinates from "../../helpers/getSquareCoordinates";
-import sortSquaresByClosest from "../../sortSquaresByClosest";
+import sortSquaresByClosest from "../../helpers/sortSquaresByClosest";
 
 const KNIGHT_MODIFIERS = [[+2, -1], [+2, +1], [+1, +2], [-1, +2], [-2, +1], [-2, -1], [+1, -2], [-1, -2]];
 

@@ -28,6 +28,12 @@
  */
 
 /**
+ * @callback StateNavigate
+ * @param {Array.<number> | number} ply
+ * @returns {State}
+ */
+
+/**
  * @callback StateGetCachedCalculation
  * @param {string} startSquare
  * @param {PIECE_COLORS} color
@@ -66,6 +72,14 @@
  */
 
 /**
+ * @typedef PlyBoardData
+ * @type {object}
+ * @property {string}
+ * @property
+ */
+
+
+/**
  * @typedef Ply
  * @type {object}
  * @property {string} previous
@@ -76,6 +90,7 @@
  * @property {NOTATION_DISAMBIGUATION_TYPES} disambiguationNeeded
  * @property {Take} take
  * @property {CHECK_TYPES} check
+ * @property {PlyBoardData} boardData
  */
 
 /**
@@ -89,6 +104,14 @@
  * @type {Array.<Move>}
  */
 
+/**
+ * @typedef PieceSquare
+ * @type {object}
+ * @property {string} square
+ * @property {string} symbol
+ * @property {PIECE_COLORS} pieceColor
+ * @property {boolean} isEmpty
+ */
 
 /**
  * @typedef State
@@ -106,19 +129,11 @@
  * @property {CHECK_TYPES} blackCheck
  *
  * @property {StateUpdateWithNextMove} updateWithNextMove - update state with the next ply in the game
+ * @property {StateNavigate} navigate - navigate to a ply in the board's history
  * @property {StateClone} clone - get a copy of the state with optional overrides
  * @property {StateGetCachedCalculation} getCachedCalculation
  * @property {StateCacheCalculation} cacheCalculation
  * @property {StateGetCacheSize} getCacheSize
- */
-
-/**
- * @typedef PieceSquare
- * @type {object}
- * @property {string} square
- * @property {string} symbol
- * @property {PIECE_COLORS} pieceColor
- * @property {boolean} isEmpty
  */
 
 /**
@@ -127,4 +142,13 @@
  * @property {string} symbol
  * @property {string} square
  * @property {string[]} moves
+ */
+
+/**
+ * @typedef PlyAlgebraicNotation
+ * @type {object}
+ * @property {string} emoji
+ * @property {string} normal
+ * @property {boolean} isPawn
+ * @property {Array.<number>} index
  */

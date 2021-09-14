@@ -5,16 +5,22 @@ import {
 	createSimpleSetterHook,
 	createTransactionHookSetter,
 } from "./recoilHelpers";
-import {
-	GameMoves,
-	GameStartingPosition,
-	GameCurrentPosition,
-	GameStartingPositionFen,
-	SelectedPieceData,
-	SelectedPieceAvailableMoves, GameBoardSettings,
-} from "./atoms";
+import atoms from "./atoms";
 import { selectGameCurrentPosition } from "./selectors";
 import { useSelectedPieceSquareSelector } from "./selectorHooks";
+import { PIECE_COLORS } from "../../../consts";
+
+const {
+	GameStartingPosition,
+	GameCurrentPosition,
+	GameHistoryPosition,
+	GameStartingPositionFen,
+	GameMoves,
+	SelectedPieceData,
+	SelectedPieceAvailableMoves,
+	GameBoardSettings,
+	CurrentPly,
+} = atoms;
 
 const useGameStartingPositionSetter = createTransactionHookSetter(
 	({ get, set }, value) => {
@@ -26,6 +32,7 @@ const useGameStartingPositionSetter = createTransactionHookSetter(
 			set(GameCurrentPosition, position);
 			set(GameStartingPositionFen, fen);
 			set(GameMoves, []);
+			set(CurrentPly, [position.move, 0]);
 	}
 );
 
@@ -46,7 +53,6 @@ const useGameStartingPositionSetter = createTransactionHookSetter(
 const useSelectedPieceSetter = createStateHookSetter(
 	"SelectedPieceState",
 	(set, { square, symbol }, get) => {
-
 		set(SelectedPieceData, square);
 		const currentPosition = get(selectGameCurrentPosition);
 
@@ -67,19 +73,30 @@ const useUnselectPieceSetter = createStateHookSetter(
 	unselectPiece,
 );
 
-//TODO !!!!!!!! cant use transaction hook because no support for selectors!
+//TODO! cant use transaction hook because no support for selectors!
 const usePieceDestinationSetter = createStateHookSetter(
 	"PieceDestinationState",
 	(set, { square }, get) => {
-
-		// const currentPosition = get(selectGameCurrentPosition);
 		const pieceSquare = get(useSelectedPieceSquareSelector.selector);
 
-		//TODO: update current position
-		set(GameCurrentPosition, (state) =>
-			state.updateWithNextMove(pieceSquare, square));
+		const currentPosition = get(selectGameCurrentPosition)
+		const nextPosition = currentPosition.updateWithNextMove(pieceSquare, square);
 
+		set(GameCurrentPosition, nextPosition); 	 //(state) =>);
+		set(CurrentPly, [nextPosition.move, (nextPosition.turn === PIECE_COLORS.WHITE ? 0 : 1)]);
 		unselectPiece(set);
+	},
+);
+
+//TODO! cant use transaction hook because no support for selectors!
+const useRewindForwardSetter = createStateHookSetter(
+	"RewindForwardState",
+	(set, { ply }, get) => {
+		const currentPosition = get(selectGameCurrentPosition);
+		console.log("navigating to ply! ", ply, currentPosition);
+
+		const historyPosition = currentPosition.navigate(ply);
+		set(GameHistoryPosition, historyPosition);
 	},
 );
 
@@ -110,4 +127,5 @@ export {
 	useUnselectPieceSetter,
 	usePieceDestinationSetter,
 	useToggleGameBoardIsFlipped,
+	useRewindForwardSetter,
 };

@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import {
+	atom,
 	isRecoilValue,
 	selector,
 	useRecoilState,
@@ -10,7 +11,7 @@ import {
 
 export const createTransactionHookSetter = (setter) => {
 	return () => useRecoilTransaction((actions) =>
-		(...args) =>{
+		(...args) => {
 			setter(actions, ...args);
 		});
 };
@@ -54,3 +55,17 @@ export const createSimpleSetterHook = (atom, customSetter = undefined) => {
 		}, [recoilSetter]);
 	};
 };
+
+// export const getKeys = (keys) =>
+// 	keys.reduce((res, key) => {
+// 		res[key] = key;
+// 		return res;
+// 	}, {});
+
+export const createAtoms = (list) =>
+	Object.entries(list)
+		.reduce((res, [name, defaults]) => {
+			res.keys[name] = name;
+			res.atoms[name] = atom({ key: name, default: defaults });
+			return res;
+		}, { keys: {}, atoms: {} });

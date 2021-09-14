@@ -1,6 +1,7 @@
 const createGameApi = ({
-	                       toggleIsFlipped,
+	                       toggleFlipped,
 	                       setStartingPosition,
+	                       rewindForward,
                        }) => {
 
 	console.log("1!!!!!!! CREATING GAME API !!!!!!!");
@@ -16,17 +17,16 @@ const createGameApi = ({
 	};
 
 	const goToPly = (move = 0, ply = 0) => {
-
+		rewindForward({ ply: [move, ply] });
 	};
 
-	const makeMove = (source, target, options) => {
-
-		//TODO: check validity
-
-	};
+	// const makeMove = (source, target, options) => {
+	//
+	//
+	// };
 
 	const flipBoard = () => {
-		toggleIsFlipped();
+		toggleFlipped();
 	};
 
 	const resign = (color) => {
@@ -58,6 +58,7 @@ const createGameApi = ({
 	return {
 		flipBoard,
 		loadFen,
+		goToPly,
 	};
 };
 

@@ -1,12 +1,16 @@
 import { PIECE_COLORS } from "consts";
-import {
-	GameBoardSettings,
-	SelectedPieceData,
-	SelectedPieceAvailableMoves,
-} from "./atoms";
+import { getPlyAlgebraicNotation } from "logic";
+import atoms from "./atoms";
 import { createSelectorHook } from "./recoilHelpers";
 import { selectGameCurrentPosition } from "./selectors";
-import { getPlyAlgebraicNotation } from "../../../logic";
+
+const {
+	SelectedPieceData,
+	SelectedPieceAvailableMoves,
+	GameBoardSettings,
+	CurrentPly,
+} = atoms;
+
 
 // const createSelectorHook = (key, getter) => {
 // 	const hookSelector = selector({
@@ -89,6 +93,11 @@ const useMovesSelector = createSelectorHook(
 			]) ?? [];
 	});
 
+const useLatestPlySelector = createSelectorHook(
+	"LatestPlySelector",
+	(get) => get(CurrentPly),
+)
+
 export {
 	useBoardSquaresSelector,
 	useIsFlippedSelector,
@@ -98,4 +107,5 @@ export {
 	useAllowedMovesSquaresSelector,
 	useChecksSelector,
 	useMovesSelector,
+	useLatestPlySelector,
 };

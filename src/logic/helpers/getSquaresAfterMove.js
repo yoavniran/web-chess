@@ -1,20 +1,27 @@
-import { switchReturn } from "../../utils";
+import { switchReturn } from "utils";
+import getColorFromSymbol from "./getColorFromSymbol";
+import { isEmptyChar } from "./is";
+
+const getSquareData = (symbol, color, square = null, name) => {
+	const useSymbol = symbol && !isEmptyChar(symbol) ? symbol : false;
+	const pieceColor = color || (useSymbol ? getColorFromSymbol(useSymbol) : null);
+
+	return {
+		...square,
+		name: name || square.name,
+		symbol: useSymbol,
+		pieceColor,
+		isEmpty: !useSymbol,
+	}
+};
 
 const getSquaresAfterNormalMove = (squares, startSquare, targetSquare, symbol, color) => {
 	return {
 		...squares,
-		[startSquare]: {
-			...squares[startSquare],
-			isEmpty: true,
-			symbol: false,
-			pieceColor: null,
-		},
-		...(targetSquare ? {[targetSquare]: {
-			...squares[targetSquare],
-			isEmpty: false,
-			symbol,
-			pieceColor: color,
-		}} : {}),
+		[startSquare]: getSquareData(false, null, squares[startSquare]),
+		...(targetSquare ?
+			{ [targetSquare]: getSquareData(symbol, color, squares[targetSquare]) } :
+			{}),
 	};
 };
 
@@ -40,3 +47,7 @@ const getSquaresAfterMove = (squares, startSquare, targetSquare, symbol, color) 
 };
 
 export default getSquaresAfterMove;
+
+export {
+	getSquareData
+};

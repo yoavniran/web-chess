@@ -1,4 +1,4 @@
-import sortSquaresByClosest from "../sortSquaresByClosest";
+import sortSquaresByClosest from "../helpers/sortSquaresByClosest";
 
 const isCloser = (a, b, squares) => squares.indexOf(a) <= squares.indexOf(b);
 

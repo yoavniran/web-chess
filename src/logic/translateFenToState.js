@@ -1,13 +1,13 @@
 import FenParser from "@chess-fu/fen-parser";
 import {
 	BLACK_INIT_PIECES,
-	EMPTY,
 	PIECE_COLORS,
 	TURN_PIECE,
 } from "consts";
 import getSquareName from "./helpers/getSquareName";
-import getColorFromSymbol from "./helpers/getColorFromSymbol";
-import getBoardState from "./boardState";
+import { getSquareData } from "./helpers/getSquaresAfterMove";
+import getBoardState from "./state/boardState";
+import { isEmptyChar } from "./helpers/is";
 
 const ALLOWED_PIECES_CHARS = Object.keys(BLACK_INIT_PIECES);
 
@@ -20,19 +20,11 @@ const getFenRowSquares = (rowChars, row, isFlipped) => {
 	const chars = isFlipped ? rowChars.split("").reverse() : rowChars.split("");
 	return chars
 		.map((c, col) => {
-			const symbol = c !== EMPTY ? c : false;
-			const pieceColor = symbol ? getColorFromSymbol(symbol) : null;
-
-			if (symbol && !ALLOWED_PIECES_CHARS.includes(symbol.toLowerCase())) {
-				throw new Error(`INVALID FEN! Unknown piece symbol = ${symbol}`);
+			if (!isEmptyChar(c) && !ALLOWED_PIECES_CHARS.includes(c.toLowerCase())) {
+				throw new Error(`WebChess - INVALID FEN! Unknown piece symbol = ${c}`);
 			}
 
-			return {
-				name: getSquareName(...getRowCol(row, col, isFlipped)),
-				symbol,
-				pieceColor,
-				isEmpty: c === EMPTY,
-			};
+			return getSquareData(c, null, null, getSquareName(...getRowCol(row, col, isFlipped)));
 		});
 };
 
@@ -79,7 +71,7 @@ const getSquaresData = (parser, isFlipped) => {
  */
 const translateFenToState = (fen, isFlipped = false) => {
 	if (!FenParser.isFen(fen)) {
-		throw new Error(`Invalid FEN - Could not parse: ${fen}`, );
+		throw new Error(`WebChess - Invalid FEN - Could not parse: ${fen}`);
 	}
 
 	const parser = new FenParser(fen);

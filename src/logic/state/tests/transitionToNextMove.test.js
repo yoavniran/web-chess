@@ -1,14 +1,17 @@
-import translateFenToState from "../translateFenToState";
 import {
-	BLACK_BISHOP,
-	BLACK_KING, BLACK_KNIGHT,
-	BLACK_PAWN, BLACK_QUEEN, CHECK_TYPES,
+	CHECK_TYPES,
 	INITIAL_FEN,
-	PIECE_COLORS, WHITE_BISHOP,
+	PIECE_COLORS,
+	BLACK_KING,
+	BLACK_KNIGHT,
+	BLACK_PAWN,
+	BLACK_QUEEN,
+	WHITE_BISHOP,
 	WHITE_PAWN,
 	WHITE_ROOK,
-} from "../../consts";
-import { isEmptyChar } from "../helpers/is";
+} from "consts";
+import translateFenToState from "../../translateFenToState";
+import { isEmptyChar } from "../../helpers/is";
 
 describe("boardState tests", () => {
 	it("should create new state on update ", () => {
@@ -190,5 +193,15 @@ describe("boardState tests", () => {
 			.updateWithNextMove("B5", "D7");
 
 		expect(state.blackCheck).toBe(CHECK_TYPES.CHECK);
+	});
+
+	it.each([
+		[INITIAL_FEN, "F7", "F6"],
+		["rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", "A2", "A4"],
+	])("should throw on wrong turn: ", (fen, from, to) => {
+		expect(() => {
+			translateFenToState(fen)
+				.updateWithNextMove(from, to);
+		}).toThrow("WebChess - Wrong color");
 	});
 });

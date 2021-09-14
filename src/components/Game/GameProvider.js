@@ -1,19 +1,27 @@
-import React, { createContext, useEffect, useMemo } from "react";
-import { RecoilRoot, useRecoilSnapshot, useRecoilTransactionObserver_UNSTABLE as useRecoilTransactionObserver } from "recoil";
+import React, { createContext, useContext, useEffect, useMemo } from "react";
+import {
+	RecoilRoot,
+	// useRecoilSnapshot,
+	useRecoilTransactionObserver_UNSTABLE as useRecoilTransactionObserver,
+} from "recoil";
 import { usePreviousValue } from "beautiful-react-hooks";
 import { INITIAL_FEN } from "consts";
 import createGameApi from "./gameApi";
 import {
 	useGameStartingPositionSetter,
 	useToggleGameBoardIsFlipped,
+	useRewindForwardSetter,
 } from "./state";
-import { GameCurrentPosition, GameMoves } from "./state/atoms";
+import { atoms } from "./state";
+
+const { GameCurrentPosition, GameMoves } = atoms;
 
 const GameContext = createContext(null);
 
-const useGameApi = ({ position }) => {
-	const setStartingPosition = useGameStartingPositionSetter();
-	const toggleIsFlipped = useToggleGameBoardIsFlipped();
+const useGameApiInitializer = ({ position }) => {
+	const setStartingPosition = useGameStartingPositionSetter(),
+		toggleFlipped = useToggleGameBoardIsFlipped(),
+		rewindForward = useRewindForwardSetter();
 
 	useEffect(() => {
 		console.log("useGameApi HOOK rendered with position = ", position);
@@ -23,9 +31,10 @@ const useGameApi = ({ position }) => {
 	const gameApi = useMemo(() => createGameApi({
 		// position,
 
-		toggleIsFlipped,
+		toggleFlipped,
 		setStartingPosition,
-	}), [toggleIsFlipped, setStartingPosition]);
+		rewindForward,
+	}), [toggleFlipped, setStartingPosition, rewindForward]);
 
 	window.__wcGameApi = gameApi;
 
@@ -50,7 +59,7 @@ const ProviderWithState = ({
 		}
 	}, [position, prevPosition]);
 
-	const gameApi = useGameApi({
+	const gameApi = useGameApiInitializer({
 		position,
 	});
 
@@ -59,13 +68,12 @@ const ProviderWithState = ({
 	</GameContext.Provider>);
 };
 
+const useGameApi = () => {
+	return useContext(GameContext);
+};
+
 const GameTracker = () => {
-	// useRecoilCallback(({snapshot}) =>
-	// 	() => {
-	//
-	// 	// const numItemsInCart = await snapshot.getPromise(itemsInCart);    console.log('Items in cart: ', numItemsInCart);
-	// });
-	useRecoilTransactionObserver(({snapshot, previousSnapshot}) => {
+	useRecoilTransactionObserver(({ snapshot, previousSnapshot }) => {
 		console.log("### TRANSACTION OBSERVER --- GAME STATUS", {
 			position: snapshot.getLoadable(GameCurrentPosition).contents,
 			moves: snapshot.getLoadable(GameMoves).contents,
@@ -90,7 +98,7 @@ const GameTracker = () => {
 const GameProvider = (props) => {
 	return (<RecoilRoot>
 		<ProviderWithState {...props} />
-		<GameTracker />
+		<GameTracker/>
 	</RecoilRoot>);
 };
 
@@ -98,4 +106,5 @@ export default GameProvider;
 
 export {
 	GameContext,
+	useGameApi
 };

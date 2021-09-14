@@ -1,4 +1,4 @@
-import { atom } from "recoil";
+import { createAtoms } from "./recoilHelpers";
 
 // const translateStateToFen = (state) => {
 //
@@ -11,33 +11,49 @@ import { atom } from "recoil";
 // const translatePgnToState = (pgn) => {
 //
 // };
-
-const GameStartingPositionFen = atom({
-	key: "GameStartingPositionFen",
-	default: "",
-});
-
-const GameStartingPosition = atom({
-	key: "GameStartingPosition",
-	default: null,
-});
-
-/**
- * {
- *   squares: Object.<string, PieceSquare>,
- *   whitePositions: Object.<string, string>,
- *   blackPositions: Object.<string, string>,
- *   castles: string,
- *   halfmoveClock: number,
- *   move: number,
- *   turn: PIECE_COLOR,
- *   enpass: boolean | string
- * }
- */
-const GameCurrentPosition = atom({
-	key: "GameCurrentPosition",
-	default: null,
-});
+// const GameStartingPositionFen = atom({
+// 	key: "GameStartingPositionFen",
+// 	default: "",
+// });
+// const GameStartingPosition = atom({
+// 	key: "GameStartingPosition",
+// 	default: null,
+// });
+// const GameCurrentPosition = atom({
+// 	key: "GameCurrentPosition",
+// 	default: null,
+// });
+// const GameMoves = atom({
+// 	key: "GameMoves",
+// 	/**
+// 	 * @type GameMove[]
+// 	 */
+// 	default: [],
+// });
+// const GameBoardSettings = atom({
+// 	key: "GameBoardSettings",
+// 	default: {
+// 		isFlipped: false,
+// 	}
+// });
+// {string} square
+// const SelectedPieceData = atom({
+// 	key: "SelectedPieceData",
+// 	default: null,
+// });
+// const SelectedPieceAvailableMoves = atom({
+// 	key: "SelectedPieceAvailableMoves",
+// 	default: [],
+// })
+// export {
+// 	GameStartingPosition,
+// 	GameCurrentPosition,
+// 	GameMoves,
+// 	GameBoardSettings,
+// 	GameStartingPositionFen,
+// 	SelectedPieceData,
+// 	SelectedPieceAvailableMoves,
+// };
 
 /**
  * @typedef GameMove
@@ -45,54 +61,58 @@ const GameCurrentPosition = atom({
  * @property {Ply[]} plys
  */
 
-const GameMoves = atom({
-	key: "GameMoves",
+/**
+ * @typedef BoardSettings
+ * @type {object}
+ * @property {boolean} isFlipped
+ */
+
+const { keys, atoms } = createAtoms({
 	/**
-	 * @type GameMove[]
+	 * @type {?State}
 	 */
-	default: [],
-});
+	GameStartingPosition: null,
 
-const GameBoardSettings = atom({
-	key: "GameBoardSettings",
-	default: {
+	/**
+	 * @type {?State}
+	 */
+	GameCurrentPosition: null,
+
+	/**
+	 * @type {?State}
+	 */
+	GameHistoryPosition: null,
+
+	/**
+	 * @type {GameMove[]}
+	 */
+	GameMoves: [],
+
+	/**
+	 * @type {BoardSettings}
+	 */
+	GameBoardSettings: {
 		isFlipped: false,
-	}
+	},
+
+	GameStartingPositionFen: "",
+
+	/**
+	 * @type {?string}
+	 */
+	SelectedPieceData: null,
+
+	/**
+	 * @type {string[]}
+	 */
+	SelectedPieceAvailableMoves: [],
+
+	CurrentPly: [0, 0],
 });
 
-// {string} square
-const SelectedPieceData = atom({
-	key: "SelectedPieceData",
-	default: null,
-});
 
-const SelectedPieceAvailableMoves = atom({
-	key: "SelectedPieceAvailableMoves",
-	default: [],
-});
-
-const CurrentPly = atom({
-
-})
+export default atoms;
 
 export {
-	GameStartingPosition,
-	GameCurrentPosition,
-	GameMoves,
-	GameBoardSettings,
-	GameStartingPositionFen,
-	SelectedPieceData,
-	SelectedPieceAvailableMoves,
+	keys,
 };
-
-// const GameState = atom({
-// 	key: "game",
-// 	default: {
-// 		//String (Fen)
-// 		startingPosition: "",
-// 		//String (Fen)
-// 		currentPosition: "",
-// 		//Ply[]
-// 		moves: [],
-// 	},
-// });
