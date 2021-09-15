@@ -2,6 +2,6 @@ export {
 	default as Game,
 	GameBoard,
 	GameMoveCounter,
-	GameHistory,
+	GameMoves,
 } from "./components/Game";
 

@@ -1,31 +1,35 @@
 import React, { useCallback } from "react";
-import { useMovesSelector, useLatestPlySelector } from "./state";
-import MoveHistoryList from "../History/MoveHistoryList";
-import CompactMoveHistoryList from "../History/CompactMoveHistoryList";
+import { useMovesSelector, useHistoryPositionLastPlySelector } from "./state";
+import MoveHistoryList from "../Moves/MoveList";
+import CompactMoveHistoryList from "../Moves/CompactMoveList";
 import { useGameApi } from "./GameProvider";
 
-const GameHistory = ({
+const GameMoves = ({
 	                     className,
 	                     useAlgebraicNotation = true,
 	                     showWithEmojis = true,
 	                     showCompact = false,
 	                     isTraversable = true,
                      }) => {
-	const moves = useMovesSelector();
-	// const latestPly = useLatestPlySelector();
 	const { goToPly } = useGameApi();
-	const HistoryList = showCompact ? CompactMoveHistoryList : MoveHistoryList;
+
+	const moves = useMovesSelector(false);
+	const lastHistoryPly = useHistoryPositionLastPlySelector();
+	const List = showCompact ? CompactMoveHistoryList : MoveHistoryList;
+
+	console.log("GAME MOVES!!!!!!!!!", moves);
 
 	const onPlyClick = useCallback((plyIndex) => {
 		goToPly(...plyIndex);
 	}, [goToPly]);
 
-	return (<HistoryList
+	return (<List
 		className={className}
 		moves={moves}
 		showWithEmojis={showWithEmojis}
 		onPlyClick={isTraversable ? onPlyClick : undefined}
+		lastHistoryPly={lastHistoryPly}
 	/>);
 };
 
-export default GameHistory;
+export default GameMoves;

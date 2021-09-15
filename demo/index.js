@@ -3,7 +3,7 @@ import { render } from "react-dom";
 import styled from "styled-components";
 import { ResizableBox } from "react-resizable";
 import { Game, GameBoard, GameMoveCounter } from "../src/index";
-import History from "./History";
+import Moves from "./Moves";
 
 import "react-resizable/css/styles.css";
 
@@ -53,7 +53,7 @@ const Demo = () => {
 				</BoardContainer>
 				<SideBoardContainer>
 					<StyledGameMoveCounter/>
-					<History/>
+					<Moves/>
 				</SideBoardContainer>
 			</DemoContainer>
 		</Game>

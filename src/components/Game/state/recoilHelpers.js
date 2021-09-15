@@ -6,6 +6,7 @@ import {
 	useRecoilState,
 	useRecoilValue,
 	useSetRecoilState,
+	selectorFamily,
 	useRecoilTransaction_UNSTABLE as useRecoilTransaction,
 } from "recoil";
 
@@ -29,6 +30,20 @@ export const createStateHookSetter = (key, setter) => {
 	return () => useRecoilState(stateSelector)[1];
 };
 
+export const createSelectorFamilyHook = (key, getter, defaultValue) => {
+	const hookSelectorFamily = selectorFamily({
+		key,
+		get: (param) => ({ get }) => getter(param, get),
+	});
+
+	const useHook = (param = defaultValue) =>
+		useRecoilValue(hookSelectorFamily(param));
+
+	useHook.selectorFamily = hookSelectorFamily;
+
+	return useHook;
+};
+
 export const createSelectorHook = (key, getter) => {
 	const hookSelector = selector({
 		key,
@@ -45,8 +60,8 @@ export const createSelectorHook = (key, getter) => {
 	return useHook;
 };
 
-export const createSimpleSetterHook = (atom, customSetter = undefined) => {
-	return () => {
+export const createSimpleSetterHook = (atom, customSetter = undefined) =>
+	() => {
 		const recoilSetter = useSetRecoilState(atom);
 
 		return useCallback((value) => {
@@ -54,7 +69,6 @@ export const createSimpleSetterHook = (atom, customSetter = undefined) => {
 				(current) => customSetter(current, value) : value);
 		}, [recoilSetter]);
 	};
-};
 
 // export const getKeys = (keys) =>
 // 	keys.reduce((res, key) => {

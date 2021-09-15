@@ -15,7 +15,7 @@ const defaultTheme = {
 		check: "rgba(202,84,58,0.75)",
 		mate: "rgba(178,45,16,0.9)",
 		// allowedTakeStrong: "rgba(131,20,81,0.9)",
-	}
+	},
 };
 
 export default defaultTheme;

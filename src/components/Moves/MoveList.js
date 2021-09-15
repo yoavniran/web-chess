@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { PIECE_COLORS } from "consts";
 import { clickableMixin } from "../styled.mixins";
 import PlyContent from "./PlyContent";
-import { getPlyClassName, itemAnimationVariants } from "./historyUtils";
+import { getIsActivePly, getPlyClassName, itemAnimationVariants } from "./moves.shared";
 
 const ListContainer = styled.div`
   width: 100%;
@@ -22,12 +22,12 @@ const ItemWrapper = styled(motion.div)`
 
 const latestPlyCss = css`
   &:after {
-	  border-radius: 100%;
-	  position: relative;
-	  content: "";
+    border-radius: 100%;
+    position: relative;
+    content: "";
     top: 0;
     left: 2px;
-	  width: 8px;
+    width: 8px;
     height: 8px;
     background-color: ${({ theme }) => theme.indicators.allowed};
     //: inset 0 0 2px 1px 
@@ -35,7 +35,7 @@ const latestPlyCss = css`
 `;
 
 const StyledPly = styled.div`
-	position: relative;
+  position: relative;
   flex: 1 1 0;
   width: 0;
   height: 100%;
@@ -54,8 +54,10 @@ const StyledPly = styled.div`
     color: ${theme.darkOverlayText};
 		background-color: ${theme.dark};
 	`}
-	
-	${({$latest}) => $latest ? latestPlyCss : ""}
+
+  opacity: ${({ $active }) => $active ? 1 : 0.5};
+
+  ${({ $latest }) => $latest ? latestPlyCss : ""}
 `;
 
 const StyledMoveIndex = styled.div`
@@ -68,7 +70,28 @@ const StyledMoveIndex = styled.div`
   padding: 4px;
 `;
 
-const ListItem = memo(({ move, white, black, showWithEmojis, onPlyClick, isLatest }) => {
+const renderPly = (ply, color, isLatest, move, turn, lastHistoryPly, showWithEmojis, onClick) =>
+	(<StyledPly
+		className={getPlyClassName(color)}
+		$for={color}
+		$clickable={!!onClick}
+		$latest={isLatest}
+		$active={getIsActivePly(move, turn, lastHistoryPly)}
+		onClick={onClick}
+	>
+		{ply &&
+		<PlyContent ply={ply} withEmoji={showWithEmojis}/>}
+	</StyledPly>);
+
+const ListItem = memo(({
+	                       move,
+	                       white,
+	                       black,
+	                       showWithEmojis,
+	                       onPlyClick,
+	                       isLatest,
+	                       lastHistoryPly,
+                       }) => {
 	const onWhiteClick = () => onPlyClick?.(white.index);
 	const onBlackClick = () => onPlyClick?.(black.index);
 
@@ -78,29 +101,12 @@ const ListItem = memo(({ move, white, black, showWithEmojis, onPlyClick, isLates
 		variants={itemAnimationVariants}
 	>
 		<StyledMoveIndex>{move + 1}.</StyledMoveIndex>
-		<StyledPly
-			className={getPlyClassName(PIECE_COLORS.WHITE)}
-			$for={PIECE_COLORS.WHITE}
-			$clickable={!!onPlyClick}
-			$latest={isLatest && !black}
-			onClick={onWhiteClick}
-		>
-			<PlyContent ply={white} withEmoji={showWithEmojis}/>
-		</StyledPly>
-		<StyledPly
-			className={getPlyClassName(PIECE_COLORS.BLACK)}
-			$for={PIECE_COLORS.BLACK}
-			$clickable={!!onPlyClick}
-			$latest={isLatest && !!black}
-			onClick={onBlackClick}
-		>
-			{black &&
-			<PlyContent ply={black} withEmoji={showWithEmojis}/>}
-		</StyledPly>
+		{renderPly(white, PIECE_COLORS.WHITE, isLatest && !black, move, 0, lastHistoryPly, showWithEmojis, onPlyClick && onWhiteClick)}
+		{renderPly(black, PIECE_COLORS.BLACK, isLatest && !!black, move, 1, lastHistoryPly, showWithEmojis, onPlyClick && onBlackClick)}
 	</ItemWrapper>);
 });
 
-const MoveHistoryList = ({ className, moves, showWithEmojis, onPlyClick }) => {
+const MoveList = ({ className, moves, showWithEmojis, lastHistoryPly, onPlyClick }) => {
 	return (<ListContainer className={className}>
 		{moves.map(([move, white, black], index) =>
 			<ListItem
@@ -111,8 +117,9 @@ const MoveHistoryList = ({ className, moves, showWithEmojis, onPlyClick }) => {
 				showWithEmojis={showWithEmojis}
 				onPlyClick={onPlyClick}
 				isLatest={index === moves.length - 1}
+				lastHistoryPly={lastHistoryPly}
 			/>)}
 	</ListContainer>);
 };
 
-export default MoveHistoryList;
+export default MoveList;

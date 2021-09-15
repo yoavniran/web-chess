@@ -123,7 +123,7 @@
  * @property {string} castles
  * @property {number} halfmoveClock
  * @property {number} move
- * @property {TURN_PIECE} turn
+ * @property {PIECE_COLORS} turn
  * @property {boolean | string} enpassant
  * @property {CHECK_TYPES} whiteCheck
  * @property {CHECK_TYPES} blackCheck

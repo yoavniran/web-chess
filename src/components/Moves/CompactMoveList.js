@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { PIECE_COLORS } from "consts";
 import { clickableMixin } from "../styled.mixins";
 import PlyContent from "./PlyContent";
-import { getPlyClassName, itemAnimationVariants } from "./historyUtils";
+import { getIsActivePly, getPlyClassName, itemAnimationVariants } from "./moves.shared";
 
 const ListContainer = styled.div`
   width: 100%;
@@ -69,7 +69,7 @@ const ListItem = memo(({ move, white, black, showWithEmojis, onPlyClick }) => {
 	</ListItemWrapper>);
 });
 
-const CompactMoveHistoryList = ({ className, moves, showWithEmojis, onPlyClick }) => {
+const CompactMoveList = ({ className, moves, showWithEmojis, onPlyClick }) => {
 	return (<ListContainer className={className}>
 		{moves.map(([move, white, black]) =>
 			<ListItem
@@ -83,4 +83,4 @@ const CompactMoveHistoryList = ({ className, moves, showWithEmojis, onPlyClick }
 	</ListContainer>);
 };
 
-export default CompactMoveHistoryList;
+export default CompactMoveList;

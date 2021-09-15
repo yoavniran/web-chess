@@ -54,7 +54,7 @@ const useSelectedPieceSetter = createStateHookSetter(
 	"SelectedPieceState",
 	(set, { square, symbol }, get) => {
 		set(SelectedPieceData, square);
-		const currentPosition = get(selectGameCurrentPosition);
+		const currentPosition = get(selectGameCurrentPosition());
 
 		if (currentPosition) {
 			set(SelectedPieceAvailableMoves,
@@ -79,10 +79,10 @@ const usePieceDestinationSetter = createStateHookSetter(
 	(set, { square }, get) => {
 		const pieceSquare = get(useSelectedPieceSquareSelector.selector);
 
-		const currentPosition = get(selectGameCurrentPosition)
+		const currentPosition = get(selectGameCurrentPosition())
 		const nextPosition = currentPosition.updateWithNextMove(pieceSquare, square);
 
-		set(GameCurrentPosition, nextPosition); 	 //(state) =>);
+		set(GameCurrentPosition, nextPosition);
 		set(CurrentPly, [nextPosition.move, (nextPosition.turn === PIECE_COLORS.WHITE ? 0 : 1)]);
 		unselectPiece(set);
 	},
@@ -92,11 +92,19 @@ const usePieceDestinationSetter = createStateHookSetter(
 const useRewindForwardSetter = createStateHookSetter(
 	"RewindForwardState",
 	(set, { ply }, get) => {
-		const currentPosition = get(selectGameCurrentPosition);
-		console.log("navigating to ply! ", ply, currentPosition);
-
+		const currentPosition = get(selectGameCurrentPosition(false));
 		const historyPosition = currentPosition.navigate(ply);
-		set(GameHistoryPosition, historyPosition);
+		const isSame = historyPosition.move === currentPosition.move &&
+			historyPosition.turn === currentPosition.turn;
+
+		console.log("REWIND FORWARD !!!! IS SAME = ", isSame, {
+			ply,
+			historyPosition,
+			currentPosition
+		});
+
+		set(GameHistoryPosition,
+			!isSame ? historyPosition : null);
 	},
 );
 

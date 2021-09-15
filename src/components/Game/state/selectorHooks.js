@@ -1,7 +1,7 @@
 import { PIECE_COLORS } from "consts";
 import { getPlyAlgebraicNotation } from "logic";
 import atoms from "./atoms";
-import { createSelectorHook } from "./recoilHelpers";
+import { createSelectorFamilyHook, createSelectorHook } from "./recoilHelpers";
 import { selectGameCurrentPosition } from "./selectors";
 
 const {
@@ -9,29 +9,13 @@ const {
 	SelectedPieceAvailableMoves,
 	GameBoardSettings,
 	CurrentPly,
+	GameHistoryPosition,
 } = atoms;
-
-
-// const createSelectorHook = (key, getter) => {
-// 	const hookSelector = selector({
-// 		key,
-// 		get: ({ get }) => isRecoilValue(getter) ?
-// 			//get atom directly
-// 			get(getter) :
-// 			//execute getter callback
-// 			getter(get),
-// 	});
-//
-// 	const useHook = () => useRecoilValue(hookSelector);
-// 	useHook.selector = hookSelector;
-//
-// 	return useHook;
-// };
 
 const useBoardSquaresSelector = createSelectorHook(
 	"BoardSquaresSelector",
 	(get) => {
-		const currentPosition = get(selectGameCurrentPosition);
+		const currentPosition = get(selectGameCurrentPosition());
 		return currentPosition?.squares;
 	},
 );
@@ -46,15 +30,15 @@ const useIsFlippedSelector = createSelectorHook(
 const useMoveCounterSelector = createSelectorHook(
 	"MoveCounterSelector",
 	(get) => {
-		const currentPosition = get(selectGameCurrentPosition);
-		return currentPosition?.move;
+		const currentPosition = get(selectGameCurrentPosition());
+		return currentPosition?.move ?? 0;
 	},
 );
 
 const useTurnSelector = createSelectorHook(
 	"TurnSelector",
 	(get) => {
-		const currentPosition = get(selectGameCurrentPosition);
+		const currentPosition = get(selectGameCurrentPosition());
 		return currentPosition?.turn;
 	},
 );
@@ -72,31 +56,39 @@ const useAllowedMovesSquaresSelector = createSelectorHook(
 const useChecksSelector = createSelectorHook(
 	"ChecksSelector",
 	(get) => {
-		const currentPosition = get(selectGameCurrentPosition);
+		const currentPosition = get(selectGameCurrentPosition());
 		return currentPosition ? {
 			[PIECE_COLORS.WHITE]: currentPosition.whiteCheck,
-			[PIECE_COLORS.BLACK]: currentPosition.blackCheck
+			[PIECE_COLORS.BLACK]: currentPosition.blackCheck,
 		} : {};
 	},
 );
 
-const useMovesSelector = createSelectorHook(
-	"MovesSelector",
-	(get) => {
-		const currentPosition = get(selectGameCurrentPosition);
-		console.log("MOVE SELECTOR RUNNING FOR POSITION = ", currentPosition);
+const useMovesSelector = createSelectorFamilyHook(
+	"MovesSelectorFamily",
+	(withHistory, get) => {
+		const currentPosition = get(selectGameCurrentPosition(withHistory));
 
 		return currentPosition?.history.map(([whitePly, blackPly]) => [
 			whitePly.move,
-				getPlyAlgebraicNotation(whitePly),
-				blackPly ? getPlyAlgebraicNotation(blackPly) : undefined
-			]) ?? [];
-	});
+			getPlyAlgebraicNotation(whitePly),
+			blackPly ? getPlyAlgebraicNotation(blackPly) : undefined,
+		]) ?? [];
+	},
+	true);
 
 const useLatestPlySelector = createSelectorHook(
 	"LatestPlySelector",
 	(get) => get(CurrentPly),
-)
+);
+
+const useHistoryPositionLastPlySelector = createSelectorHook(
+	"HistoryPositionLastPlySelector",
+	(get) => {
+		const historyPosition = get(GameHistoryPosition);
+		const lastMove = historyPosition?.history.slice(-1)[0];
+		return lastMove ? [lastMove[0].move, lastMove.length > 1 ? 1 : 0] : null;
+	});
 
 export {
 	useBoardSquaresSelector,
@@ -108,4 +100,5 @@ export {
 	useChecksSelector,
 	useMovesSelector,
 	useLatestPlySelector,
+	useHistoryPositionLastPlySelector,
 };

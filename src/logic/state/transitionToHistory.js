@@ -33,17 +33,20 @@ const getHistorySquares = (state, toMove, toTurn) => {
 	let newSquares = { ...squares };
 
 	if (toMove <= state.move) {
-		let currentMove = state.move;
+		let currentMove = state.move - (state.turn === PIECE_COLORS.WHITE ? 1 : 0);
 		let historyIndex = history.length - 1;
 
 		while (currentMove >= toMove && !!~historyIndex) {
 			const [whitePly, blackPly] = history[historyIndex];
+			const moreMoves = currentMove !== toMove;
 
-			if (blackPly) {
+			if (blackPly && (moreMoves || !toTurn)) {
+				//revert black ply if we need to get to white's ply
 				newSquares = revertPlyOnSquares(newSquares, blackPly);
 			}
 
-			if (currentMove !== toMove || !toTurn) {
+			if (moreMoves) {
+				//revert white ply if we need to get to a previous move
 				newSquares = revertPlyOnSquares(newSquares, whitePly);
 			}
 
@@ -69,14 +72,7 @@ const getTurnAfterRewind = (state, lastMove, toTurn, isReset) =>
 const getHistoryDestination = (plyDestination) =>
 	Array.isArray(plyDestination) ? plyDestination : [plyDestination, 0];
 
-/**
- *
- * @param {State} state
- * @param {Array.<number> | number} ply
- * @param {Function} getStateBoardFromData
- * @returns {State}
- */
-const transitionToHistory = (state, ply, getStateBoardFromData) => {
+const getStateForPly = (state, ply, getStateBoardFromData) => {
 	const [toMove, toTurn] = getHistoryDestination(ply);
 	const isReset = !~toMove;
 	const rewindMoveIndex = !isReset ?
@@ -126,9 +122,19 @@ const transitionToHistory = (state, ply, getStateBoardFromData) => {
 			whitePositions: getColorPiecePositions(PIECE_COLORS.WHITE, newSquares),
 			blackPositions: getColorPiecePositions(PIECE_COLORS.BLACK, newSquares),
 		},
-
 		createUpdatedHistory,
 	);
+}
+
+/**
+ *
+ * @param {State} state
+ * @param {Array.<number> | number} ply
+ * @param {Function} getStateBoardFromData
+ * @returns {State}
+ */
+const transitionToHistory = (state, ply, getStateBoardFromData) => {
+
 };
 
 export default transitionToHistory;

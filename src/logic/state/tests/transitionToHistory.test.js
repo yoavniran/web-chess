@@ -1,7 +1,50 @@
-import { CHECK_TYPES, INITIAL_FEN, PIECE_COLORS } from "consts";
+import {
+	BLACK_PAWN,
+	BLACK_QUEEN,
+	CHECK_TYPES,
+	INITIAL_FEN,
+	PIECE_COLORS,
+	WHITE_PAWN,
+} from "consts";
 import translateFenToState from "../../translateFenToState";
 
 describe("transitionToHistory tests", () => {
+	const expectCloneForSamePly = (state, newState) => {
+		expect(newState).not.toBe(state);
+		expect(newState.squares).not.toBe(state.squares);
+		expect(newState.history).not.toBe(state.history);
+		expect(newState.whitePositions).not.toBe(state.whitePositions);
+		expect(newState.blackPositions).not.toBe(state.blackPositions);
+		expect(newState.history.length).toBe(state.history.length)
+		expect(newState.move).toBe(state.move);
+		expect(newState.turn).toBe(state.turn);
+
+		Object.entries(newState.whitePositions)
+			.every(([key, value]) => state.whitePositions[key] === value);
+
+		Object.entries(newState.blackPositions)
+			.every(([key, value]) => state.blackPositions[key] === value);
+	};
+
+	it("should return clone if navigate to current ply", () => {
+		const state = translateFenToState(INITIAL_FEN)
+			.updateWithNextMove("E2", "E4")
+			.updateWithNextMove("D7", "D5")
+			.updateWithNextMove("E4", "D5")
+			.updateWithNextMove("D8", "D5");
+
+		const newState = state.navigate([1, 1]);
+
+		expectCloneForSamePly(state, newState);
+	});
+
+	it("should return clone for init position", () => {
+		const state = translateFenToState(INITIAL_FEN);
+		const newState  = state.navigate(0);
+
+		expectCloneForSamePly(state, newState);
+	});
+
 	it("should revert to the first ply", () => {
 		const state = translateFenToState(INITIAL_FEN)
 			.updateWithNextMove("E2", "E4")
@@ -24,6 +67,7 @@ describe("transitionToHistory tests", () => {
 		expect(startState.history[0]).toHaveLength(1);
 		expect(startState.blackCheck).toBe(CHECK_TYPES.NONE);
 		expect(startState.turn).toBe(PIECE_COLORS.BLACK);
+		expect(startState.squares["E4"].symbol).toBe(WHITE_PAWN);
 	});
 
 	it("should revert 1 ply backward", () => {
@@ -39,6 +83,33 @@ describe("transitionToHistory tests", () => {
 
 		expect(state.blackCheck).toBe(CHECK_TYPES.NONE);
 		expect(newState.blackCheck).toBe(CHECK_TYPES.CHECK);
+	});
+
+	it("should revert 2 plys backward", () => {
+		const state = translateFenToState(INITIAL_FEN)
+			.updateWithNextMove("E2", "E4")
+			.updateWithNextMove("D7", "D5")
+			.updateWithNextMove("E4", "D5")
+			.navigate([0, 1]);
+
+		expect(state.history).toHaveLength(1);
+		expect(state.history[0][1]).toBeDefined();
+		expect(state.squares["E4"].symbol).toBe(WHITE_PAWN);
+		expect(state.squares["D5"].symbol).toBe(BLACK_PAWN);
+	});
+
+	it("should revert 3 pls backward", () => {
+		const state = translateFenToState(INITIAL_FEN)
+			.updateWithNextMove("E2", "E4")
+			.updateWithNextMove("D7", "D5")
+			.updateWithNextMove("E4", "D5")
+			.updateWithNextMove("D8", "D5")
+			.navigate([0, 1]);
+
+		expect(state.squares["D8"].symbol).toBe(BLACK_QUEEN);
+		expect(state.squares["D7"].isEmpty).toBe(true);
+		expect(state.squares["D5"].symbol).toBe(BLACK_PAWN);
+		expect(state.squares["E4"].symbol).toBe(WHITE_PAWN);
 	});
 
 	it("should revert and update halfmoveClock correctly", () => {
@@ -121,6 +192,12 @@ describe("transitionToHistory tests", () => {
 		expect(newState.turn).toBe(PIECE_COLORS.WHITE);
 		expect(newState.history).toHaveLength(0);
 		expect(newState.move).toBe(0);
+
+		expect(newState.squares["E2"].symbol).toBe(WHITE_PAWN);
+		expect(newState.squares["E4"].isEmpty).toBe(true);
+		expect(newState.squares["F7"].symbol).toBe(BLACK_PAWN);
+		expect(newState.squares["F5"].isEmpty).toBe(true);
+		expect(newState.squares["D6"].isEmpty).toBe(true);
 	});
 
 	it("should reset to custom FEN with last move was black's", () => {

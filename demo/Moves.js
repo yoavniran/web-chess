@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { GameHistory } from "../src";
+import { GameMoves } from "../src";
 import { MdInsertEmoticon } from "react-icons/md";
 import { BiText } from "react-icons/bi";
 import { GoListOrdered } from "react-icons/go";
 import { IoMdList } from "react-icons/io";
 
-const HistoryContainer = styled.div`
+const MovesContainer = styled.div`
   width: 300px;
 `;
 
-const StyledGameHistory = styled(GameHistory)`
+const StyledGameMoves = styled(GameMoves)`
 
 	.emoji-ply {
 		font-size: 22px;
@@ -18,7 +18,7 @@ const StyledGameHistory = styled(GameHistory)`
 	}
 `;
 
-const HistoryToggleBar = styled.div`
+const MovesToggleBar = styled.div`
   display: flex;
   height: 50px;
   justify-content: flex-end;
@@ -62,7 +62,7 @@ const Divider = styled.div`
   border: solid 1px rgba(0, 0, 0, 0.64);
 `;
 
-const History = () => {
+const Moves = () => {
 	const [isEmojis, setEmojis] = useState(true);
 	const [isCompact, setCompact] = useState(false);
 
@@ -74,8 +74,8 @@ const History = () => {
 		setCompact(!isCompact);
 	};
 
-	return (<HistoryContainer>
-			<HistoryToggleBar>
+	return (<MovesContainer>
+			<MovesToggleBar>
 				<BarButtons>
 					<ToggleButton
 						Icon={MdInsertEmoticon} onClick={toggleEmojis} disabled={isEmojis}
@@ -95,11 +95,11 @@ const History = () => {
 						Icon={IoMdList} onClick={toggleCompact} disabled={isCompact}
 					/>
 				</BarButtons>
-			</HistoryToggleBar>
-			<StyledGameHistory showWithEmojis={isEmojis} showCompact={isCompact}/>
-		</HistoryContainer>
+			</MovesToggleBar>
+			<StyledGameMoves showWithEmojis={isEmojis} showCompact={isCompact}/>
+		</MovesContainer>
 	);
 };
 
-export default History;
+export default Moves;
 
