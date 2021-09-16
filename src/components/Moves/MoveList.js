@@ -1,10 +1,15 @@
 import React, { memo } from "react";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 import { motion } from "framer-motion";
 import { PIECE_COLORS } from "consts";
 import { clickableMixin } from "../styled.mixins";
 import PlyContent from "./PlyContent";
-import { getIsActivePly, getPlyClassName, itemAnimationVariants } from "./moves.shared";
+import {
+	getIsActivePly,
+	getPlyClassName,
+	itemAnimationVariants,
+	latestPlyCss,
+} from "./moves.shared";
 
 const ListContainer = styled.div`
   width: 100%;
@@ -18,20 +23,6 @@ const ItemWrapper = styled(motion.div)`
   align-items: center;
   margin-bottom: 2px;
   height: 1.5rem;
-`;
-
-const latestPlyCss = css`
-  &:after {
-    border-radius: 100%;
-    position: relative;
-    content: "";
-    top: 0;
-    left: 2px;
-    width: 8px;
-    height: 8px;
-    background-color: ${({ theme }) => theme.indicators.allowed};
-    //: inset 0 0 2px 1px 
-  }
 `;
 
 const StyledPly = styled.div`
@@ -74,7 +65,7 @@ const renderPly = (ply, color, isLatest, move, turn, lastHistoryPly, showWithEmo
 	(<StyledPly
 		className={getPlyClassName(color)}
 		$for={color}
-		$clickable={!!onClick}
+		$clickable={!!onClick && !!ply}
 		$latest={isLatest}
 		$active={getIsActivePly(move, turn, lastHistoryPly)}
 		onClick={onClick}
@@ -93,7 +84,7 @@ const ListItem = memo(({
 	                       lastHistoryPly,
                        }) => {
 	const onWhiteClick = () => onPlyClick?.(white.index);
-	const onBlackClick = () => onPlyClick?.(black.index);
+	const onBlackClick = () => black && onPlyClick?.(black.index);
 
 	return (<ItemWrapper
 		initial="hidden"

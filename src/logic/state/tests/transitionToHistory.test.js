@@ -9,22 +9,6 @@ import {
 import translateFenToState from "../../translateFenToState";
 
 describe("transitionToHistory tests", () => {
-	const expectCloneForSamePly = (state, newState) => {
-		expect(newState).not.toBe(state);
-		expect(newState.squares).not.toBe(state.squares);
-		expect(newState.history).not.toBe(state.history);
-		expect(newState.whitePositions).not.toBe(state.whitePositions);
-		expect(newState.blackPositions).not.toBe(state.blackPositions);
-		expect(newState.history.length).toBe(state.history.length)
-		expect(newState.move).toBe(state.move);
-		expect(newState.turn).toBe(state.turn);
-
-		Object.entries(newState.whitePositions)
-			.every(([key, value]) => state.whitePositions[key] === value);
-
-		Object.entries(newState.blackPositions)
-			.every(([key, value]) => state.blackPositions[key] === value);
-	};
 
 	it("should return clone if navigate to current ply", () => {
 		const state = translateFenToState(INITIAL_FEN)
@@ -35,14 +19,23 @@ describe("transitionToHistory tests", () => {
 
 		const newState = state.navigate([1, 1]);
 
-		expectCloneForSamePly(state, newState);
+		expect(newState).not.toBe(state);
+		expect(newState.history.length).toBe(state.history.length)
+		expect(newState.move).toBe(state.move);
+		expect(newState.turn).toBe(state.turn);
+
+		expect(newState.squares["D5"].symbol).toBe(state.squares["D5"].symbol);
+
+		Object.entries(newState.whitePositions)
+			.every(([key, value]) => state.whitePositions[key] === value);
+
+		Object.entries(newState.blackPositions)
+			.every(([key, value]) => state.blackPositions[key] === value);
 	});
 
-	it("should return clone for init position", () => {
+	it("should not be able to navigate on init position", () => {
 		const state = translateFenToState(INITIAL_FEN);
-		const newState  = state.navigate(0);
-
-		expectCloneForSamePly(state, newState);
+		expect(() => state.navigate(0)).toThrow("WebChess - Cannot navigate to ply: [0,0]")
 	});
 
 	it("should revert to the first ply", () => {

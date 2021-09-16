@@ -3,6 +3,7 @@ import { PIECE_COLORS } from "consts";
 import { getSquareData } from "../helpers/getSquaresAfterMove";
 import { getColorPiecePositions } from "../moves/calculators/afterMove";
 import getOppositeColor from "../helpers/getOppositeColor";
+import { getIsSamePlyAsHistory } from "../index";
 
 /**
  *
@@ -79,7 +80,7 @@ const getStateForPly = (state, ply, getStateBoardFromData) => {
 		state.history.findIndex(([whitePly]) => whitePly.move === toMove) : 0;
 
 	if (!isReset && (!~rewindMoveIndex || !state.history[rewindMoveIndex][toTurn])) {
-		throw new Error(`WebChess - Cannot navigate to ply: [${ply.join(",")}] - it doesn't exist in history!`);
+		throw new Error(`WebChess - Cannot navigate to ply: [${toMove},${toTurn}] - it doesn't exist in history!`);
 	}
 
 	const newSquares = getHistorySquares(state, toMove, toTurn);
@@ -134,7 +135,11 @@ const getStateForPly = (state, ply, getStateBoardFromData) => {
  * @returns {State}
  */
 const transitionToHistory = (state, ply, getStateBoardFromData) => {
-
+	return getIsSamePlyAsHistory(state, ply) ?
+		//clone since requested ply is current
+		state.clone() :
+		//rewind to ply in history
+		getStateForPly(state, ply, getStateBoardFromData);
 };
 
 export default transitionToHistory;

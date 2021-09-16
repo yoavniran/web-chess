@@ -4,7 +4,12 @@ import { motion } from "framer-motion";
 import { PIECE_COLORS } from "consts";
 import { clickableMixin } from "../styled.mixins";
 import PlyContent from "./PlyContent";
-import { getIsActivePly, getPlyClassName, itemAnimationVariants } from "./moves.shared";
+import {
+	getIsActivePly,
+	getPlyClassName,
+	itemAnimationVariants,
+	latestPlyCss,
+} from "./moves.shared";
 
 const ListContainer = styled.div`
   width: 100%;
@@ -16,8 +21,13 @@ const StyledPly = styled.span`
   font-weight: bold;
   display: flex;
   align-items: center;
-
+	position: relative;
+	
   ${clickableMixin}
+
+  ${({ $latest }) => $latest ? latestPlyCss : ""}
+
+  opacity: ${({ $active }) => $active ? 1 : 0.5};
 `;
 
 const ListItemWrapper = styled(motion.div)`
@@ -38,7 +48,7 @@ const Divider = styled.div`
   margin: 0 4px;
 `;
 
-const ListItem = memo(({ move, white, black, showWithEmojis, onPlyClick }) => {
+const ListItem = memo(({ move, white, black, showWithEmojis, lastHistoryPly, isLatest, onPlyClick }) => {
 	const onWhiteClick = () => onPlyClick?.(white.index);
 	const onBlackClick = () => onPlyClick?.(black.index);
 
@@ -51,6 +61,8 @@ const ListItem = memo(({ move, white, black, showWithEmojis, onPlyClick }) => {
 		<StyledPly
 			className={getPlyClassName(PIECE_COLORS.WHITE)}
 			$clickable={!!onPlyClick}
+			$active={getIsActivePly(move, 0, lastHistoryPly)}
+			$latest={isLatest && !black}
 			onClick={onWhiteClick}
 		>
 			<PlyContent ply={white} withEmoji={showWithEmojis}/>
@@ -61,6 +73,8 @@ const ListItem = memo(({ move, white, black, showWithEmojis, onPlyClick }) => {
 			<StyledPly
 				className={getPlyClassName(PIECE_COLORS.BLACK)}
 				$clickable={!!onPlyClick}
+				$active={getIsActivePly(move, 1, lastHistoryPly)}
+				$latest={isLatest}
 				onClick={onBlackClick}
 			>
 				{<PlyContent ply={black} withEmoji={showWithEmojis}/>}
@@ -69,15 +83,17 @@ const ListItem = memo(({ move, white, black, showWithEmojis, onPlyClick }) => {
 	</ListItemWrapper>);
 });
 
-const CompactMoveList = ({ className, moves, showWithEmojis, onPlyClick }) => {
+const CompactMoveList = ({ className, moves, showWithEmojis, lastHistoryPly, onPlyClick }) => {
 	return (<ListContainer className={className}>
-		{moves.map(([move, white, black]) =>
+		{moves.map(([move, white, black], index) =>
 			<ListItem
 				key={`move${move}`}
 				move={move}
 				white={white}
 				black={black}
 				showWithEmojis={showWithEmojis}
+				lastHistoryPly={lastHistoryPly}
+				isLatest={index === moves.length - 1}
 				onPlyClick={onPlyClick}
 			/>)}
 	</ListContainer>);

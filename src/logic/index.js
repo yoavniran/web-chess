@@ -5,3 +5,4 @@ export { getMoveSquares } from "./moves";
 export * from "./helpers/is";
 export { default as getColorFromSymbol } from "./helpers/getColorFromSymbol";
 export { default as getPlyAlgebraicNotation } from "./helpers/getPlyAlgebraicNotation";
+export { default as getIsSamePlyAsHistory } from "./helpers/getIsSamePlyAsHistory";

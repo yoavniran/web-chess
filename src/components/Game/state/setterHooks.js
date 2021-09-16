@@ -1,5 +1,11 @@
 import isString from "lodash/isString";
-import { getMoveSquares, translateFenToState, translateStateToFen } from "logic";
+import { PIECE_COLORS } from "consts";
+import {
+	getMoveSquares,
+	translateFenToState,
+	translateStateToFen,
+	getIsSamePlyAsHistory,
+} from "logic";
 import {
 	createStateHookSetter,
 	createSimpleSetterHook,
@@ -8,7 +14,6 @@ import {
 import atoms from "./atoms";
 import { selectGameCurrentPosition } from "./selectors";
 import { useSelectedPieceSquareSelector } from "./selectorHooks";
-import { PIECE_COLORS } from "../../../consts";
 
 const {
 	GameStartingPosition,
@@ -93,32 +98,12 @@ const useRewindForwardSetter = createStateHookSetter(
 	"RewindForwardState",
 	(set, { ply }, get) => {
 		const currentPosition = get(selectGameCurrentPosition(false));
-		const historyPosition = currentPosition.navigate(ply);
-		const isSame = historyPosition.move === currentPosition.move &&
-			historyPosition.turn === currentPosition.turn;
+		const historyPosition = !getIsSamePlyAsHistory(currentPosition, ply) ?
+			currentPosition.navigate(ply) : null;
 
-		console.log("REWIND FORWARD !!!! IS SAME = ", isSame, {
-			ply,
-			historyPosition,
-			currentPosition
-		});
-
-		set(GameHistoryPosition,
-			!isSame ? historyPosition : null);
+		set(GameHistoryPosition, historyPosition);
 	},
 );
-
-// const useGameCurrentPosition =
-// 	createSimpleStateHook(GameCurrentPosition);
-// //"selectGameCurrentPosition",
-
-// const useSetGameStartingPosition =
-// 	createSimpleSetterHook( GameStartingPosition,
-// 		(current, value) => {
-// 			return isString(value) ?
-// 				translateFenToState(value) :
-// 				value;
-// 		});
 
 const useToggleGameBoardIsFlipped =
 	createSimpleSetterHook(GameBoardSettings,
