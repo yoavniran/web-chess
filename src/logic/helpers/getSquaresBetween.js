@@ -4,6 +4,14 @@ import calculatePieceAllMoveSquares from "../moves/calculators/calculatePieceAll
 import { PIECE_COLORS } from "../../consts";
 import getSquareCoordinates from "./getSquareCoordinates";
 
+/**
+ *
+ * @param {string} start
+ * @param {string }end
+ * @param {State} state
+ * @param {boolean} infinite - whether to return squares after end square
+ * @return {*}
+ */
 const getSquaresBetween = (start, end, state, infinite = false) => {
 	const distance = infinite ? Infinity :
 		getDistance(getSquareCoordinates(start), getSquareCoordinates(end));

@@ -8,10 +8,10 @@ import {
 } from "consts";
 import translateFenToState from "../../../translateFenToState";
 import moveCalculator from "../moveCalculator";
-import kingMovesDefinitions from "../definitions/kingMovesDefinitions";
-import queenMovesDefinitions from "../definitions/queenMovesDefinitions";
-import knightMovesDefinitions from "../definitions/knightMovesDefinitions";
-import pawnMovesDefinitions from "../definitions/pawnMovesDefinitions";
+import kingMovesDefinitions from "../../definitions/kingMovesDefinitions";
+import queenMovesDefinitions from "../../definitions/queenMovesDefinitions";
+import knightMovesDefinitions from "../../definitions/knightMovesDefinitions";
+import pawnMovesDefinitions from "../../definitions/pawnMovesDefinitions";
 
 const findSquare = (name, squares) => !!squares.find((s) => s === name);
 

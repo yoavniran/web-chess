@@ -1,6 +1,6 @@
 import { CASTLE_SIDES, EMPTY } from "consts";
 import { isEmptyChar, isKing, isRook, isRookStartPosition } from "logic/helpers/is";
-import getCanCastle, { CASTLE_POSITIONS, CASTLES_RGX } from "logic/helpers/getCanCastle";
+import { getCanCastle, CASTLE_POSITIONS, CASTLES_RGX } from "logic/helpers/castleHelpers";
 import getSquareCoordinates from "logic/helpers/getSquareCoordinates";
 
 const getCastlesAfterMove = (state, symbol, color, startSquare) => {

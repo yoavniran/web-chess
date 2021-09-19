@@ -18,13 +18,14 @@ import {
 import { addArrayToSet } from "../../utils";
 import getColorFromSymbol from "../helpers/getColorFromSymbol";
 import { isKing } from "../helpers/is";
-import kingMovesDefinitions from "./calculators/definitions/kingMovesDefinitions";
-import queenMovesDefinitions from "./calculators/definitions/queenMovesDefinitions";
-import rookMovesDefinitions from "./calculators/definitions/rookMovesDefinitions";
-import bishopMovesDefinitions from "./calculators/definitions/bishopMovesDefinitions";
-import knightMovesDefinitions from "./calculators/definitions/knightMovesDefinitions";
-import pawnMovesDefinitions from "./calculators/definitions/pawnMovesDefinitions";
+import kingMovesDefinitions from "./definitions/kingMovesDefinitions";
+import queenMovesDefinitions from "./definitions/queenMovesDefinitions";
+import rookMovesDefinitions from "./definitions/rookMovesDefinitions";
+import bishopMovesDefinitions from "./definitions/bishopMovesDefinitions";
+import knightMovesDefinitions from "./definitions/knightMovesDefinitions";
+import pawnMovesDefinitions from "./definitions/pawnMovesDefinitions";
 import moveCalculator from "./calculators/moveCalculator";
+import castleCalculator from "./calculators/castleCalculator";
 import filterAbsolutePinSquares from "./calculators/filters/filterAbsolutePinSquares";
 
 const PIECE_DEFINITIONS = {
@@ -53,7 +54,7 @@ const isRightTurn = (state, pieceColor) =>
 const MOVE_CALCULATORS = {
 	[MOVE_TYPES.MOVE]: moveCalculator,
 	[MOVE_TYPES.EN_PASSANT]: () => [],
-	[MOVE_TYPES.CASTLE]: () => [],
+	[MOVE_TYPES.CASTLE]: castleCalculator,
 };
 
 const calculateForDefinitions = (definitions, square, symbol, state, pieceColor, options) => {

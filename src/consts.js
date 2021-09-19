@@ -43,6 +43,7 @@ export const MOVE_TYPES = {
 	MOVE: "MOVE",
 	CASTLE: "CASTLE",
 	EN_PASSANT: "EN_PASSANT",
+	PROMOTION: "PROMOTION",
 };
 
 /**

@@ -54,6 +54,14 @@ const getAttacksOnSquare = (targetSquare, considerEmpty, opponentPieces, ownPiec
 		}, []);
 
 /**
+ * @typedef Attacker
+ * @type {object}
+ * @property {string} symbol
+ * @property {string} square
+ * @property {Array.<string>} moves
+ */
+
+/**
  * @typedef GetAttackingPiecesOptions
  * @type {object}
  * @property {?boolean} bailOnFirst
@@ -67,7 +75,7 @@ const getAttacksOnSquare = (targetSquare, considerEmpty, opponentPieces, ownPiec
  * @param considerEmpty
  * @param state
  * @param {GetAttackingPiecesOptions} options
- * @returns {*}
+ * @returns {Array.<Attacker>}
  */
 const getAttackingPiecesOnSquare = (targetSquare, color, considerEmpty, state, options = {}) => {
 	const isWhite = color === PIECE_COLORS.WHITE;
