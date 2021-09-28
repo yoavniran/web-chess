@@ -1,7 +1,7 @@
 import { NOTATION_DISAMBIGUATION_TYPES } from "consts";
 import { isBishop, isKnight, isQueen, isRook } from "./is";
 import findPieceTypeSquares from "./findPieceTypeSquares";
-import { calculateSquares } from "../moves";
+import { getNextMoveSquares } from "../moves";
 import getSquareCoordinates from "./getSquareCoordinates";
 
 /**
@@ -24,7 +24,7 @@ const getDisambiguateTypeRequired = (fromSquare, toSquare, symbol, color, state)
 			//there is more than one of this piece type
 			const competitorSquares = samePieceSquares.filter((square) =>
 				square !== fromSquare &&
-				calculateSquares(square, symbol, color, state).includes(toSquare),
+				getNextMoveSquares(square, symbol, color, state).includes(toSquare),
 			);
 
 			if (competitorSquares.length) {

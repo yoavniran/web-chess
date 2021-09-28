@@ -52,3 +52,5 @@ export const isPawnStartPosition = (symbol, square) =>
 		(color, [col, row]) =>
 			color === PIECE_COLORS.BLACK && row === 6
 );
+
+export const isColumn = (square, column) => square[0].toLowerCase() === column.toLowerCase();

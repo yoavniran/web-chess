@@ -1,10 +1,18 @@
 import {
+	BLACK_KING,
+	BLACK_KNIGHT,
 	BLACK_PAWN,
 	BLACK_QUEEN,
+	BLACK_ROOK,
+	WHITE_BISHOP,
+	WHITE_KING,
+	WHITE_KNIGHT,
+	WHITE_PAWN,
+	WHITE_ROOK,
 	CHECK_TYPES,
 	INITIAL_FEN,
+	MOVE_TYPES,
 	PIECE_COLORS,
-	WHITE_PAWN,
 } from "consts";
 import translateFenToState from "../../translateFenToState";
 
@@ -12,15 +20,15 @@ describe("transitionToHistory tests", () => {
 
 	it("should return clone if navigate to current ply", () => {
 		const state = translateFenToState(INITIAL_FEN)
-			.updateWithNextMove("E2", "E4")
-			.updateWithNextMove("D7", "D5")
-			.updateWithNextMove("E4", "D5")
-			.updateWithNextMove("D8", "D5");
+			.updateWithNextMove("E2", { square: "E4" })
+			.updateWithNextMove("D7", { square: "D5" })
+			.updateWithNextMove("E4", { square: "D5" })
+			.updateWithNextMove("D8", { square: "D5" });
 
 		const newState = state.navigate([1, 1]);
 
 		expect(newState).not.toBe(state);
-		expect(newState.history.length).toBe(state.history.length)
+		expect(newState.history.length).toBe(state.history.length);
 		expect(newState.move).toBe(state.move);
 		expect(newState.turn).toBe(state.turn);
 
@@ -35,16 +43,16 @@ describe("transitionToHistory tests", () => {
 
 	it("should not be able to navigate on init position", () => {
 		const state = translateFenToState(INITIAL_FEN);
-		expect(() => state.navigate(0)).toThrow("WebChess - Cannot navigate to ply: [0,0]")
+		expect(() => state.navigate(0)).toThrow("WebChess - Cannot navigate to ply: [0,0]");
 	});
 
 	it("should revert to the first ply", () => {
 		const state = translateFenToState(INITIAL_FEN)
-			.updateWithNextMove("E2", "E4")
-			.updateWithNextMove("F7", "F5")
-			.updateWithNextMove("F1", "B5")
-			.updateWithNextMove("C7", "C6")
-			.updateWithNextMove("D1", "H5"); //white Queen checks
+			.updateWithNextMove("E2", { square: "E4" })
+			.updateWithNextMove("F7", { square: "F5" })
+			.updateWithNextMove("F1", { square: "B5" })
+			.updateWithNextMove("C7", { square: "C6" })
+			.updateWithNextMove("D1", { square: "H5" }); //white Queen checks
 
 		const startState = state.navigate([0, 0]);
 
@@ -65,12 +73,12 @@ describe("transitionToHistory tests", () => {
 
 	it("should revert 1 ply backward", () => {
 		const state = translateFenToState(INITIAL_FEN)
-			.updateWithNextMove("E2", "E4")
-			.updateWithNextMove("F7", "F5")
-			.updateWithNextMove("F1", "B5")
-			.updateWithNextMove("C7", "C6")
-			.updateWithNextMove("D1", "H5")
-			.updateWithNextMove("G7", "G6");
+			.updateWithNextMove("E2", { square: "E4" })
+			.updateWithNextMove("F7", { square: "F5" })
+			.updateWithNextMove("F1", { square: "B5" })
+			.updateWithNextMove("C7", { square: "C6" })
+			.updateWithNextMove("D1", { square: "H5" })
+			.updateWithNextMove("G7", { square: "G6" });
 
 		const newState = state.navigate([state.move - 1, 0]);
 
@@ -80,9 +88,9 @@ describe("transitionToHistory tests", () => {
 
 	it("should revert 2 plys backward", () => {
 		const state = translateFenToState(INITIAL_FEN)
-			.updateWithNextMove("E2", "E4")
-			.updateWithNextMove("D7", "D5")
-			.updateWithNextMove("E4", "D5")
+			.updateWithNextMove("E2", { square: "E4" })
+			.updateWithNextMove("D7", { square: "D5" })
+			.updateWithNextMove("E4", { square: "D5" })
 			.navigate([0, 1]);
 
 		expect(state.history).toHaveLength(1);
@@ -93,10 +101,10 @@ describe("transitionToHistory tests", () => {
 
 	it("should revert 3 pls backward", () => {
 		const state = translateFenToState(INITIAL_FEN)
-			.updateWithNextMove("E2", "E4")
-			.updateWithNextMove("D7", "D5")
-			.updateWithNextMove("E4", "D5")
-			.updateWithNextMove("D8", "D5")
+			.updateWithNextMove("E2", { square: "E4" })
+			.updateWithNextMove("D7", { square: "D5" })
+			.updateWithNextMove("E4", { square: "D5" })
+			.updateWithNextMove("D8", { square: "D5" })
 			.navigate([0, 1]);
 
 		expect(state.squares["D8"].symbol).toBe(BLACK_QUEEN);
@@ -107,11 +115,11 @@ describe("transitionToHistory tests", () => {
 
 	it("should revert and update halfmoveClock correctly", () => {
 		const state = translateFenToState(INITIAL_FEN)
-			.updateWithNextMove("B1", "C3")
-			.updateWithNextMove("B8", "C6")
-			.updateWithNextMove("G1", "F3")
-			.updateWithNextMove("G8", "F6")
-			.updateWithNextMove("E2", "E4");
+			.updateWithNextMove("B1", { square: "C3" })
+			.updateWithNextMove("B8", { square: "C6" })
+			.updateWithNextMove("G1", { square: "F3" })
+			.updateWithNextMove("G8", { square: "F6" })
+			.updateWithNextMove("E2", { square: "E4" });
 
 		expect(state.halfmoveClock).toBe(0);
 
@@ -123,14 +131,14 @@ describe("transitionToHistory tests", () => {
 
 	it("should revert and update takes correctly", () => {
 		const state = translateFenToState(INITIAL_FEN)
-			.updateWithNextMove("E2", "E4")
-			.updateWithNextMove("D7", "D5")
-			.updateWithNextMove("E4", "D5") //take
-			.updateWithNextMove("D8", "D5") //take
-			.updateWithNextMove("B1", "C3")
-			.updateWithNextMove("E7", "E6")
-			.updateWithNextMove("C3", "D5") //take
-			.updateWithNextMove("E6", "D5"); //take
+			.updateWithNextMove("E2", { square: "E4" })
+			.updateWithNextMove("D7", { square: "D5" })
+			.updateWithNextMove("E4", { square: "D5" }) //take
+			.updateWithNextMove("D8", { square: "D5" }) //take
+			.updateWithNextMove("B1", { square: "C3" })
+			.updateWithNextMove("E7", { square: "E6" })
+			.updateWithNextMove("C3", { square: "D5" }) //take
+			.updateWithNextMove("E6", { square: "D5" }); //take
 
 		expect(state.takes).toHaveLength(4);
 
@@ -147,11 +155,11 @@ describe("transitionToHistory tests", () => {
 
 	it("should work when starting with custom FEN", () => {
 		const state = translateFenToState("rnb1kbnr/ppp2ppp/8/3p4/8/8/PPPP1PPP/R1BQKBNR w KQkq - 0 5")
-			.updateWithNextMove("D1", "F3") //move 5 (index = 4)
-			.updateWithNextMove("C7", "C6")
-			.updateWithNextMove("F3", "F7") //take + check
-			.updateWithNextMove("E8", "F7") //take
-			.updateWithNextMove("G1", "F3");
+			.updateWithNextMove("D1", { square: "F3" }) //move 5 (index = 4)
+			.updateWithNextMove("C7", { square: "C6" })
+			.updateWithNextMove("F3", { square: "F7" }) //take + check
+			.updateWithNextMove("E8", { square: "F7" }) //take
+			.updateWithNextMove("G1", { square: "F3" });
 
 		expect(state.takes).toHaveLength(6);
 
@@ -170,11 +178,11 @@ describe("transitionToHistory tests", () => {
 
 	it("should reset all moves", () => {
 		const state = translateFenToState(INITIAL_FEN)
-			.updateWithNextMove("E2", "E4")
-			.updateWithNextMove("F7", "F5")
-			.updateWithNextMove("F1", "B5")
-			.updateWithNextMove("D7", "D6")
-			.updateWithNextMove("E4", "F5");
+			.updateWithNextMove("E2", { square: "E4" })
+			.updateWithNextMove("F7", { square: "F5" })
+			.updateWithNextMove("F1", { square: "B5" })
+			.updateWithNextMove("D7", { square: "D6" })
+			.updateWithNextMove("E4", { square: "F5" });
 
 		expect(state.takes).toHaveLength(1);
 		expect(state.turn).toBe(PIECE_COLORS.BLACK);
@@ -195,12 +203,61 @@ describe("transitionToHistory tests", () => {
 
 	it("should reset to custom FEN with last move was black's", () => {
 		const state = translateFenToState("rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2")
-			.updateWithNextMove("G8", "F6")
-			.updateWithNextMove("B1", "C3")
+			.updateWithNextMove("G8", { square: "F6" })
+			.updateWithNextMove("B1", { square: "C3" })
 			.navigate(-1);
 
 		expect(state.move).toBe(1);
 		expect(state.turn).toBe(PIECE_COLORS.BLACK);
 		expect(state.takes).toHaveLength(1);
+	});
+
+	it("should be able to revert to first ply with black's turn", () => {
+		const state = translateFenToState("rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2")
+			.updateWithNextMove("G8", { square: "F6" })
+			.updateWithNextMove("B1", { square: "C3" })
+			.navigate([1, 0]);
+
+		expect(state.move).toBe(1);
+		expect(state.turn).toBe(PIECE_COLORS.WHITE);
+		expect(state.squares.G8.isEmpty).toBe(true);
+		expect(state.squares.F6.symbol).toBe(BLACK_KNIGHT);
+		expect(state.squares.F6.isEmpty).toBe(false);
+		expect(state.squares.B1.symbol).toBe(WHITE_KNIGHT);
+		expect(state.squares.C3.isEmpty).toBe(true);
+	});
+
+	it("should revert castle", () => {
+		const state = translateFenToState("rnbqk2r/ppppnppp/4p3/8/1b1PP1Q1/2N5/PPP2PPP/R1B1KBNR b KQkq - 2 4")
+			.updateWithNextMove("B8", { square: "C6" })
+			.updateWithNextMove("F1", { square: "D3" })
+			.updateWithNextMove("E8", { square: "G8", type: MOVE_TYPES.CASTLE })
+			.navigate([4, 0]);
+
+		expect(state.move).toBe(4);
+		expect(state.turn).toBe(PIECE_COLORS.BLACK);
+		expect(state.squares.E8.symbol).toBe(BLACK_KING);
+		expect(state.squares.H8.symbol).toBe(BLACK_ROOK);
+		expect(state.squares.G8.isEmpty).toBe(true);
+	});
+
+	it("should reset to start after both sides castled", () => {
+		const state = translateFenToState("rnbqk2r/ppppnppp/4p3/8/1b1PP1Q1/2N5/PPP2PPP/R1B1KBNR b KQkq - 2 4")
+			.updateWithNextMove("B8", { square: "C6" })
+			.updateWithNextMove("F1", { square: "D3" })
+			.updateWithNextMove("E8", { square: "G8", type: MOVE_TYPES.CASTLE })
+			.updateWithNextMove("C1", { square: "F4" })
+			.updateWithNextMove("D7", { square: "D5" })
+			.updateWithNextMove("E1", { square: "C1", type: MOVE_TYPES.CASTLE })
+			.navigate(-1);
+
+		expect(state.move).toBe(3);
+		expect(state.turn).toBe(PIECE_COLORS.BLACK);
+		expect(state.squares.E8.symbol).toBe(BLACK_KING);
+		expect(state.squares.E1.symbol).toBe(WHITE_KING);
+		expect(state.squares.H8.symbol).toBe(BLACK_ROOK);
+		expect(state.squares.A1.symbol).toBe(WHITE_ROOK);
+		expect(state.squares.F8.isEmpty).toBe(true);
+		expect(state.squares.F1.symbol).toBe(WHITE_BISHOP);
 	});
 });

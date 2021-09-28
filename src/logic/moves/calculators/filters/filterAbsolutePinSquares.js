@@ -8,7 +8,7 @@ import { BLACK_KING, PIECE_COLORS, WHITE_KING } from "../../../../consts";
  * @param {string} startSquare
  * @param {string} symbol
  * @param {PIECE_COLORS} pieceColor
- * @param {string[]} moveSquares
+ * @param {Array.<string>} moveSquares
  * @param {State} state
  */
 const filterAbsolutePinSquares = (startSquare, symbol, pieceColor, moveSquares, state) => {

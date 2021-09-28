@@ -1,5 +1,5 @@
 import { CASTLE_SIDES, PIECE_COLORS } from "consts";
-import castleHelpers from "../getCanCastle";
+import { getCanCastle } from "../castleHelpers";
 
 describe("getCanCastle tests", () => {
 	it.each([
@@ -28,7 +28,6 @@ describe("getCanCastle tests", () => {
 		["Q", PIECE_COLORS.BLACK, CASTLE_SIDES.KING, false],
 	])("for %s, %s castling to side: %s should be: %s",
 		(castles, color, side, expected) => {
-
-			expect(castleHelpers(castles, color, side)).toBe(expected);
+			expect(getCanCastle(castles, color, side)).toBe(expected);
 		});
 });

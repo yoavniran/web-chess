@@ -1,7 +1,7 @@
 import isString from "lodash/isString";
 import { PIECE_COLORS } from "consts";
 import {
-	getMoveSquares,
+	getNextMoves,
 	translateFenToState,
 	translateStateToFen,
 	getIsSamePlyAsHistory,
@@ -62,8 +62,8 @@ const useSelectedPieceSetter = createStateHookSetter(
 		const currentPosition = get(selectGameCurrentPosition());
 
 		if (currentPosition) {
-			set(SelectedPieceAvailableMoves,
-				getMoveSquares(square, symbol, currentPosition));
+			const moves = getNextMoves(square, symbol, currentPosition);
+			set(SelectedPieceAvailableMoves, moves);
 		}
 	},
 );
@@ -81,11 +81,10 @@ const useUnselectPieceSetter = createStateHookSetter(
 //TODO! cant use transaction hook because no support for selectors!
 const usePieceDestinationSetter = createStateHookSetter(
 	"PieceDestinationState",
-	(set, { square }, get) => {
+	(set, { move }, get) => {
 		const pieceSquare = get(useSelectedPieceSquareSelector.selector);
-
 		const currentPosition = get(selectGameCurrentPosition())
-		const nextPosition = currentPosition.updateWithNextMove(pieceSquare, square);
+		const nextPosition = currentPosition.updateWithNextMove(pieceSquare, move);
 
 		set(GameCurrentPosition, nextPosition);
 		set(CurrentPly, [nextPosition.move, (nextPosition.turn === PIECE_COLORS.WHITE ? 0 : 1)]);

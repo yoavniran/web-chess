@@ -1,7 +1,7 @@
 import {
 	BLACK_KING,
 	BLACK_QUEEN,
-	INITIAL_FEN,
+	INITIAL_FEN, MOVE_TYPES,
 	PIECE_COLORS,
 	WHITE_KNIGHT,
 	WHITE_PAWN,
@@ -13,7 +13,7 @@ import queenMovesDefinitions from "../../definitions/queenMovesDefinitions";
 import knightMovesDefinitions from "../../definitions/knightMovesDefinitions";
 import pawnMovesDefinitions from "../../definitions/pawnMovesDefinitions";
 
-const findSquare = (name, squares) => !!squares.find((s) => s === name);
+const findSquare = (name, squares) => !!squares.find((s) => s.square === name);
 
 describe("moveCalculator tests", () => {
 
@@ -27,7 +27,8 @@ describe("moveCalculator tests", () => {
 		);
 
 		expect(moveSquares).toHaveLength(1);
-		expect(moveSquares[0]).toBe("E3");
+		expect(moveSquares[0].square).toBe("E3");
+		expect(moveSquares[0].type).toBe(MOVE_TYPES.MOVE);
 	});
 
 	it("should calculate normal moves for pawn - count:2 - from initial FEN", () => {
@@ -40,8 +41,8 @@ describe("moveCalculator tests", () => {
 		);
 
 		expect(moveSquares).toHaveLength(2);
-		expect(moveSquares[0]).toBe("E3");
-		expect(moveSquares[1]).toBe("E4");
+		expect(moveSquares[0].square).toBe("E3");
+		expect(moveSquares[1].square).toBe("E4");
 	});
 
 	it("should calculate normal moves for white knight from initial FEN", () => {
@@ -55,8 +56,8 @@ describe("moveCalculator tests", () => {
 			);
 
 		expect(moveSquares).toHaveLength(2);
-		expect(moveSquares[0]).toBe("H3");
-		expect(moveSquares[1]).toBe("F3");
+		expect(moveSquares[0].square).toBe("H3");
+		expect(moveSquares[1].square).toBe("F3");
 	});
 
 	it("should calculate for normal moves Black Queen - ignoring turn", () => {

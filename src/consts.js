@@ -39,6 +39,11 @@ export const BLACK_ROOK = "r",
 	BLACK_KING = "k",
 	BLACK_PAWN = "p";
 
+/**
+ * Enum for types of moves
+ * @readonly
+ * @enum {string}
+ */
 export const MOVE_TYPES = {
 	MOVE: "MOVE",
 	CASTLE: "CASTLE",

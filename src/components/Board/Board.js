@@ -34,7 +34,7 @@ const Board = ({
 	               isFlipped = false,
 	               squares = [],
 	               selectedPieceSquare = "",
-	               allowedMoveSquares = [],
+	               selectedAllowedMoves = [],
 	               selectPiece,
 	               unselectPiece,
 	               movePiece,
@@ -55,23 +55,25 @@ const Board = ({
 		isFlipped,
 		squares,
 		selectedPieceSquare,
-		allowedMoveSquares,
+		selectedAllowedMoves,
 		checks,
 	});
 
 	return (<BoardContainer $size={size} className={className}>
-		{grid.map((square) =>
-			<Square
+		{grid.map((square) => {
+			const allowedMove = selectedAllowedMoves.find((m) => m.square === square.name);
+
+			return (<Square
 				key={square.name}
 				{...square}
 				{...squares[square.name]}
 				isPieceSelected={selectedPieceSquare === square.name}
 				selectPiece={selectPiece}
 				unselectPiece={unselectPiece}
-				isAllowedMove={!!~allowedMoveSquares.indexOf(square.name)}
+				allowedMove={allowedMove}
 				check={getCheck(squares[square.name]?.symbol, checks)}
 				movePiece={movePiece}
-			/>)}
+			/>)})}
 	</BoardContainer>);
 };
 

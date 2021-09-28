@@ -30,8 +30,6 @@ describe("castleCalculator tests", () => {
 			type: MOVE_TYPES.CASTLE,
 		}]);
 
-		expect(castleCalculator("E8", BLACK_KING, state.updateWithNextMove("D6", "C7"), PIECE_COLORS.BLACK)).toEqual([]);
+		expect(castleCalculator("E8", BLACK_KING, state.updateWithNextMove("D6", {square: "C7"}), PIECE_COLORS.BLACK)).toEqual([]);
 	});
-
-
 });

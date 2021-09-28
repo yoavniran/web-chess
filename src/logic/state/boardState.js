@@ -83,8 +83,8 @@ const getStateBoardFromData = (data, ...dataCreators) => {
 			move: data.move ?? 0,
 			turn: data.turn ?? PIECE_COLORS.WHITE,
 			history: data.history ?? [],
-			updateWithNextMove: (startSquare, targetSquare) =>
-				transitionToNextMove(state, startSquare, targetSquare, getStateBoardFromData),
+			updateWithNextMove: (startSquare, move) =>
+				transitionToNextMove(state, startSquare, move, getStateBoardFromData),
 			navigate: (ply) =>
 				transitionToHistory(state, ply, getStateBoardFromData),
 			getCachedCalculation,

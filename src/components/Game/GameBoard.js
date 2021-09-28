@@ -20,7 +20,7 @@ const GameBoard = ({ className }) => {
 		selectedPieceSquare = useSelectedPieceSquareSelector(),
 		setSelectedPiece = useSelectedPieceSetter(),
 		unselectPiece = useUnselectPieceSetter(),
-		allowedMovesSquares = useAllowedMovesSquaresSelector(),
+		selectedAllowedMoves = useAllowedMovesSquaresSelector(),
 		setPieceDestinationSquare = usePieceDestinationSetter(),
 		checks = useChecksSelector();
 
@@ -31,7 +31,7 @@ const GameBoard = ({ className }) => {
 		selectedPieceSquare={selectedPieceSquare}
 		selectPiece={setSelectedPiece}
 		unselectPiece={unselectPiece}
-		allowedMoveSquares={allowedMovesSquares}
+		selectedAllowedMoves={selectedAllowedMoves}
 		movePiece={setPieceDestinationSquare}
 		checks={checks}
 	/>);

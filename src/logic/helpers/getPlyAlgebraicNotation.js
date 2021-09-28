@@ -1,23 +1,15 @@
 import {
-	CHECK_TYPES,
+	CHECK_TYPES, MOVE_TYPES,
 	NOTATION_DISAMBIGUATION_TYPES,
 	PIECES_EMOJIS,
 } from "consts";
 import { switchReturn } from "utils";
-import { isPawn, isWhite } from "./is";
+import { isColumn, isPawn, isWhite } from "./is";
 
 const getCheckNotation = (ply) => {
 	return ply.check === CHECK_TYPES.MATE ? "#" :
 		(ply.check === CHECK_TYPES.CHECK ? "+" : "");
 };
-
-/**
- * @typedef Notation
- * @type {object}
- * @property {string} emoji
- * @property {string} normal
- */
-
 
 /**
  *
@@ -68,6 +60,22 @@ const createNormalNotation = (ply, notPawn, check) => {
 /**
  *
  * @param {Ply} ply
+ * @returns {Notation | boolean}
+ */
+const createCastlingNotation = (ply) => {
+	const notation = ply.moveType === MOVE_TYPES.CASTLE &&
+	(isColumn(ply.target, "G") ? "O-O" : "O-O-O");
+
+	return notation && {
+		emoji: notation,
+		normal: notation,
+		isCastle: true,
+	};
+};
+
+/**
+ *
+ * @param {Ply} ply
  * @returns PlyAlgebraicNotation
  */
 const getPlyAlgebraicNotation = (ply) => {
@@ -78,15 +86,13 @@ const getPlyAlgebraicNotation = (ply) => {
 	 * @type {Notation}
 	 */
 	const notation = switchReturn([ply, notPawn, check],
-		//castling
-		(ply) => {
-			//tODO!!!!!!!! CASTLING NOTATION!!
-		},
+		createCastlingNotation,
 		createTakeNotation,
 		createNormalNotation,
 	);
 
 	return {
+		isCastle: false,
 		...notation,
 		index: [ply.move, isWhite(ply.symbol) ? 0 : 1],
 		isPawn: !notPawn,

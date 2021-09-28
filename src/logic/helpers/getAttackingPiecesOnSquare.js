@@ -1,5 +1,5 @@
 import intersection from "lodash/intersection";
-import { calculateSquares } from "../moves";
+import { getNextMoveSquares } from "../moves";
 import getColorFromSymbol from "./getColorFromSymbol";
 import getSquaresBetween from "./getSquaresBetween";
 import { isKing } from "./is";
@@ -33,7 +33,7 @@ const getAttacksOnSquare = (targetSquare, considerEmpty, opponentPieces, ownPiec
 						blackPositions: !isWhite ? removeKingFromPositions(ownPieces) : state.blackPositions,
 					}) : state;
 
-				moves = calculateSquares(
+				moves = getNextMoveSquares(
 					square, symbol, getColorFromSymbol(symbol), useState, {
 						ignoreTurn: true,
 						expectedTake: [targetSquare],
@@ -74,7 +74,7 @@ const getAttacksOnSquare = (targetSquare, considerEmpty, opponentPieces, ownPiec
  * @param color
  * @param considerEmpty
  * @param state
- * @param {GetAttackingPiecesOptions} options
+ * @param {?GetAttackingPiecesOptions} options
  * @returns {Array.<Attacker>}
  */
 const getAttackingPiecesOnSquare = (targetSquare, color, considerEmpty, state, options = {}) => {

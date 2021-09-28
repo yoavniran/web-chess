@@ -12,7 +12,8 @@ import {
 	WHITE_KNIGHT,
 
 	INITIAL_FEN,
-	PIECE_COLORS, CHECK_TYPES,
+	PIECE_COLORS,
+	CHECK_TYPES,
 } from "consts";
 import translateFenToState from "../translateFenToState";
 

@@ -15,7 +15,6 @@ import {
 	MOVE_TYPES,
 	CHECK_TYPES,
 } from "consts";
-import { addArrayToSet } from "../../utils";
 import getColorFromSymbol from "../helpers/getColorFromSymbol";
 import { isKing } from "../helpers/is";
 import kingMovesDefinitions from "./definitions/kingMovesDefinitions";
@@ -58,17 +57,12 @@ const MOVE_CALCULATORS = {
 };
 
 const calculateForDefinitions = (definitions, square, symbol, state, pieceColor, options) => {
-	const movesSet = definitions
+	return definitions
 		.reduce((res, [defType, ...definition]) => {
-			addArrayToSet(
-				MOVE_CALCULATORS[defType](square, symbol, state, pieceColor, definition, options),
-				res,
-			);
-
+			const moves = MOVE_CALCULATORS[defType](square, symbol, state, pieceColor, definition, options);
+			moves.forEach((move) => res.set(move.square, move));
 			return res;
-		}, new Set());
-
-	return [...movesSet.values()];
+		}, new Map());
 };
 
 const canCalculate = (pieceColor, symbol, state, options) => {
@@ -83,10 +77,43 @@ const canCalculate = (pieceColor, symbol, state, options) => {
 	);
 };
 
-export const calculateSquares = (square, symbol, pieceColor, state, options = {}) => {
+/**
+ * convert Map to object-map
+ * @param {Map.<string, Move>} movesMap
+ * @return {Record.<string, Move>}
+ */
+const getMovesFromMap = (movesMap) =>
+	[...movesMap.entries()]
+	.reduce((res, [key, move]) => {
+		res[key] = move;
+		return res;
+	}, {})
+
+const getFilteredFromAbsolutePins = (movesMap, square, symbol, pieceColor, state) => {
+	const moves = getMovesFromMap(movesMap);
+	const filtered = filterAbsolutePinSquares(square, symbol, pieceColor, Object.keys(moves), state);
+
+	return movesMap.size === filtered.length ?
+		getMovesFromMap(movesMap) :
+		filtered.reduce((res, square) => {
+			res[square] = movesMap.get(square);
+			return res;
+		}, {});
+};
+
+/**
+ *
+ * @param square
+ * @param symbol
+ * @param pieceColor
+ * @param state
+ * @param options
+ * @return {Record.<string, Move>}
+ */
+const calculateMoves = (square, symbol, pieceColor, state, options = {}) => {
 	const definitions = PIECE_DEFINITIONS[symbol];
 
-	const moves = calculateForDefinitions(
+	const movesMap = calculateForDefinitions(
 		definitions,
 		square,
 		symbol,
@@ -96,15 +123,42 @@ export const calculateSquares = (square, symbol, pieceColor, state, options = {}
 	);
 
 	return (options.ignorePin || isKing(symbol)) ?
-		moves :
-		filterAbsolutePinSquares(square, symbol, pieceColor, moves, state);
+		getMovesFromMap(movesMap) :
+		getFilteredFromAbsolutePins(movesMap, square, symbol, pieceColor, state);
 };
 
-const getMoveSquares = (square, symbol, state, options = {}) => {
+/**
+ *
+ * @param square
+ * @param symbol
+ * @param pieceColor
+ * @param state
+ * @param options
+ * @return {string[]}
+ */
+const getNextMoveSquares = (square, symbol, pieceColor, state, options = {}) => {
+	const movesMap = calculateMoves(square, symbol, pieceColor, state, options);
+	return Object.values(movesMap)
+		.map((m) => m.square);
+};
+
+/**
+ *
+ * @param square
+ * @param symbol
+ * @param state
+ * @param options
+ * @return {Record.<string,Move>}
+ */
+const getNextMoves = (square, symbol, state, options = {}) => {
 	const pieceColor = getColorFromSymbol(symbol);
 
 	return canCalculate(pieceColor, symbol, state, options) ?
-		calculateSquares(square, symbol, pieceColor, state, options) : [];
+		calculateMoves(square, symbol, pieceColor, state, options) : [];
 };
 
-export default getMoveSquares;
+export default getNextMoves;
+
+export {
+	getNextMoveSquares,
+};

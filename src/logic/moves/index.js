@@ -1,6 +1,6 @@
-import getMoveSquares, { calculateSquares } from "./getMoveSquares";
+import getNextMoves, { getNextMoveSquares } from "./getNextMoves";
 
 export {
-	getMoveSquares,
-	calculateSquares,
+	getNextMoves,
+	getNextMoveSquares,
 };

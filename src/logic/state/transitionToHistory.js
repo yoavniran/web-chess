@@ -1,9 +1,24 @@
 import isUndefined from "lodash/isUndefined";
-import { PIECE_COLORS } from "consts";
+import { BLACK_ROOK, MOVE_TYPES, PIECE_COLORS, WHITE_ROOK } from "consts";
 import { getSquareData } from "../helpers/getSquaresAfterMove";
 import { getColorPiecePositions } from "../moves/calculators/afterMove";
 import getOppositeColor from "../helpers/getOppositeColor";
-import { getIsSamePlyAsHistory } from "../index";
+import { getIsSamePlyAsHistory, isColumn } from "../index";
+
+const revertRookFromCastle = (squares, ply) => {
+	const { color, target} = ply;
+	const row = color === PIECE_COLORS.WHITE ? "1" : "8";
+	const isQueenSide = isColumn(target, "C");
+	const currentRookSquare = (isQueenSide ? "D" : "F") + row;
+	const revertRookSquare = (isQueenSide ? "A" : "H") + row;
+	const rook = color === PIECE_COLORS.WHITE ? WHITE_ROOK : BLACK_ROOK;
+
+	return {
+		...squares,
+		[currentRookSquare]: getSquareData(false, null, squares[currentRookSquare]),
+		[revertRookSquare]: getSquareData(rook, color, squares[revertRookSquare]),
+	};
+};
 
 /**
  *
@@ -13,9 +28,14 @@ import { getIsSamePlyAsHistory } from "../index";
 const revertPlyOnSquares = (squares, ply) => {
 	const prevSquare = squares[ply.previous];
 	const targetSquare = squares[ply.target];
+	let revertedSquares = squares;
+
+	if (ply.moveType === MOVE_TYPES.CASTLE) {
+		revertedSquares = revertRookFromCastle(revertedSquares, ply);
+	}
 
 	return {
-		...squares,
+		...revertedSquares,
 		[ply.previous]: getSquareData(ply.symbol, ply.color, prevSquare),
 		[ply.target]: ply.take ?
 			getSquareData(ply.take.symbol, ply.take.color, targetSquare) :
@@ -46,7 +66,7 @@ const getHistorySquares = (state, toMove, toTurn) => {
 				newSquares = revertPlyOnSquares(newSquares, blackPly);
 			}
 
-			if (moreMoves) {
+			if (moreMoves && whitePly) {
 				//revert white ply if we need to get to a previous move
 				newSquares = revertPlyOnSquares(newSquares, whitePly);
 			}
@@ -59,8 +79,10 @@ const getHistorySquares = (state, toMove, toTurn) => {
 	return newSquares;
 };
 
+const getFirstPlyInHistory = (history) => history[0][0] || history[0][1];
+
 const getFirstPlyMoveIndex = (history) => {
-	const firstPly = history[0][0];
+	const firstPly = getFirstPlyInHistory(history);
 	return firstPly.color === PIECE_COLORS.BLACK ? firstPly.move : Math.max(firstPly.move - 1, 0);
 };
 
@@ -68,24 +90,29 @@ const getMoveIndexAfterRewind = (state, lastMove, toTurn, isReset) =>
 	isReset ? getFirstPlyMoveIndex(state.history) : lastMove[toTurn].move;
 
 const getTurnAfterRewind = (state, lastMove, toTurn, isReset) =>
-	isReset ? state.history[0][0].color : getOppositeColor(lastMove[toTurn].color);
+	isReset ? getFirstPlyInHistory(state.history).color : getOppositeColor(lastMove[toTurn].color);
 
 const getHistoryDestination = (plyDestination) =>
 	Array.isArray(plyDestination) ? plyDestination : [plyDestination, 0];
 
 const getStateForPly = (state, ply, getStateBoardFromData) => {
-	const [toMove, toTurn] = getHistoryDestination(ply);
+	let [toMove, toTurn] = getHistoryDestination(ply);
 	const isReset = !~toMove;
-	const rewindMoveIndex = !isReset ?
-		state.history.findIndex(([whitePly]) => whitePly.move === toMove) : 0;
 
-	if (!isReset && (!~rewindMoveIndex || !state.history[rewindMoveIndex][toTurn])) {
+	const rewindMoveIndex = !isReset ?
+		state.history.findIndex(([whitePly, blackPly]) => whitePly ? whitePly.move === toMove : blackPly?.move === toMove) : 0;
+
+	if (!isReset && (!~rewindMoveIndex || state.history[rewindMoveIndex].length - 1 < toTurn)) { //!state.history[rewindMoveIndex][toTurn])) {
 		throw new Error(`WebChess - Cannot navigate to ply: [${toMove},${toTurn}] - it doesn't exist in history!`);
+	}
+
+	if (!toTurn && state.history[rewindMoveIndex][0] === null){
+		//if FEN started from black's turn we cant go back to first white ply since we dont have it
+		toTurn = 1;
 	}
 
 	const newSquares = getHistorySquares(state, toMove, toTurn);
 
-	//TODO! Deal with castle!!!
 	//tODO! deal with promotion (rewind...) !!!
 
 	const createUpdatedHistory = (state) => {

@@ -9,16 +9,6 @@ import getSquaresAfterMove from "../helpers/getSquaresAfterMove";
 import getOppositeColor from "../helpers/getOppositeColor";
 import createChecksData from "./createChecksData";
 import getDisambiguateTypeRequired from "../helpers/getDisambiguateTypeRequired";
-import { isKing } from "../helpers/is";
-
-const getCastleType = (fromSquare, toSquare, symbol) => {
-	if (isKing(symbol)) {
-
-	}
-
-	return false;
-};
-
 
 const getLastPly = (history) => {
 	const lastMove = history.slice(-1)[0];
@@ -38,7 +28,7 @@ const getUpdatedTakes = (takes, history) => {
 /**
  *
  * @param {string} fromSquare
- * @param {string} toSquare
+ * @param {Move} move
  * @param {string} symbol
  * @param {PIECE_COLORS} color
  * @param {Object.<string, PieceSquare>} prevSquares - the squares info before the move
@@ -46,19 +36,20 @@ const getUpdatedTakes = (takes, history) => {
  * @param {State} state
  * @returns {History}
  */
-const getUpdatedHistory = (fromSquare, toSquare, symbol, color, prevSquares, halfmoveClock, state) => {
-	const targetInfo = prevSquares[toSquare];
+const getUpdatedHistory = (fromSquare, move, symbol, color, prevSquares, halfmoveClock, state) => {
+	const targetInfo = prevSquares[move.square];
 	const isNewMove = color === PIECE_COLORS.WHITE;
 
 	const ply = {
 		previous: fromSquare,
-		target: toSquare,
+		target: move.square,
+		moveType: move.type,
 		color,
 		symbol,
 		//move counter may have already incremented if last move was white's
 		move: state.move - (isNewMove ? 0 : 1),
-		disambiguationNeeded: getDisambiguateTypeRequired(fromSquare, toSquare, symbol, color, state),
-		castle: getCastleType(fromSquare, toSquare, symbol),
+		disambiguationNeeded: getDisambiguateTypeRequired(fromSquare, move.square, symbol, color, state),
+		// castle: getCastleType(fromSquare, move.square, symbol),
 		take: targetInfo.isEmpty ? null : {
 			symbol: targetInfo.symbol,
 			color: targetInfo.pieceColor,
@@ -75,29 +66,39 @@ const getUpdatedHistory = (fromSquare, toSquare, symbol, color, prevSquares, hal
 	};
 
 	const history = state.history || [];
-	const move = isNewMove ? [] : (history[history.length - 1] || []);
+	const historyMove = isNewMove ? [] : (history[history.length - 1] || []);
 	const newHistory = isNewMove ? history : history.slice(0, -1);
 
-	return newHistory.concat([move.concat([ply])]);
+	if (color === PIECE_COLORS.BLACK && !historyMove.length) {
+		//in case loaded FEN with first ply being black's
+		historyMove.push(null);
+	}
+
+	return newHistory.concat([historyMove.concat([ply])]);
 };
 
 /**
+ * @param {State} state
+ * @param {string} startSquare
+ * @param {Move} move
+ * @param {Function} getStateBoardFromData
  * @returns {State}
  */
-const transitionToNextMove = (state, startSquare, targetSquare, getStateBoardFromData) => {
+const transitionToNextMove = (state, startSquare, move, getStateBoardFromData) => {
 	const movingSymbol = state.squares[startSquare].symbol,
 		movingColor = state.squares[startSquare].pieceColor,
-		prevSquares = state.squares;
+		prevSquares = state.squares,
+		{ square: targetSquare } = move;
 
 	if (state.turn !== movingColor) {
 		throw new Error(`WebChess - Wrong color (${movingColor}) turn.`);
 	}
 
-	const newSquares = getSquaresAfterMove(prevSquares, startSquare, targetSquare, movingSymbol, movingColor);
+	const newSquares = getSquaresAfterMove(prevSquares, startSquare, move, movingSymbol, movingColor);
 
 	const createHistoryData = (state) => {
 		const halfmoveClock = getFiftyMoveRuleCount(state.halfmoveClock, movingSymbol, !prevSquares[targetSquare].isEmpty);
-		const history = getUpdatedHistory(startSquare, targetSquare, movingSymbol, movingColor, prevSquares, halfmoveClock, state);
+		const history = getUpdatedHistory(startSquare, move, movingSymbol, movingColor, prevSquares, halfmoveClock, state);
 
 		return {
 			history,

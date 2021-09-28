@@ -1,4 +1,4 @@
-import { MOVE_SQUARE_STATE } from "consts";
+import { MOVE_SQUARE_STATE, MOVE_TYPES } from "consts";
 import calculatePieceAllMoveSquares from "./calculatePieceAllMoveSquares";
 import filterOwnPiecesSquares from "./filters/filterOwnPiecesSquares";
 import filterUnreachableSquares from "./filters/filterUnreachableSquares";
@@ -52,7 +52,7 @@ const moveCalculator = (square, symbol, state, pieceColor, definition, options =
 	}
 
 	//add new allowed moves to those calculated by (possibly) previous calculators
-	return moveSquares;
+	return moveSquares.map((square) => ({ square, type: MOVE_TYPES.MOVE }));
 };
 
 export default moveCalculator;

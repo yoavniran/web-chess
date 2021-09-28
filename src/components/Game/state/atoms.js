@@ -103,9 +103,9 @@ const { keys, atoms } = createAtoms({
 	SelectedPieceData: null,
 
 	/**
-	 * @type {string[]}
+	 * @type {Record.<string, Move>}
 	 */
-	SelectedPieceAvailableMoves: [],
+	SelectedPieceAvailableMoves: {},
 
 	CurrentPly: [0, 0],
 });

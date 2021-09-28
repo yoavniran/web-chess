@@ -1,6 +1,6 @@
 import intersection from "lodash/intersection";
 import { CHECK_TYPES, PIECE_COLORS } from "consts";
-import { calculateSquares } from "../moves";
+import { getNextMoveSquares } from "../moves";
 import findPieceTypeSquares from "./findPieceTypeSquares";
 import getColorFromSymbol from "./getColorFromSymbol";
 import getAttackingPiecesOnSquare from "./getAttackingPiecesOnSquare";
@@ -35,7 +35,7 @@ const getCanAttackBeBlocked = (checkSquare, attackInfo, color, state) => {
 		//king cant check another king
 		.filter(([square, symbol]) => !isKing(symbol))
 		.find(([square, symbol]) => {
-			const moves = calculateSquares(
+			const moves = getNextMoveSquares(
 				square,
 				symbol,
 				color,
@@ -80,7 +80,7 @@ const getCheckType = (symbol, state) => {
 		check = CHECK_TYPES.CHECK;
 
 		//check if can move out of check
-		const moves = calculateSquares(square, symbol,  color, state);
+		const moves = getNextMoveSquares(square, symbol,  color, state);
 
 		if (!moves.length) {
 			//look for piece that can block check

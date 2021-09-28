@@ -1,4 +1,4 @@
-import { PIECE_COLORS } from "consts";
+import { MOVE_TYPES, PIECE_COLORS } from "consts";
 import { getColorPiecePositions } from "../moves/calculators/afterMove";
 import getSquaresAfterMove from "./getSquaresAfterMove";
 import getAttackingPiecesOnSquare from "./getAttackingPiecesOnSquare";
@@ -18,7 +18,7 @@ export const getAbsolutePinAttacks = (square, moveSquare, color, symbol, checkSq
 	const afterMoveSquares = getSquaresAfterMove(
 		state.squares,
 		square,
-		moveSquare,
+		{ square: moveSquare, type: MOVE_TYPES.MOVE },
 		symbol,
 		color);
 
@@ -34,7 +34,7 @@ export const getAbsolutePinAttacks = (square, moveSquare, color, symbol, checkSq
 		}),
 		{
 			bailOnFirst: true,
-		}
+		},
 	);
 
 	//find if king is attacked(checked) after blocking piece moved

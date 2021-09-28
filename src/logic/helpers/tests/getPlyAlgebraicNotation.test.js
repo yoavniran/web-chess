@@ -6,7 +6,11 @@ import {
 	WHITE_PAWN,
 	BLACK_QUEEN,
 	BLACK_ROOK,
-	WHITE_ROOK, BLACK_KNIGHT,
+	WHITE_ROOK,
+	BLACK_KNIGHT,
+	WHITE_KING,
+	BLACK_KING,
+	MOVE_TYPES,
 } from "consts";
 import getPlyAlgebraicNotation from "../getPlyAlgebraicNotation";
 
@@ -55,6 +59,34 @@ describe("getPlyAlgebraicNotation tests", () => {
 			symbol: BLACK_KNIGHT,
 			disambiguationNeeded: NOTATION_DISAMBIGUATION_TYPES.ROW,
 		}, `${BLACK_KNIGHT}5F4`, `${PIECES_EMOJIS[BLACK_KNIGHT]}5F4`],
+		[{
+			previous: "E1",
+			target: "C1",
+			moveType: MOVE_TYPES.CASTLE,
+			symbol: WHITE_KING,
+			disambiguationNeeded: NOTATION_DISAMBIGUATION_TYPES.NONE,
+		}, "O-O-O", "O-O-O"],
+		[{
+			previous: "E1",
+			target: "G1",
+			moveType: MOVE_TYPES.CASTLE,
+			symbol: WHITE_KING,
+			disambiguationNeeded: NOTATION_DISAMBIGUATION_TYPES.NONE,
+		}, "O-O", "O-O"],
+		[{
+			previous: "E8",
+			target: "C8",
+			moveType: MOVE_TYPES.CASTLE,
+			symbol: BLACK_KING,
+			disambiguationNeeded: NOTATION_DISAMBIGUATION_TYPES.NONE,
+		}, "O-O-O", "O-O-O"],
+		[{
+			previous: "E8",
+			target: "G8",
+			moveType: MOVE_TYPES.CASTLE,
+			symbol: BLACK_KING,
+			disambiguationNeeded: NOTATION_DISAMBIGUATION_TYPES.NONE,
+		}, "O-O", "O-O"],
 	])("for ply: %s, should notate as: %s & %s",
 		(ply, expectedNormal, expectedEmoji) => {
 			const result = getPlyAlgebraicNotation(ply);

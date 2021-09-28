@@ -57,16 +57,18 @@ const Square = memo(({
 	                     unselectPiece,
 	                     showSquareName = false,
 	                     showAllowedMoveIndication = true,
-	                     isAllowedMove = false,
+	                     allowedMove,
 	                     movePiece,
 	                     check,
                      }) => {
 
+	const isAllowedMove = !!allowedMove;
+
 	const onSquareClick = useCallback(() => {
-		if (isAllowedMove) {
-			movePiece({ square: name });
+		if (allowedMove) {
+			movePiece({ move: allowedMove });
 		}
-	}, [isAllowedMove, name, movePiece]);
+	}, [allowedMove, name, movePiece]);
 
 	return (
 		<SquareContainer

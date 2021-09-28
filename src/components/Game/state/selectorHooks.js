@@ -50,7 +50,10 @@ const useSelectedPieceSquareSelector = createSelectorHook(
 
 const useAllowedMovesSquaresSelector = createSelectorHook(
 	"AllowedMovesSquaresSelector",
-	SelectedPieceAvailableMoves,
+	(get) => {
+		const allowedMoves = get(SelectedPieceAvailableMoves);
+		return Object.values(allowedMoves);
+	},
 );
 
 const useChecksSelector = createSelectorHook(

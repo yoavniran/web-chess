@@ -23,7 +23,7 @@
 /**
  * @callback StateUpdateWithNextMove
  * @param {string} startSquare
- * @param {string} targetSquare
+ * @param {Move} move
  * @returns {State}
  */
 
@@ -84,6 +84,7 @@
  * @type {object}
  * @property {string} previous
  * @property {string} target
+ * @property {MOVE_TYPES} moveType
  * @property {PIECE_COLORS} color
  * @property {string} symbol
  * @property {number} move
@@ -94,14 +95,14 @@
  */
 
 /**
- * @typedef Move
+ * @typedef HistoryMove
  * @type {Array.<Ply>}
  */
 
 
 /**
  * @typedef History
- * @type {Array.<Move>}
+ * @type {Array.<HistoryMove>}
  */
 
 /**
@@ -150,5 +151,20 @@
  * @property {string} emoji
  * @property {string} normal
  * @property {boolean} isPawn
+ * @property {boolean} isCastle
  * @property {Array.<number>} index
+ */
+
+/**
+ * @typedef Move
+ * @type {object}
+ * @property {string} square
+ * @property {MOVE_TYPES} type
+ */
+
+/**
+ * @typedef Notation
+ * @type {object}
+ * @property {string} emoji
+ * @property {string} normal
  */
