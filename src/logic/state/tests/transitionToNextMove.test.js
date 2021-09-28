@@ -14,7 +14,7 @@ import translateFenToState from "../../translateFenToState";
 import { isEmptyChar } from "../../helpers/is";
 
 describe("boardState tests", () => {
-	it("should create new state on update ", () => {
+	it("should create new state on update", () => {
 		const state = translateFenToState(INITIAL_FEN);
 		const newState = state.updateWithNextMove("E2", { square: "E4" });
 
@@ -199,7 +199,7 @@ describe("boardState tests", () => {
 		[INITIAL_FEN, "F7", "F6"],
 		["rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1", "A2", "A4"],
 		["rnbqk2r/ppppnppp/4p3/8/1b1PP1Q1/2N5/PPP2PPP/R1B1KBNR b KQkq - 2 4", "D4", "D5"]
-	])("should throw on wrong turn: ", (fen, from, to) => {
+	])("should throw on wrong turn:", (fen, from, to) => {
 		expect(() => {
 			translateFenToState(fen)
 				.updateWithNextMove(from, { square: to });

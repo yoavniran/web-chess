@@ -17,8 +17,6 @@ const GameMoves = ({
 	const lastHistoryPly = useHistoryPositionLastPlySelector();
 	const List = showCompact ? CompactMoveHistoryList : MoveHistoryList;
 
-	console.log("GAME MOVES!!!!!!!!!", moves);
-
 	const onPlyClick = useCallback((plyIndex) => {
 		goToPly(...plyIndex);
 	}, [goToPly]);

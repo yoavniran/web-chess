@@ -1,17 +1,15 @@
 import {
 	BLACK_BISHOP,
-	BLACK_KING,
-	BLACK_PAWN, BLACK_ROOK,
+	BLACK_PAWN,
+	BLACK_ROOK,
 	PIECE_COLORS,
-	WHITE_KING, WHITE_KNIGHT,
-	WHITE_PAWN,
-	WHITE_ROOK,
+	WHITE_KNIGHT,
 } from "consts";
 import translateFenToState from "../../../../translateFenToState";
 import filterAbsolutePinSquares from "../filterAbsolutePinSquares";
 
 describe("filterAbsolutePinSquares tests", () => {
-	it("should return one square forward for pawn between its king and attacking rook ", () => {
+	it("should return one square forward for pawn between its king and attacking rook", () => {
 		const state = translateFenToState("1r1r4/1pkp2p1/2pn4/1P6/5B2/7B/2R5/6KR b - - 0 1", true);
 
 		const moves = filterAbsolutePinSquares(
@@ -49,10 +47,10 @@ describe("filterAbsolutePinSquares tests", () => {
 
 		const moves = filterAbsolutePinSquares(
 			"C6",
-			BLACK_BISHOP  ,
+			BLACK_BISHOP,
 			PIECE_COLORS.BLACK,
 			["D5", "E4", "F3", "G2", "H1", "B5", "A4", "D7"],
-			state
+			state,
 		);
 
 		expect(moves).toHaveLength(0);
@@ -66,7 +64,7 @@ describe("filterAbsolutePinSquares tests", () => {
 			WHITE_KNIGHT,
 			PIECE_COLORS.WHITE,
 			["E4", "G4", "D1"],
-			state
+			state,
 		);
 
 		expect(moves).toHaveLength(0);

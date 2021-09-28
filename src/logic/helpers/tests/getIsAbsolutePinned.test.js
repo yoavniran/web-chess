@@ -10,7 +10,7 @@ describe("getIsAbsolutePinned tests", () => {
 		["2r5/1R2P2k/p3p1pp/3r2B1/5bb1/1B2N1P1/3K2PP/1q6 w - - 0 42", "E3", "F5", WHITE_KNIGHT, true],
 		["1k6/1r6/8/8/5B2/8/1K6/8 w - - 0 1", "B7", "C7", BLACK_ROOK, false],
 		["1k6/1r6/8/8/5B2/1R6/1K6/8 w - - 0 1", "B7", "C7", BLACK_ROOK, true],
-	])("should return true for FEN: %s, square: %s, move: %s, symbol: %s. is absolute pin = %s ",
+	])("should return true for FEN: %s, square: %s, move: %s, symbol: %s. is absolute pin = %s",
 		(fen, square, moveSquare, symbol, expected) => {
 		const state = translateFenToState(fen);
 		const color = getColorFromSymbol(symbol);

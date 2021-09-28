@@ -21,10 +21,8 @@ export const createStateHookSetter = (key, setter) => {
 	const stateSelector = selector({
 		key,
 		get: ({ get }) => null,
-		set: ({ set, get /*, reset */ }, value) => {
-			console.log(`>>>>>>>> STATE HOOK ${key} - setter called `, { value });
-			setter(set, value, get);
-		},
+		set: ({ set, get /*, reset */ }, value) =>
+			setter(set, value, get),
 	});
 
 	return () => useRecoilState(stateSelector)[1];

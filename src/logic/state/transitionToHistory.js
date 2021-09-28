@@ -6,7 +6,7 @@ import getOppositeColor from "../helpers/getOppositeColor";
 import { getIsSamePlyAsHistory, isColumn } from "../index";
 
 const revertRookFromCastle = (squares, ply) => {
-	const { color, target} = ply;
+	const { color, target } = ply;
 	const row = color === PIECE_COLORS.WHITE ? "1" : "8";
 	const isQueenSide = isColumn(target, "C");
 	const currentRookSquare = (isQueenSide ? "D" : "F") + row;
@@ -128,12 +128,12 @@ const getStateForPly = (state, ply, getStateBoardFromData) => {
 		}
 
 		const newTakes = state.takes.filter((take) =>
-			//take was taken based on FEN (not from game move)
+			//take was recorded based on FEN (not from game move)
 			isUndefined(take.move) ||
 			//if reset then filter all in game takes
-			!isReset &&
+			(!isReset &&
 			//filter out takes that happened after ply we're rewinding to
-			(take.move <= toMove && (toTurn || take.color === PIECE_COLORS.BLACK)));
+			(take.move <= toMove && (toTurn || take.color === PIECE_COLORS.BLACK))));
 
 		return {
 			history: newHistory,
@@ -152,7 +152,7 @@ const getStateForPly = (state, ply, getStateBoardFromData) => {
 		},
 		createUpdatedHistory,
 	);
-}
+};
 
 /**
  *

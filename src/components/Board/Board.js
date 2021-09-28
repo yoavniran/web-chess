@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import styled from "styled-components";
-import { MOVE_ANIMATIONS, PIECE_COLORS } from "consts";
+import { MOVE_ANIMATIONS } from "consts";
 import { createBoardSquares, getColorFromSymbol, isKing } from "logic";
 import Square from "./Square";
 import {} from "../../logic/helpers/is";
@@ -73,7 +73,7 @@ const Board = ({
 				allowedMove={allowedMove}
 				check={getCheck(squares[square.name]?.symbol, checks)}
 				movePiece={movePiece}
-			/>)})}
+			/>);})}
 	</BoardContainer>);
 };
 

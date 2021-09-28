@@ -11,8 +11,7 @@ import {
 	useGameStartingPositionSetter,
 	useToggleGameBoardIsFlipped,
 	useRewindForwardSetter,
-} from "./state";
-import { atoms } from "./state";
+ atoms } from "./state";
 
 const { GameCurrentPosition, GameMoves } = atoms;
 
@@ -24,7 +23,6 @@ const useGameApiInitializer = ({ position }) => {
 		rewindForward = useRewindForwardSetter();
 
 	useEffect(() => {
-		console.log("useGameApi HOOK rendered with position = ", position);
 		setStartingPosition(position);
 	}, [setStartingPosition, position]);
 
@@ -74,6 +72,7 @@ const useGameApi = () => {
 
 const GameTracker = () => {
 	useRecoilTransactionObserver(({ snapshot, previousSnapshot }) => {
+		// eslint-disable-next-line no-console
 		console.log("### TRANSACTION OBSERVER --- GAME STATUS", {
 			position: snapshot.getLoadable(GameCurrentPosition).contents,
 			moves: snapshot.getLoadable(GameMoves).contents,

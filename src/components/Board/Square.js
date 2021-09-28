@@ -68,7 +68,7 @@ const Square = memo(({
 		if (allowedMove) {
 			movePiece({ move: allowedMove });
 		}
-	}, [allowedMove, name, movePiece]);
+	}, [allowedMove, movePiece]);
 
 	return (
 		<SquareContainer

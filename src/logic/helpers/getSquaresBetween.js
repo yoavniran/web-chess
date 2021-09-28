@@ -28,7 +28,7 @@ const getSquaresBetween = (start, end, state, infinite = false) => {
 		direction,
 		distance - 1,
 		state,
-		{ diagonalVector, sidewaysVector});
+		{ diagonalVector, sidewaysVector });
 };
 
 export default getSquaresBetween;

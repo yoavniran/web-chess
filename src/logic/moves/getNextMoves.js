@@ -70,10 +70,10 @@ const canCalculate = (pieceColor, symbol, state, options) => {
 		//when ignoreTurn is on, we dont care about check or who's turn it is
 		options.ignoreTurn ||
 		//if checkmate no more moves allowed
-		state.whiteCheck !== CHECK_TYPES.MATE &&
+		(state.whiteCheck !== CHECK_TYPES.MATE &&
 		state.blackCheck !== CHECK_TYPES.MATE &&
 		//check if the right turn
-		isRightTurn(state, pieceColor)
+		isRightTurn(state, pieceColor))
 	);
 };
 
@@ -87,7 +87,7 @@ const getMovesFromMap = (movesMap) =>
 	.reduce((res, [key, move]) => {
 		res[key] = move;
 		return res;
-	}, {})
+	}, {});
 
 const getFilteredFromAbsolutePins = (movesMap, square, symbol, pieceColor, state) => {
 	const moves = getMovesFromMap(movesMap);

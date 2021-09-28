@@ -124,6 +124,6 @@ describe("translateFenToState tests", () => {
 		expect(() => translateFenToState("abd")).toThrow("WebChess - Invalid FEN - Could not parse");
 
 		expect(() => translateFenToState("r1bqk1r1/ppp12pp/7n/n2pp3/3b1Q2/2NP1PP1/PPPBP1BP/R3K2R b KQkq - 9 13"))
-			.toThrow("WebChess - INVALID FEN! Unknown piece symbol")
+			.toThrow("WebChess - INVALID FEN! Unknown piece symbol");
 	});
 });

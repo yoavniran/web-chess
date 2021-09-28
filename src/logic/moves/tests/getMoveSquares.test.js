@@ -3,7 +3,6 @@ import {
 	BLACK_KING,
 	BLACK_PAWN,
 	BLACK_ROOK,
-	CHECK_TYPES,
 	INITIAL_FEN, MOVE_TYPES,
 	WHITE_KNIGHT,
 	WHITE_PAWN,
@@ -51,7 +50,7 @@ describe("getMoveSquares tests", () => {
 		expect(Object.keys(moves)).toHaveLength(0);
 	});
 
-	it("should return one square forward for pawn between its king and attacking rook ", () => {
+	it("should return one square forward for pawn between its king and attacking rook", () => {
 		const state = translateFenToState("1r1r4/1pkp2p1/2pn4/1P6/5B2/7B/2R5/6KR b - - 0 1", true);
 		const moves = getNextMoves("C6", BLACK_PAWN, state);
 

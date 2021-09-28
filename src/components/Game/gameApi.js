@@ -4,8 +4,6 @@ const createGameApi = ({
 	                       rewindForward,
                        }) => {
 
-	console.log("1!!!!!!! CREATING GAME API !!!!!!!");
-
 	/**
 	 * restart the game
 	 * by default to the starting position (if FEN was used)

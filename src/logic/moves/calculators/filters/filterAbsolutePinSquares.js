@@ -25,7 +25,7 @@ const filterAbsolutePinSquares = (startSquare, symbol, pieceColor, moveSquares, 
 		state);
 
 	return attacks.reduce((newMoves, attack) => {
-		return intersection(newMoves , attack.moves.concat(attack.square))
+		return intersection(newMoves , attack.moves.concat(attack.square));
 	}, moveSquares);
 };
 

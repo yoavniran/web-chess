@@ -9,7 +9,7 @@ export const itemAnimationVariants = {
 };
 
 export const getIsActivePly = (move, turn, lastHistoryPly) => {
-	return !lastHistoryPly || lastHistoryPly[0] >= move && lastHistoryPly[1] >= turn;
+	return !lastHistoryPly || (lastHistoryPly[0] >= move && lastHistoryPly[1] >= turn);
 };
 
 export const latestPlyCss = css`

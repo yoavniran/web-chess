@@ -31,10 +31,10 @@ const getDisambiguateTypeRequired = (fromSquare, toSquare, symbol, color, state)
 				const fromCoordinates = getSquareCoordinates(fromSquare);
 
 				//find whether there's a competitor square on same column or row that is better candidate for disambiguation
-				const mostSimilar = competitorSquares.length > 1 && competitorSquares.find((square) => {
+				const mostSimilar = (competitorSquares.length > 1 && competitorSquares.find((square) => {
 					const compCoordinates = getSquareCoordinates(square);
 					return fromCoordinates[0] === compCoordinates[0] || fromCoordinates[1] === compCoordinates[1];
-				}) || competitorSquares[0];
+				})) || competitorSquares[0];
 
 				const similarCoordinates = getSquareCoordinates(mostSimilar);
 
